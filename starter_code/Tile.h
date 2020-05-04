@@ -1,12 +1,4 @@
-class Tile{
-    public:
-        Tile();
-        Tile(int type);
-        ~Tile();
-        Tile getType();
-
-    private:
-        enum Types {
+enum Types {
             Red,
             Yellow,
             Dark_Blue,
@@ -16,5 +8,14 @@ class Tile{
 
         };
 
+class Tile{
+    public:
+        Tile();
+        Tile(Types type);
+        ~Tile();
+        Types getType();
+
+    private:
         Types type;
+
 };
