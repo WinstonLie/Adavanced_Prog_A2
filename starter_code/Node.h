@@ -1,3 +1,6 @@
+#ifndef AZUL_NODE
+#define AZUL_NODE
+
 #include "Tile.h"
 
 class Node{
@@ -11,3 +14,5 @@ class Node{
         Tile* tile;
         Node* nextNode;
 };
+
+#endif //AZUL_NODE

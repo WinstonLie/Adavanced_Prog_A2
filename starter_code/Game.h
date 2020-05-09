@@ -1,3 +1,6 @@
+#ifndef AZUL_GAME
+#define AZUL_GAME
+
 #include "Player.h"
 #include "Tile.h"
 #include "LinkedList.h"
@@ -16,6 +19,7 @@ class Game{
         bool isFirstPlayerMarkerTaken();
         std::vector<Tile*> getBoxLid();
 
+
     private:
         int playerCount;
         Player** players;
@@ -26,3 +30,5 @@ class Game{
         std::vector<Tile*> boxLid;
         bool firstPlayerMarker;
 };
+
+#endif // AZUL_GAME

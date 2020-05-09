@@ -31,8 +31,8 @@ void LinkedList::insert(Tile* tile){
     head = newNode;
 }
 
-void LinkedList::removeTiles(Types colour, Tile[]* tiles, int& tileCount){
-
+void LinkedList::removeTiles(Types colour, Tile** tiles, int& tileCount){
+    
 }
 
 void LinkedList::clear(){

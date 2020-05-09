@@ -1,3 +1,6 @@
+#ifndef AZUL_TILES
+#define AZUL_TILES
+
 enum Types {
             Red = 'R',
             Yellow = 'Y',
@@ -17,3 +20,5 @@ class Tile{
     private:
         Types type;
 };
+
+#endif //AZUL_TILES

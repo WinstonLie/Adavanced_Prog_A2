@@ -1,5 +1,8 @@
 
-//#include "Game.h"
+#ifndef AZUL_PLAYER
+#define AZUL_PLAYER
+
+#include "Game.h"
 #include <string>
 
 class Player{
@@ -15,10 +18,12 @@ class Player{
 
     private:
         std::string playerName;
-        //Game* game;
+        Game* game;
         int points;
         Tile*** patternLines;
         Tile*** wall;
         Tile** floorLine;
         int floorLineCount;
 };
+
+#endif // AZUL_PLAYER
