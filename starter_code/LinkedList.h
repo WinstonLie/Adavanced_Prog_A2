@@ -10,10 +10,10 @@ class LinkedList{
         LinkedList();
         ~LinkedList();
         int getSize();
-        void insertFront(Tile tile);
-        void insertBack(Tile tile);
-        void removeTiles(Tile colour, Tile[]& tiles, int& tileCount);
-        void remove(Tile tile);
+        void insertFront(Tile* tile);
+        void insertBack(Tile* tile);
+        void removeTiles(Tile* colour, Tile[]& tiles, int& tileCount);
+        void remove(Tile* tile);
         void clear();
 
     private:

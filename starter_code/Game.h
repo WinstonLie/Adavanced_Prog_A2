@@ -11,8 +11,8 @@ class Game{
         void populateFactories();
         int getPlayerCount();
         Player* getPlayer(int index);
-        void getTilesFromFactory(int factoryIndex, Tile colour, int& tileAmount, Tile*& tiles);
-        void getTilesFromCentre(Tile colour, int& tileAmount, Tile*& tiles);
+        void getTilesFromFactory(int factoryIndex, Tile* colour, int& tileAmount, Tile*& tiles);
+        void getTilesFromCentre(Tile* colour, int& tileAmount, Tile*& tiles);
         bool isFirstPlayerMarkerTaken();
 
     private:
