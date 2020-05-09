@@ -5,7 +5,6 @@ enum Types {
             Light_Blue,
             Black,
             starter_player,
-
         };
 
 class Tile{
@@ -17,5 +16,4 @@ class Tile{
 
     private:
         Types type;
-
 };

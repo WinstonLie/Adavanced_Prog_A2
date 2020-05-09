@@ -34,3 +34,7 @@ void LinkedList::insertFront(Tile tile){
 void LinkedList::insertBack(Tile tile){
     //To be further implemented
 }
+
+void LinkedList::remove(Tile tile){
+
+}
