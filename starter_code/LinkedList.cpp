@@ -16,7 +16,7 @@ int LinkedList::getSize(){
     while(hasNext == true){
         if(current != nullptr){
             count++;
-            current =  current->getNext;
+            current =  current->getNext();
         }else{
             hasNext = false;
         }
@@ -25,16 +25,18 @@ int LinkedList::getSize(){
     return count;
 }
 
-void LinkedList::insertFront(Tile tile){
+void LinkedList::insert(Tile* tile){
     Node* newNode = new Node(tile);
-    newNode->setNext->head;
+    newNode->setNext(head);
     head = newNode;
 }
 
-void LinkedList::insertBack(Tile tile){
-    //To be further implemented
-}
-
-void LinkedList::remove(Tile tile){
+void LinkedList::removeTiles(Types colour, Tile[]* tiles, int& tileCount){
 
 }
+
+void LinkedList::clear(){
+    
+}
+
+

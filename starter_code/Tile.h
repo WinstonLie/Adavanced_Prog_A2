@@ -1,10 +1,10 @@
 enum Types {
-            Red,
-            Yellow,
-            Dark_Blue,
-            Light_Blue,
-            Black,
-            starter_player,
+            Red = 'R',
+            Yellow = 'Y',
+            Dark_Blue = 'B',
+            Light_Blue = 'L',
+            Black = 'U',
+            starter_player = 'S',
         };
 
 class Tile{

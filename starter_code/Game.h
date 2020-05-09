@@ -14,6 +14,7 @@ class Game{
         void getTilesFromFactory(int factoryIndex, Tile* colour, int& tileAmount, Tile*& tiles);
         void getTilesFromCentre(Tile* colour, int& tileAmount, Tile*& tiles);
         bool isFirstPlayerMarkerTaken();
+        std::vector<Tile*> getBoxLid();
 
     private:
         int playerCount;

@@ -2,12 +2,12 @@
 
 class Node{
     public:
-        Node(Tile tile);
+        Node(Tile* tile);
         ~Node();
-        void setNext(Node node);
-        Node getNext();
-        Tile getTileFromNode();
+        void setNext(Node* node);
+        Node* getNext();
+        Tile* getTileFromNode();
     private:
-        Tile tile;
+        Tile* tile;
         Node* nextNode;
 };
