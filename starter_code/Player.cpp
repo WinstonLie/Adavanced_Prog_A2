@@ -86,8 +86,9 @@ void Player::addToFloorLine(Tile* tile){
 bool Player::addTileToWall(int patternLineRow, int row, int column){
     // Value to be returned
     bool successfulAddToWall = false;
-    // Checks that wall is empty and that pattern line row is full
-    if (wall[row][column] != nullptr && patternLineRowCounts[patternLineRow] == patternLineRow + 1){
+    // Checks that wall is empty and that pattern line row is full and that colour matches wall
+    if (wall[row][column] != nullptr && patternLineRowCounts[patternLineRow] == patternLineRow + 1
+      && patternLines[patternLineRow][0]->getType() == WALL_COLOURS[row][column]){
         // Places first tile from patternLine into wall
         wall[row][column] = patternLines[patternLineRow][0];
         // Removes tile pointer from patternLines

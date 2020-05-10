@@ -6,6 +6,13 @@
 #include <string>
 
 #define WALL_DIMENSION 5
+const Types WALL_COLOURS[WALL_DIMENSION][WALL_DIMENSION] =
+                {{Dark_Blue, Yellow, Red, Black, Light_Blue},
+                {Light_Blue, Dark_Blue, Yellow, Red, Black},
+                {Black, Light_Blue, Dark_Blue, Yellow, Red},
+                {Red, Black, Light_Blue, Dark_Blue, Yellow},
+                {Yellow, Red, Black, Light_Blue, Dark_Blue}};
+
 #define PATTERN_LINE_ROWS 5
 #define FLOOR_LINE_LENGTH 7
 const int FLOOR_LINE_PENALTIES[] = {-1, -1, -2, -2, -2, -3, -3};
@@ -33,6 +40,7 @@ class Player{
         // All tiles except first will be moved to floor line
         // Points earned from placing the tile will be added to total here
         // Returns false if place on wall is already occupied or if pattern line is not full
+        //   or if location doesn't match colour of tile
         bool addTileToWall(int patternLineRow, int row, int column);
 
         // Checks to see if there is a completed row on the board
