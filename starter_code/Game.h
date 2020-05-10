@@ -1,3 +1,4 @@
+
 #ifndef AZUL_GAME
 #define AZUL_GAME
 
@@ -31,5 +32,4 @@ class Game{
         std::vector<Tile*> boxLid;
         bool firstPlayerMarker;
 };
-
 #endif // AZUL_GAME

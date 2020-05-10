@@ -13,12 +13,12 @@ enum Types {
 class Tile{
     public:
         Tile();
-        Tile(Types type);
+        Tile(Types* type);
         ~Tile();
-        Types getType();
+        Types* getType();
 
     private:
-        Types type;
+        Types* type;
 };
 
 #endif //AZUL_TILES
