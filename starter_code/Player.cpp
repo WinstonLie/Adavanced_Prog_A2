@@ -232,11 +232,46 @@ bool Player::hasEndedGame(){
     return endedGame;
 }
 
-int Player::getCurrentScore(){
+int Player::getPoints(){
     return points;
 }
 
-int Player::getFinalScore(){
-    // TODO
-    return points;
+void Player::updateFinalPoints(){
+    // Check for completed rows and columns
+    for (int i = 0; i < WALL_DIMENSION; i++){
+        // Check for completed rows
+        if (tilesInDirection(i, -1, 1) == WALL_DIMENSION){
+            points += 2;
+        }
+        // Check for completed columns
+        if (tilesInDirection(-1, i, 2) == WALL_DIMENSION){
+            points += 7;
+        }
+    }
+
+    // Get counts for every colour (assumes same amount of colours as dimension of wall)
+    int colourCount = WALL_DIMENSION;
+    int maxCount = WALL_DIMENSION;
+    int counts[colourCount];
+    Types colours[colourCount] = {Dark_Blue, Yellow, Red, Black, Light_Blue};
+    // Go through every row and column of wall
+    for (int i = 0; i < WALL_DIMENSION; i++){
+        for (int r = 0; r < WALL_DIMENSION; r++){
+            // If there is a tile then add to the count of that tiles colour
+            if (wall[i][r] != nullptr){
+                for (int w = 0; w < colourCount; w++){
+                    if (wall[i][r]->getType() == colours[w]){
+                        counts[w]++;
+                    }
+                }
+            }
+        }
+    }
+
+    // Go through every colour count and if it is max, add points
+    for (int i = 0; i < colourCount; i++){
+        if (counts[i] == maxCount){
+            points += 10;
+        }
+    }
 }

@@ -47,11 +47,10 @@ class Player{
         bool hasEndedGame();
         
         // Returns current score of the player
-        int getCurrentScore();
+        int getPoints();
         
-        // Adds up end-game additional points to current score and
-        // returns result
-        int getFinalScore();
+        // Adds up end-game additional points to current score
+        void updateFinalPoints();
 
     private:
         // Name of the player
