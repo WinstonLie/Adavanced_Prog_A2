@@ -84,15 +84,60 @@ void Player::addToFloorLine(Tile* tile){
 }
 
 bool Player::addTileToWall(int patternLineRow, int row, int column){
-    // TODO  
+    // Value to be returned
+    bool successfulAddToWall = false;
+    // Checks that wall is empty and that pattern line row is full
+    if (wall[row][column] != nullptr && patternLineRowCounts[patternLineRow] == patternLineRow + 1){
+        // Places first tile from patternLine into wall
+        wall[row][column] = patternLines[patternLineRow][0];
+        // Removes tile pointer from patternLines
+        patternLines[patternLineRow][0] = nullptr;
+        // Puts all other tiles in row (if any exist) into lid
+        for (int i = 1; i < patternLineRowCounts[patternLineRow]; i++){
+            game->addToBoxLid(patternLines[patternLineRow][i]);
+            patternLines[patternLineRow][i] = nullptr;
+        }
+
+        // Calculate points for new tile placement and add to points
+        // TODO
+
+        // Sets output to true
+        successfulAddToWall = true;
+    }
+
+    // Returns output value
+    return successfulAddToWall;
 }
 
 bool Player::hasEndedGame(){
-    // TODO
+    // Counter for rows
+    int rowCount = 0;
+    // Counter for columns
+    int columnCount = 0;
+    // Output value
+    bool endedGame = false;
+    // Loops through each row in wall
+    while (endedGame == false && rowCount < WALL_DIMENSION){
+        // Checks to see if value at spot is nullptr
+        if (wall[rowCount][columnCount] == nullptr){
+            // Move on to next row
+            rowCount++;
+        // If last column of row has been reached without finding a nullptr, then set
+        // output to true
+        } else if (columnCount == WALL_DIMENSION - 1){
+            endedGame = true;
+        // Else move on to the next column of same row
+        } else {
+            columnCount++;
+        }
+    }
+
+    //Returns output
+    return endedGame;
 }
 
 int Player::getCurrentScore(){
-    // TODO
+    return points;
 }
 
 int Player::getFinalScore(){
