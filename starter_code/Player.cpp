@@ -99,7 +99,40 @@ bool Player::addTileToWall(int patternLineRow, int row, int column){
         }
 
         // Calculate points for new tile placement and add to points
-        // TODO
+        // Count concurrent tiles in all directions of tile
+        // Count horizontal (tiles to left and right)
+        int horizontalTiles = tilesInDirection(row, column, 1) + tilesInDirection(row, column, 3);
+        // Count vertical (tiles above and below)
+        int verticalTiles = tilesInDirection(row, column, 0) + tilesInDirection(row, column, 2);
+        // If no adjacent tiles, add one point
+        if (horizontalTiles == 0 && verticalTiles == 0){
+            points += 1;
+        // If adjacent tiles found, then 
+        } else {
+            // If there are horizontal tiles, add amount of tiles plus the one that was just placed
+            if (horizontalTiles != 0){
+                points += horizontalTiles + 1;
+            }
+            
+            // If there are vertical tiles, add amount of tiles plus the one that was just placed
+            if (verticalTiles != 0){
+                points += verticalTiles + 1;
+            }
+        }
+
+        // Subtracts floor line values and empties tiles into lid
+        // Also clears floor line
+        for (int i = 0; i < floorLineCount; i++){
+            points += FLOOR_LINE_PENALTIES[i];
+            // starting player tile doesn't go back into lid, gets deleted and re-created
+            if (floorLine[i]->getType() != starter_player){
+                game->addToBoxLid(floorLine[i]);
+            } else {
+                delete floorLine[i];
+            }
+            floorLine[i] = nullptr;
+        }
+        floorLineCount = 0;
 
         // Sets output to true
         successfulAddToWall = true;
@@ -107,6 +140,68 @@ bool Player::addTileToWall(int patternLineRow, int row, int column){
 
     // Returns output value
     return successfulAddToWall;
+}
+
+int Player::tilesInDirection(int row, int column, int direction){
+    // Tiles found in specified direction, will be returned
+    int tileCount = 0;
+    // Checks to see if direction is valid
+    if (direction >= 0 && direction <= 3){
+        // Initialises incremend and end points for values
+        // increments are added every loop, when current row/column equals end
+            // point, then end looping
+        // End point of -2 means it will never be reached, used for unchanging axis
+        int xIncrement;
+        int yIncrement;
+        int xEndPoint;
+        int yEndPoint;
+        // Sets increment/endpoint values according to direction
+        // Directions for 0,1,2,3 are north,east,south,west
+        if (direction == 0){
+            xIncrement = 0;
+            yIncrement = -1;
+            xEndPoint = -2;
+            yEndPoint = -1;
+        } else if (direction == 1){
+            xIncrement = 1;
+            yIncrement = 0;
+            xEndPoint = WALL_DIMENSION + 1;
+            yEndPoint = -2;
+        } else if (direction == 2){
+            xIncrement = 0;
+            yIncrement = 1;
+            xEndPoint = -2;
+            yEndPoint = WALL_DIMENSION + 1;
+        } else if (direction == 3){
+            xIncrement = -1;
+            yIncrement = 0;
+            xEndPoint = -1;
+            yEndPoint = -2;
+        }
+
+        // Current row and column of loop
+        int currentRow = row;
+        int currentColumn = column;
+        bool endOfDirection = false;
+        // While the end of wall hasn't been found
+        while (endOfDirection == false){
+            // Increment the row and column by pre-defined amount
+            currentRow += yIncrement;
+            currentColumn += xIncrement;
+            // Checks that rows and columns aren't at end point and that
+            // spot in wall isn't empty
+            if (currentRow != yEndPoint && currentColumn != xEndPoint
+              && wall[currentRow][currentColumn] != nullptr){
+                  tileCount++;
+            // End of direction has been reached, end loop
+            } else {
+                endOfDirection = true;
+            }
+        }
+    }
+
+    // Return amount of tiles found
+    return tileCount;
 }
 
 bool Player::hasEndedGame(){
@@ -142,4 +237,5 @@ int Player::getCurrentScore(){
 
 int Player::getFinalScore(){
     // TODO
+    return points;
 }

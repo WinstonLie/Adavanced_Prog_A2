@@ -8,6 +8,8 @@
 #define WALL_DIMENSION 5
 #define PATTERN_LINE_ROWS 5
 #define FLOOR_LINE_LENGTH 7
+const int FLOOR_LINE_PENALTIES[] = {-1, -1, -2, -2, -2, -3, -3};
+
 class Player{
     public:
         
@@ -69,6 +71,11 @@ class Player{
         // Amount of tiles in the floor line
         int floorLineCount;
 
+        // Counts the amount of tiles in a specified direction in the wall from
+        //   the coordinates given. Directions for numbers 0,1,2,3 are north, east,
+        //   south, west. Return value is amount of tiles found in direction, or 0
+        //   if direction is not within expected range.
+        int Player::tilesInDirection(int row, int column, int direction);
 };
 
 #endif // AZUL_PLAYER
