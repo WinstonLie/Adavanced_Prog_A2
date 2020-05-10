@@ -8,11 +8,11 @@ Player::Player(std::string playerName, Game* game)
 
     // Initialise patternLines and their lengths
     patternLines = new Tile**[PATTERN_LINE_ROWS];
-    patternLineLengths = new int[PATTERN_LINE_ROWS];
+    patternLineRowCounts = new int[PATTERN_LINE_ROWS];
     for (int i = 0; i < 5; i++){
         // Row 1 (index 0) has 1 max length, row 2 has 2 etc 
         patternLines[i] = new Tile*[i + 1];
-        patternLineLengths[i] = 0;
+        patternLineRowCounts[i] = 0;
     }
 
     // Initialise wall
@@ -32,15 +32,45 @@ Player::~Player(){
     // TODO
 }
 
-bool Player::addTilesToPatternLine(Tile** tiles, int tileCount, int patternLine){
-    // TODO
+bool Player::addTilesToPatternLine(Tile** tiles, int tileCount, int patternLineRow){
+    // Value to be output
+    bool successfulTileAdd = false;
+    // Check that patternLine is valid
+    if (patternLineRow >= 0 && patternLineRow < PATTERN_LINE_ROWS){
+        // Checks to see if either row is empty or first tile matches inserted ones
+        if (patternLineRowCounts[patternLineRow] == 0 ||
+          patternLines[patternLineRow][0]->getType() == tiles[0]->getType()){
+            // Counts how many tiles have been input
+            int inputTileCounter = 0;
+            // counter for pattern line
+            int* patternLineCounter = &patternLineRowCounts[patternLineRow];
+            // While there are tiles to input, insert into pattern line
+            while (*patternLineCounter < patternLineRow + 1 && inputTileCounter < tileCount){
+                patternLines[patternLineRow][*patternLineCounter] = tiles[inputTileCounter];
+                inputTileCounter++;
+                *patternLineCounter++;
+            }
+
+            // If there are tiles left over, insert into floor line
+            while (inputTileCounter < tileCount){
+                addToFloorLine(tiles[inputTileCounter]);
+                inputTileCounter++;
+            }
+
+            // Sets output value to true
+            successfulTileAdd = true;
+        }
+    }
+
+    // Returns true if operation was valid, otherwise false
+    return successfulTileAdd;
 }
 
 void Player::addToFloorLine(Tile* tile){
     // TODO
 }
 
-bool Player::addTileToWall(int patternLine, int row, int column){
+bool Player::addTileToWall(int patternLineRow, int row, int column){
     // TODO  
 }
 

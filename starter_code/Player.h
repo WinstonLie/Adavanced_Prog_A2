@@ -17,10 +17,12 @@ class Player{
         // Deconstructor for player
         ~Player();
         
+        // Input is an array of tiles, and int of the
+        //   length of array and index of pattern line row
         // Adds tile/s to the pattern line
         // Leftover tiles from this will be placed on floor line
         // If tile doesn't match the starting value, then return false
-        bool addTilesToPatternLine(Tile** tiles, int tileCount, int patternLine);
+        bool addTilesToPatternLine(Tile** tiles, int tileCount, int patternLineRow);
         
         // Adds the tile to the floor line
         void addToFloorLine(Tile* tile);
@@ -29,7 +31,7 @@ class Player{
         // All tiles except first will be moved to floor line
         // Points earned from placing the tile will be added to total here
         // Returns false if place on wall is already occupied or if pattern line is not full
-        bool addTileToWall(int patternLine, int row, int column);
+        bool addTileToWall(int patternLineRow, int row, int column);
 
         // Checks to see if there is a completed row on the board
         bool hasEndedGame();
@@ -56,7 +58,7 @@ class Player{
         Tile*** patternLines;
         
         // Counts the amount of tiles in each row
-        int* patternLineLengths;
+        int* patternLineRowCounts;
         
         // 5x5 two-dimensional array
         Tile*** wall;
@@ -66,6 +68,7 @@ class Player{
         
         // Amount of tiles in the floor line
         int floorLineCount;
+
 };
 
 #endif // AZUL_PLAYER
