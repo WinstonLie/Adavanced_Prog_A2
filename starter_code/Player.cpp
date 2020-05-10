@@ -10,7 +10,8 @@ Player::Player(std::string playerName, Game* game)
     patternLines = new Tile**[PATTERN_LINE_ROWS];
     patternLineRowCounts = new int[PATTERN_LINE_ROWS];
     for (int i = 0; i < 5; i++){
-        // Row 1 (index 0) has 1 max length, row 2 has 2 etc 
+        // Row 1 (index 0) has 1 max length, row 2 has 2 etc
+        // Pattern lines not set to nullptr as o 
         patternLines[i] = new Tile*[i + 1];
         patternLineRowCounts[i] = 0;
     }
@@ -19,6 +20,10 @@ Player::Player(std::string playerName, Game* game)
     wall = new Tile**[WALL_DIMENSION];
     for (int i = 0; i < WALL_DIMENSION; i++){
         wall[i] = new Tile*[WALL_DIMENSION];
+        // Sets all spots in wall to nullptr
+        for (int r = 0; r < WALL_DIMENSION; i++){
+            wall[i][r] = nullptr;
+        }
     }
 
     // Initialise floor line
@@ -67,7 +72,15 @@ bool Player::addTilesToPatternLine(Tile** tiles, int tileCount, int patternLineR
 }
 
 void Player::addToFloorLine(Tile* tile){
-    // TODO
+    // Checks to see if floor line has space left
+    if (floorLineCount < FLOOR_LINE_LENGTH){
+        // If room left, then add tile to floor line
+        floorLine[floorLineCount - 1] = tile;
+        floorLineCount++;
+    } else {
+        // If no room left, send tile to game to put inside lid
+        game->addToBoxLid(tile);
+    }
 }
 
 bool Player::addTileToWall(int patternLineRow, int row, int column){
