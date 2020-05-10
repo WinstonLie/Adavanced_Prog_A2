@@ -10,29 +10,60 @@
 #define FLOOR_LINE_LENGTH 7
 class Player{
     public:
+        
+        // Constructs the player and initialises the structures
         Player(std::string playerName, Game* game);
+        
+        // Deconstructor for player
         ~Player();
-        void addTilesToPatternLine(Tile** tiles, int tileCount, int patternLine);
+        
+        // Adds tile/s to the pattern line
+        // Leftover tiles from this will be placed on floor line
+        // If tile doesn't match the starting value, then return false
+        bool addTilesToPatternLine(Tile** tiles, int tileCount, int patternLine);
+        
+        // Adds the tile to the floor line
         void addToFloorLine(Tile* tile);
+        
+        // Adds a tile from the pattern line to the wall.
+        // All tiles except first will be moved to floor line
+        // Points earned from placing the tile will be added to total here
+        // Returns false if place on wall is already occupied or if pattern line is not full
         bool addTileToWall(int patternLine, int row, int column);
+
+        // Checks to see if there is a completed row on the board
         bool hasEndedGame();
+        
+        // Returns current score of the player
         int getCurrentScore();
+        
+        // Adds up end-game additional points to current score and
+        // returns result
         int getFinalScore();
 
     private:
         // Name of the player
         std::string playerName;
+        
         // Game that the player is a part of
         Game* game;
+        
         // Points that the player has
         int points;
+        
         // pattern lines (area to left of wall)
         // rows from top to bottom have lengths 1,2,3,4,5
         Tile*** patternLines;
+        
+        // Counts the amount of tiles in each row
+        int* patternLineLengths;
+        
         // 5x5 two-dimensional array
         Tile*** wall;
+        
         // Array of length 7 at the bottom
         Tile** floorLine;
+        
         // Amount of tiles in the floor line
         int floorLineCount;
 };
