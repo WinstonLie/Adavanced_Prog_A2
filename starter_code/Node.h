@@ -10,6 +10,7 @@ class Node{
         void setNext(Node* node);
         Node* getNext();
         Tile* getTileFromNode();
+        void setTile(Tile* tile);
     private:
         Tile* tile;
         Node* nextNode;

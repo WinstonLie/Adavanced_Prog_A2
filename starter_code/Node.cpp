@@ -6,7 +6,7 @@ Node::Node(Tile* tile){
 }
 
 Node::~Node(){
-   this->nextNode = nullptr;
+   this->tile = nullptr;
 }
 
 void Node::setNext(Node* node){
@@ -19,5 +19,9 @@ Node* Node::getNext(){
 
 Tile* Node::getTileFromNode(){
     return this->tile;
+}
+
+void Node::setTile(Tile* tile){
+    this->tile = tile;
 }
 

@@ -5,6 +5,8 @@
 #include "Node.h"
 #include "Game.h"
 //LinkedList implementation for Centre Factory
+
+#define ARRAY_MAX_SIZE    100
 class LinkedList{
     public:
         LinkedList();
@@ -14,14 +16,14 @@ class LinkedList{
         // Inserts tile to the front of the list
         void insert(Tile* tile);
         //Remove tiles of a colour from the center factory and puts the removed tiles into an array
-        void removeTiles(Types colour, Tile** tiles, int& tileCount);
+        void removeTiles(Types* colour, Tile** tiles, int& tileCount);
         // Removes all tiles from the list and puts them into the lid
         void clear();
 
     private:
         // Removes tile nodeToDel from the list
         // Sets prevNodes next node to nodeToDels next node
-        void removeTile(Tile* prevNode, Tile* nodeToDel);
+        void removeTile(Node* prevNode, Node* nodeToDel);
         Game* game;
         int size;
         Node* head;
