@@ -83,4 +83,15 @@ void LinkedList::removeNode(Node* prevNode, Node* nodeToDel){
     }
 }
 
+std::string LinkedList::getCenterTableDetails(){
+    Node* iterator = head;
+    std::string data = "";
+    while(iterator != nullptr){
+        data += iterator->getTileFromNode()->getType();
+        iterator = iterator->getNext();
+    }
+    data += "$";
+    return data;
+}
+
 

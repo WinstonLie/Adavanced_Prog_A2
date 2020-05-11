@@ -9,7 +9,7 @@ Player::Player(std::string playerName, Game* game)
     // Initialise patternLines and their lengths
     patternLines = new Tile**[PATTERN_LINE_ROWS];
     patternLineRowCounts = new int[PATTERN_LINE_ROWS];
-    for (int i = 0; i < 5; i++){
+    for (int i = 0; i < PATTERN_LINE_ROWS; i++){
         // Row 1 (index 0) has 1 max length, row 2 has 2 etc
         // Pattern lines not set to nullptr as o 
         patternLines[i] = new Tile*[i + 1];
@@ -274,4 +274,47 @@ void Player::updateFinalPoints(){
             points += 10;
         }
     }
+}
+
+std::string Player::getPlayerName(){
+    return this->playerName;
+}
+
+std::string Player::getWall(){
+    std::string data = "";
+
+    for(int i = 0; i < WALL_DIMENSION; i++){
+        for(int j = 0; j < WALL_DIMENSION; j++){
+            data += wall[i][j]->getType();
+        }
+        data += "$\n";
+    }
+    data += '$';
+
+    return data;
+}
+
+std::string Player::getPatternLine(){
+    std::string data = "";
+
+    for(int i = 0; i < PATTERN_LINE_ROWS ; i++){
+        for(int j = 0 ; j < i+1 ; j++){
+            data += patternLines[i][j]->getType();
+        }
+        data += "$\n";
+    }
+    data += "$";
+
+    return data;
+}
+
+std::string Player::getFloorLine(){
+    std::string data = "";
+
+    for(int i = 0; i < FLOOR_LINE_LENGTH; i++){
+        data += floorLine[i]->getType();
+    }
+    data += "$";
+
+    return data;
 }

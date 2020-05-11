@@ -52,6 +52,18 @@ class Player{
         // Adds up end-game additional points to current score
         void updateFinalPoints();
 
+        //returns player name
+        std::string getPlayerName();
+
+        //get Wall data for saving
+        std::string getWall();
+
+        //get PatternLine data for saving
+        std::string getPatternLine();
+
+        //get floorLine data for saving
+        std::string getFloorLine();
+
     private:
         // Name of the player
         std::string playerName;
@@ -83,6 +95,7 @@ class Player{
         //   south, west. Return value is amount of tiles found in direction, or 0
         //   if direction is not within expected range.
         int Player::tilesInDirection(int row, int column, int direction);
+
 };
 
 #endif // AZUL_PLAYER

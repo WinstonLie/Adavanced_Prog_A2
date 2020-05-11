@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Tile.h"
 #include "LinkedList.h"
+#include <string>
 #include <vector>
 
 #define FACTORY_SIZE    4
@@ -46,6 +47,18 @@ class Game{
 
         // Adds a tile to the box lid
         void addToBoxLid(Tile* tile);
+
+        //get bag data for saving
+        std::string getBag();
+
+        //get boxLid data for saving
+        std::string getBoxLid();
+
+        //get factory data for saving
+        std::string getFactories();
+
+        //get centreTable data for saving
+        std::string getCentreTable();
 
 
     private:

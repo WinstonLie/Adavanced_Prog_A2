@@ -19,6 +19,7 @@ class LinkedList{
         void removeTiles(Types colour, Tile** tiles, int& tileCount);
         // Removes all tiles from the list and puts them into the lid
         void clear();
+        std::string getCenterTableDetails();
 
     private:
         // Removes tile nodeToDel from the list

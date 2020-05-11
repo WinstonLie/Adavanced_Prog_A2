@@ -93,6 +93,8 @@ int Game::getPlayerCount(){
 
 Player* Game::getPlayer(int index){
     Player* foundPlayer = nullptr;
+
+    //checks if index is within player bounds
     if (index >= 0 && index < playerCount){
         foundPlayer = players[index];
     }
@@ -153,6 +155,7 @@ bool Game::getTilesFromCentre(Types colour, int& tileAmount, Tile** tiles){
         //remove tiles from centreTable and add to tiles array
         centreTable->removeTiles(colour, tiles, tileAmount);
 
+        //checks if it is first time taking from centreTable
         if (firstPlayerMarker){
             hasTakenFirstPlayer = true;
             firstPlayerMarker = false;
@@ -170,6 +173,56 @@ bool Game::isFirstPlayerMarkerTaken(){
 
 
 void Game::addToBoxLid(Tile* tile){
+    //insert into boxLid vector
     boxLid.insert(boxLid.end(), tile);
 }
 
+
+std::string Game::getBag(){
+    std::string data = "";
+
+    for(int i = 0; i < bag.size(); i++){
+        data += bag[i]->getType();
+    }
+    data += '$';
+
+    return data;
+}
+
+
+std::string Game::getBoxLid(){
+    std::string data = "";
+
+    for(int i = 0; i < boxLid.size(); i++){
+        data += boxLid[i]->getType();
+    }
+    data += '$';
+
+    return data;
+}
+
+
+std::string Game::getFactories(){
+    std::string data = "";
+
+    for(int i = 0; i < NUM_OF_FACTORIES; i++){
+        for(int j = 0; j < FACTORY_SIZE ; j++){
+            data += factories[i][j]->getType();
+        }
+        data += "$\n";
+    }
+    data += '$';
+
+    return data;
+}
+
+
+std::string Game::getCentreTable(){
+    std::string data = "";
+
+    if(centreTable->getSize() != 0){
+        data += centreTable->getCenterTableDetails();
+    }
+
+    return data;
+}
