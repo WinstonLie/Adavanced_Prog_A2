@@ -7,29 +7,71 @@
 #include "LinkedList.h"
 #include <vector>
 
+#define FACTORY_SIZE    4
+#define NUM_OF_FACTORIES  5
+
 class Game{
     public:
-        Game(Player** players, int playerCount);
+        // Constructor that initialises private values and sets players
+        Game(Player** playersToAdd, int playerCount);
+        
+        // Decontructor
         ~Game();
-        void populateBag();
+        
+        // Moves tiles from the lid into the bag
+        void populateBagFromLid();
+        
+        // Fills up the factories with tiles from the bag
         void populateFactories();
+        
+        // Returns the amount of players
         int getPlayerCount();
+        
+        // Returns the player at the specified index, or nullptr if not present
         Player* getPlayer(int index);
-        void getTilesFromFactory(int factoryIndex, Tile* colour, int& tileAmount, Tile*& tiles);
-        void getTilesFromCentre(Tile* colour, int& tileAmount, Tile*& tiles);
+        
+        // Removes the tiles of the inputted colour from the specified factory and places
+        //   them into the inputted 'tiles' array
+        // Returns true if factory was emptied, else false
+        bool getTilesFromFactory(int factoryIndex, Types colour, int& tileAmount, Tile** tiles);
+        
+        // Removes the tiles of the inputted colour from the centre factory and places
+        //   them into the inputted 'tiles' array
+        // Returns true if first player marker has not been taken and remove
+        //   the first player marker, otherwise false
+        bool getTilesFromCentre(Types colour, int& tileAmount, Tile** tiles);
+        
+        // Returns true if the first player marker has been taken, otherwise false
         bool isFirstPlayerMarkerTaken();
+
+        // Adds a tile to the box lid
         void addToBoxLid(Tile* tile);
-        std::vector<Tile*>* getBoxLid();
 
 
     private:
+        // Amount of players
         int playerCount;
-        Player** players;
+
+        // Vector of all players
+        std::vector<Player*> players;
+
+        // Bag that holds tiles
         std::vector<Tile*> bag;
+
+        // Amount of factories
         int factoryCount;
+
+        // Two dimensional array for factories, with every row
+        // being a different factory
         Tile*** factories;
-        LinkedList centreTable;
+
+        // The factory for the centre of the table
+        LinkedList* centreTable;
+
+        // Vector for the lid
         std::vector<Tile*> boxLid;
+
+        // If true, then first player marker is still in the centre
         bool firstPlayerMarker;
 };
 #endif // AZUL_GAME

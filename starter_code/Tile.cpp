@@ -1,13 +1,13 @@
 #include "Tile.h"
 
-Tile::Tile(Types* type){
+Tile::Tile(Types type){
     this->type = type;
 }
 
 Tile::~Tile(){
-    this->type = nullptr;
+    //destructor
 }
 
-Types* Tile::getType(){
+Types Tile::getType(){
     return this->type;
 }

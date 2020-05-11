@@ -32,7 +32,7 @@ void LinkedList::insert(Tile* tile){
     head = newNode;
 }
 
-void LinkedList::removeTiles(Types* colour, Tile** tiles, int& tileCount){
+void LinkedList::removeTiles(Types colour, Tile** tiles, int& tileCount){
     Node* iterator = head;
     while(iterator->getNext() != nullptr){
         //check if next node matches the color
@@ -48,7 +48,6 @@ void LinkedList::removeTiles(Types* colour, Tile** tiles, int& tileCount){
 }
 
 void LinkedList::clear(){
-    std::vector<Tile*>* boxLid = game->getBoxLid();
     Node* iterator = head;
     Node* iteratorNext = nullptr;
     
@@ -60,7 +59,7 @@ void LinkedList::clear(){
     iterator = head;
     while(iterator != nullptr){
         //insert tiles into the box lid
-        boxLid->insert(boxLid->end(), iterator->getTileFromNode());
+        game->addToBoxLid(iterator->getTileFromNode());
         //deallocate memory
         iteratorNext = iterator->getNext();
         iterator->setTile(nullptr);
