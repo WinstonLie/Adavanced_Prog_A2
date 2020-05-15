@@ -3,10 +3,12 @@
 #define AZUL_LINKEDLIST
 
 #include "Node.h"
-#include "Game.h"
+#include <string>
+// #include "Game.h"
 //LinkedList implementation for Centre Factory
 
 #define ARRAY_MAX_SIZE    100
+
 class LinkedList{
     public:
         LinkedList();
@@ -25,7 +27,7 @@ class LinkedList{
         // Removes tile nodeToDel from the list
         // Sets prevNodes next node to nodeToDels next node
         void removeNode(Node* prevNode, Node* nodeToDel);
-        Game* game;
+        // Game* game;
         int size;
         Node* head;
 };

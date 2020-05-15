@@ -4,6 +4,12 @@
 #include <fstream>
 #include <iostream>
 
+Types readTypeFromChar(char input);
+
+void readTiles(bool& validLoad, std::vector<std::string>& inputLines, 
+  int& currentLineCounter, std::vector<Tile*>& tiles);
+
+;bool checkLoad(bool& validLoad, std::vector<std::string>& inputLines, int currentLineCounter);
 
 bool saveGame(Game* game, std::string filePath){
    bool successfullySaved = false;
@@ -112,21 +118,23 @@ bool saveGame(Game* game, std::string filePath){
    return successfullySaved;
 }
 
-bool loadGame(Game* game, std::string filePath){
+bool loadGame(Game** game, std::string filePath){
     bool validLoad = true;
     // Read all valid lines from file into vector
     std::vector<std::string> inputLines;
     std::ifstream inputFileStream;
     inputFileStream.open(filePath);
     std::string currentLine;
-    inputFileStream >> currentLine;
     while (inputFileStream.good()){
-        if (currentLine.length() != 0 && currentLine[0] != '#'){
+        std::getline(inputFileStream, currentLine);
+        if (!currentLine.empty() && currentLine[0] != '#' && currentLine[0] != '\r'){
             inputLines.push_back(currentLine);
         }
-        inputFileStream >> currentLine;
     }
     inputFileStream.close();
+    for (int i = 0; i < inputLines.size(); i++){
+        std::cout << inputLines[i] << std::endl;
+    }
     
     // Create game from input
     // Create empty values for
@@ -143,9 +151,10 @@ bool loadGame(Game* game, std::string filePath){
     
     // Check save file tag
     if (checkLoad(validLoad, inputLines, currentLineCounter) &&
-      inputLines[currentLineCounter] == "Fri 1630 - Dale"){
+      inputLines[currentLineCounter].compare("Fri 1630 - Dale") == 0){
         currentLineCounter++;
     } else {
+        std::cout << "invalid file line";
         validLoad = false;
     }
 
@@ -220,7 +229,7 @@ bool loadGame(Game* game, std::string filePath){
         int playerCounter = 0;
         while (validLoad && playerCounter < numberOfPlayers){
             // Initialise player variables
-            std::string name = nullptr;
+            std::string name = "";
             int points = -1;
             // Initialise empty wall
             Tile*** wall = new Tile**[WALL_DIMENSION];
@@ -255,6 +264,7 @@ bool loadGame(Game* game, std::string filePath){
 
             // Read in points
             if (checkLoad(validLoad, inputLines, currentLineCounter)){
+                std::cout << inputLines[currentLineCounter] << std::endl;
                 points = std::stoi(inputLines[currentLineCounter]);
                 currentLineCounter++;
             }
@@ -272,12 +282,15 @@ bool loadGame(Game* game, std::string filePath){
                         char input = inputLines[currentLineCounter][i];
                         Types type = readTypeFromChar(input);
 
-                        if (type != Empty && type != starter_player){
+                        if (type != Invalid && type != starter_player){
                             wall[wallRowCounter][i] = new Tile(type);
                         } else {
                             validLoad = false;
                         }
                     }
+                    
+                    wallRowCounter++;
+                    currentLineCounter++;
                 } else {
                     validLoad = false;
                 }
@@ -285,8 +298,8 @@ bool loadGame(Game* game, std::string filePath){
 
             // Read in patternLines
             int patternRowCounter = 0;
-            while (checkLoad(validLoad, inputLines, currentLineCounter)
-              && patternRowCounter < PATTERN_LINE_ROWS){
+            while (patternRowCounter < PATTERN_LINE_ROWS
+              && checkLoad(validLoad, inputLines, currentLineCounter)){
                 // check that row has at least five characters
                 if (inputLines[currentLineCounter].length() >= patternRowCounter + 1){
                     // Boolean to check that all tiles are inserted at front
@@ -309,6 +322,10 @@ bool loadGame(Game* game, std::string filePath){
                             validLoad = false;
                         }
                     }
+
+                    
+                    patternRowCounter++;
+                    currentLineCounter++;
                 } else {
                     validLoad = false;
                 }
@@ -343,6 +360,7 @@ bool loadGame(Game* game, std::string filePath){
                             validLoad = false;
                         }
                     }
+                    currentLineCounter++;
                 } else {
                     validLoad = false;
                 }
@@ -353,6 +371,7 @@ bool loadGame(Game* game, std::string filePath){
                 Player* player = new Player(name, points, patternLines,
                   patternLineCounts,  wall,  floorLine,  floorLineCount);
                 players.push_back(player);
+                playerCounter++;
             } else {
                 // delete created objects for player
                 // TODO
@@ -364,20 +383,23 @@ bool loadGame(Game* game, std::string filePath){
     // Creates game and adds in data if loaded successfully
     if (validLoad){
         LinkedList* centreTable = new LinkedList();// TODO add in values
-        game = new Game(players, numberOfPlayers, bag, factoryCount, 
+        *game = new Game(players, numberOfPlayers, bag, factoryCount, 
           factories.data(), centreTable,  boxLid, firstPlayerMarker);
+        std::cout << "valid load" << std::endl;
     } else {
         //delete created objects
         // TODO
+        // std::cout << "invalid load" << std::endl;
     }
 
 }
 // checks that validLoad is true and that array counter is within range
 bool checkLoad(bool& validLoad, std::vector<std::string>& inputLines, int currentLineCounter){
     bool checkedLoad;
-    if (validLoad && inputLines[currentLineCounter].length() > currentLineCounter){
+    if (validLoad && inputLines.size() > currentLineCounter){
         checkedLoad = true;
     } else {
+        std::cout << "invalid load" << std::endl;
         validLoad = false;
         checkedLoad = false;
     }
@@ -412,7 +434,8 @@ void readTiles(bool& validLoad, std::vector<std::string>& inputLines,
             } else {
                 validLoad = false;
             }
-        }
+        }// end of while
+        currentLineCounter++;
 
 }
 

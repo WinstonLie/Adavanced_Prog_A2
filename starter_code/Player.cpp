@@ -85,7 +85,7 @@ void Player::addToFloorLine(Tile* tile){
         floorLineCount++;
     } else {
         // If no room left, send tile to game to put inside lid
-        game->addToBoxLid(tile);
+        // game->addToBoxLid(tile);
     }
 }
 
@@ -101,7 +101,7 @@ bool Player::addTileToWall(int patternLineRow, int row, int column){
         patternLines[patternLineRow][0] = nullptr;
         // Puts all other tiles in row (if any exist) into lid
         for (int i = 1; i < patternLineRowCounts[patternLineRow]; i++){
-            game->addToBoxLid(patternLines[patternLineRow][i]);
+            // game->addToBoxLid(patternLines[patternLineRow][i]);
             patternLines[patternLineRow][i] = nullptr;
         }
 
@@ -133,7 +133,7 @@ bool Player::addTileToWall(int patternLineRow, int row, int column){
             points += FLOOR_LINE_PENALTIES[i];
             // starting player tile doesn't go back into lid, gets deleted and re-created
             if (floorLine[i]->getType() != starter_player){
-                game->addToBoxLid(floorLine[i]);
+                // game->addToBoxLid(floorLine[i]);
             } else {
                 delete floorLine[i];
             }
@@ -324,3 +324,7 @@ std::string Player::getFloorLine(){
 
     return data;
 }
+
+// void Player::setGame(Game* game){
+//     this->game = game;
+// }

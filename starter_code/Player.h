@@ -2,7 +2,8 @@
 #ifndef AZUL_PLAYER
 #define AZUL_PLAYER
 
-#include "Game.h"
+#include "Tile.h"
+// #include "Game.h"
 #include <string>
 
 #define WALL_DIMENSION 5
@@ -69,14 +70,14 @@ class Player{
         std::string getFloorLine();
 
         //set game that the player is in
-        void setGame(Game* game);
+        // void setGame(Game* game);
 
     private:
         // Name of the player
         std::string playerName;
         
         // Game that the player is a part of
-        Game* game;
+        // Game* game;
         
         // Points that the player has
         int points;
@@ -101,7 +102,7 @@ class Player{
         //   the coordinates given. Directions for numbers 0,1,2,3 are north, east,
         //   south, west. Return value is amount of tiles found in direction, or 0
         //   if direction is not within expected range.
-        int Player::tilesInDirection(int row, int column, int direction);
+        int tilesInDirection(int row, int column, int direction);
 
 };
 

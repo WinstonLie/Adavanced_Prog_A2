@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include "Game.h"
+#include "SaveLoad.cpp"
 
 void menuDisplay();
 
@@ -55,6 +57,10 @@ bool manageInput(char input){
     //Load saved game
     else if(input == '2'){
         std::cout << "Loading Game..." << std::endl;
+        Game** game = new Game*;
+        loadGame(game, "test.save");
+
+        saveGame(*game, "out.save");
         checked = true;
     }
     //gets credit

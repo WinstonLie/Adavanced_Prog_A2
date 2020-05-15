@@ -1,5 +1,5 @@
 #include "LinkedList.h"
-#include "Game.h"
+// #include "Game.h"
 
 LinkedList::LinkedList(){
     head = nullptr;
@@ -59,7 +59,7 @@ void LinkedList::clear(){
     iterator = head;
     while(iterator != nullptr){
         //insert tiles into the box lid
-        game->addToBoxLid(iterator->getTileFromNode());
+        // game->addToBoxLid(iterator->getTileFromNode());
         //deallocate memory
         iteratorNext = iterator->getNext();
         iterator->setTile(nullptr);
