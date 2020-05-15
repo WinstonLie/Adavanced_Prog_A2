@@ -291,7 +291,11 @@ std::string Player::getWall(){
 
     for(int i = 0; i < WALL_DIMENSION; i++){
         for(int j = 0; j < WALL_DIMENSION; j++){
-            data += wall[i][j]->getType();
+            if (wall[i][j] != nullptr){
+                data += wall[i][j]->getType();
+            } else {
+                data += '.';
+            }
         }
         data += "$\n";
     }
@@ -305,7 +309,11 @@ std::string Player::getPatternLine(){
 
     for(int i = 0; i < PATTERN_LINE_ROWS ; i++){
         for(int j = 0 ; j < i+1 ; j++){
-            data += patternLines[i][j]->getType();
+            if (patternLines[i][j] != nullptr){
+                data += patternLines[i][j]->getType();
+            } else {
+                data += '.';
+            }
         }
         data += "$\n";
     }
@@ -318,7 +326,11 @@ std::string Player::getFloorLine(){
     std::string data = "";
 
     for(int i = 0; i < FLOOR_LINE_LENGTH; i++){
-        data += floorLine[i]->getType();
+        if (floorLine[i] != nullptr){
+            data += floorLine[i]->getType();
+        } else {
+            data += '.';
+        }
     }
     data += "$";
 

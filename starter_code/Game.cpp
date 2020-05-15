@@ -213,7 +213,9 @@ std::string Game::getFactories(){
 
     for(int i = 0; i < NUM_OF_FACTORIES; i++){
         for(int j = 0; j < FACTORY_SIZE ; j++){
-            data += factories[i][j]->getType();
+            if (factories[i][j] != nullptr){
+                data += factories[i][j]->getType();
+            }
         }
         data += "$\n";
     }

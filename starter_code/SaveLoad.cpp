@@ -140,7 +140,7 @@ bool loadGame(Game** game, std::string filePath){
     // Create empty values for
     std::vector<Tile*> bag;
     std::vector<Tile*> boxLid;
-    std::vector<Tile**> factories;
+    Tile*** factories;
     int currentPlayerIndex;
     int numberOfPlayers;
     std::vector<Player*> players;
@@ -186,19 +186,24 @@ bool loadGame(Game** game, std::string filePath){
 
     // Reads in factories
     if (checkLoad(validLoad, inputLines, currentLineCounter)){
+        factories = new Tile**[factoryCount];
+        // for (int i = 0; i < factoryCount; i++){
+        //     factories[i]
+        // }
         int factoryCounter = 0;
         while (validLoad && factoryCounter < factoryCount){
             std::vector<Tile*> input;
             readTiles(validLoad, inputLines, currentLineCounter, input);
             if (validLoad){
-                factories.push_back(new Tile*[FACTORY_SIZE]);
+                Tile** factory = new Tile*[FACTORY_SIZE];
                 for (int i = 0; i < FACTORY_SIZE; i++){
                     if (i < input.size()){
-                        factories[factoryCounter][i] = input[i];
+                        factory[i] = input[i];
                     } else {
-                        factories[factoryCounter][i] = nullptr;
+                        factory[i] = nullptr;
                     }
                 }
+                factories[factoryCounter] = factory;
                 factoryCounter++;
             }
         }
@@ -243,10 +248,10 @@ bool loadGame(Game** game, std::string filePath){
             Tile*** patternLines = new Tile**[PATTERN_LINE_ROWS];
             int* patternLineCounts = new int[PATTERN_LINE_ROWS];
             for (int i = 0; i < PATTERN_LINE_ROWS; i++){
-                wall[i] = new Tile*[i + 1];
+                patternLines[i] = new Tile*[i + 1];
                 patternLineCounts[i] = 0;
                 for (int r = 0; r < i + 1; r++){
-                    wall[i][r] = nullptr;
+                    patternLines[i][r] = nullptr;
                 }
             }
 
@@ -384,7 +389,7 @@ bool loadGame(Game** game, std::string filePath){
     if (validLoad){
         LinkedList* centreTable = new LinkedList();// TODO add in values
         *game = new Game(players, numberOfPlayers, bag, factoryCount, 
-          factories.data(), centreTable,  boxLid, firstPlayerMarker);
+          factories, centreTable,  boxLid, firstPlayerMarker);
         std::cout << "valid load" << std::endl;
     } else {
         //delete created objects
