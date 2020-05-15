@@ -353,6 +353,9 @@ bool loadGame(Game* game, std::string filePath){
                 Player* player = new Player(name, points, patternLines,
                   patternLineCounts,  wall,  floorLine,  floorLineCount);
                 players.push_back(player);
+            } else {
+                // delete created objects for player
+                // TODO
             }
         }
 
@@ -365,6 +368,7 @@ bool loadGame(Game* game, std::string filePath){
           factories.data(), centreTable,  boxLid, firstPlayerMarker);
     } else {
         //delete created objects
+        // TODO
     }
 
 }

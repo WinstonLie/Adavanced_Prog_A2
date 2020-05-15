@@ -44,6 +44,12 @@ Game::Game(Player** playersToAdd, int playerCount){
     this->firstPlayerMarker = true;
 }
 
+Game::Game (std::vector<Player*> playersToAdd, int playerCount, std::vector<Tile*> bag,
+          int factoryCount, Tile*** factories, LinkedList* centreTable, std::vector<Tile*> boxLid,
+          bool firstPlayerMarker) : players{ playersToAdd }, playerCount{ playerCount }, bag{ bag },
+          factoryCount{ factoryCount }, factories{ factories }, centreTable{ centreTable }, boxLid{ boxLid },
+          firstPlayerMarker{ firstPlayerMarker } {}
+
 
 Game::~Game(){
 

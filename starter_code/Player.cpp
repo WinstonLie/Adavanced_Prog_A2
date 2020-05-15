@@ -1,7 +1,7 @@
 #include "Player.h"
 
-Player::Player(std::string playerName, Game* game)
-    : playerName{ playerName }, game{ game }
+Player::Player(std::string playerName)
+    : playerName{ playerName }
 {
     // Initialise points to 0
     points = 0;
@@ -32,6 +32,12 @@ Player::Player(std::string playerName, Game* game)
     // Initialise floor line count
     floorLineCount = 0;
 }
+
+Player::Player(std::string playerName, int points, Tile*** patternLine,
+          int* patternLineRowCounts, Tile*** wall, Tile** floorLine, int floorLineCount) :
+          playerName{ playerName }, points{ points }, patternLines{ patternLine },
+          patternLineRowCounts{ patternLineRowCounts }, wall{ wall }, floorLine{ floorLine },
+          floorLineCount{ floorLineCount } {}
 
 Player::~Player(){
     // TODO
