@@ -230,6 +230,8 @@ std::string Game::getCentreTable(){
 
     if(centreTable->getSize() != 0){
         data += centreTable->getCenterTableDetails();
+    } else {
+        data += '$';
     }
 
     return data;
