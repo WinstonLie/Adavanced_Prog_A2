@@ -15,6 +15,11 @@ class Game{
     public:
         // Constructor that initialises private values and sets players
         Game(Player** playersToAdd, int playerCount);
+
+        // Load constructor
+        Game (std::vector<Player*> playersToAdd, int playerCount, std::vector<Tile*> bag,
+          int factoryCount, Tile*** factories, LinkedList* centreTable, std::vector<Tile*> boxLid,
+          bool firstPlayerMarker);
         
         // Decontructor
         ~Game();

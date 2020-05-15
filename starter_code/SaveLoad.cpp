@@ -136,6 +136,7 @@ bool loadGame(Game* game, std::string filePath){
     int currentPlayerIndex;
     int numberOfPlayers;
     std::vector<Player*> players;
+    bool firstPlayerMarker = true;
 
     // Counter for current line
     int currentLineCounter = 0;
@@ -326,9 +327,12 @@ bool loadGame(Game* game, std::string filePath){
 
                         if (type != Invalid){
                             if (type != Empty){
-                                if (emptyTileFound){
+                                if (emptyTileFound || (type == starter_player && firstPlayerMarker == false)){
                                     validLoad = false;
                                 } else {
+                                    if (type == starter_player){
+                                        firstPlayerMarker = false;
+                                    }
                                     floorLineCount++;
                                     floorLine[i] = new Tile(type);
                                 }
@@ -345,17 +349,26 @@ bool loadGame(Game* game, std::string filePath){
             }
 
             // If load is valid so far, then create player with details
-            if (checkLoad(validLoad, inputLines, currentLineCounter)){
+            if (validLoad){
                 Player* player = new Player(name, points, patternLines,
                   patternLineCounts,  wall,  floorLine,  floorLineCount);
                 players.push_back(player);
             }
         }
 
+    }// end of reading in players
+
+    // Creates game and adds in data if loaded successfully
+    if (validLoad){
+        LinkedList* centreTable = new LinkedList();// TODO add in values
+        game = new Game(players, numberOfPlayers, bag, factoryCount, 
+          factories.data(), centreTable,  boxLid, firstPlayerMarker);
+    } else {
+        //delete created objects
     }
 
 }
-//
+// checks that validLoad is true and that array counter is within range
 bool checkLoad(bool& validLoad, std::vector<std::string>& inputLines, int currentLineCounter){
     bool checkedLoad;
     if (validLoad && inputLines[currentLineCounter].length() > currentLineCounter){
