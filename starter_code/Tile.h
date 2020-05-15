@@ -8,6 +8,8 @@ enum Types {
             Light_Blue = 'L',
             Black = 'U',
             starter_player = 'S',
+            Empty = '.',
+            Invalid = '_'
         };
 
 class Tile{

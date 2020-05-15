@@ -21,7 +21,11 @@ class Player{
     public:
         
         // Constructs the player and initialises the structures
-        Player(std::string playerName, Game* game);
+        Player(std::string playerName);
+
+        // Loading constructor
+        Player(std::string playerName, int points, Tile*** patternLine,
+          int* patternLineRowCounts, Tile*** wall, Tile** floorLine, int floorLineCount);
         
         // Deconstructor for player
         ~Player();
@@ -63,6 +67,9 @@ class Player{
 
         //get floorLine data for saving
         std::string getFloorLine();
+
+        //set game that the player is in
+        void setGame(Game* game);
 
     private:
         // Name of the player

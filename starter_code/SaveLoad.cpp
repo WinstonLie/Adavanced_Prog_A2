@@ -133,6 +133,9 @@ bool loadGame(Game* game, std::string filePath){
     std::vector<Tile*> bag;
     std::vector<Tile*> boxLid;
     std::vector<Tile**> factories;
+    int currentPlayerIndex;
+    int numberOfPlayers;
+    std::vector<Player*> players;
 
     // Counter for current line
     int currentLineCounter = 0;
@@ -191,13 +194,174 @@ bool loadGame(Game* game, std::string filePath){
         }
     }
 
+    // Read in seed
+    // Not currently implemented
+
+    // Current player
+    if (checkLoad(validLoad, inputLines, currentLineCounter)){
+        currentPlayerIndex = std::stoi(inputLines[currentLineCounter]);
+        currentLineCounter++;
+    }
+
+    // Number of players
+    if (checkLoad(validLoad, inputLines, currentLineCounter)){
+        numberOfPlayers = std::stoi(inputLines[currentLineCounter]);
+        currentLineCounter++;
+        // Check to see that current player is within boundaries
+        if (currentPlayerIndex < 0 || currentPlayerIndex >= numberOfPlayers){
+            validLoad = false;
+        }
+    }
+
+    // Read in players
+    if (checkLoad(validLoad, inputLines, currentLineCounter)){
+        // For every expected player, go through a loop
+        int playerCounter = 0;
+        while (validLoad && playerCounter < numberOfPlayers){
+            // Initialise player variables
+            std::string name = nullptr;
+            int points = -1;
+            // Initialise empty wall
+            Tile*** wall = new Tile**[WALL_DIMENSION];
+            for (int i = 0; i < WALL_DIMENSION; i++){
+                wall[i] = new Tile*[WALL_DIMENSION];
+                for (int r = 0; r < WALL_DIMENSION; r++){
+                    wall[i][r] = nullptr;
+                }
+            }
+            // Initialise empty pattern lines
+            Tile*** patternLines = new Tile**[PATTERN_LINE_ROWS];
+            int* patternLineCounts = new int[PATTERN_LINE_ROWS];
+            for (int i = 0; i < PATTERN_LINE_ROWS; i++){
+                wall[i] = new Tile*[i + 1];
+                patternLineCounts[i] = 0;
+                for (int r = 0; r < i + 1; r++){
+                    wall[i][r] = nullptr;
+                }
+            }
+
+            Tile** floorLine = new Tile*[FLOOR_LINE_LENGTH];
+            for (int i = 0; i < FLOOR_LINE_LENGTH; i++){
+                floorLine[i] = nullptr;
+            }
+            int floorLineCount = 0;
+
+            // Read in name
+            if (checkLoad(validLoad, inputLines, currentLineCounter)){
+                name = inputLines[currentLineCounter];
+                currentLineCounter++;
+            }
+
+            // Read in points
+            if (checkLoad(validLoad, inputLines, currentLineCounter)){
+                points = std::stoi(inputLines[currentLineCounter]);
+                currentLineCounter++;
+            }
+
+            // Read in wall
+            
+
+            int wallRowCounter = 0;
+            while (checkLoad(validLoad, inputLines, currentLineCounter)
+              && wallRowCounter < WALL_DIMENSION){
+                // check that row has at least five characters
+                if (inputLines[currentLineCounter].length() >= 5){
+                    // Read in each character one by one
+                    for (int i = 0; validLoad && i < WALL_DIMENSION; i++){
+                        char input = inputLines[currentLineCounter][i];
+                        Types type = readTypeFromChar(input);
+
+                        if (type != Empty && type != starter_player){
+                            wall[wallRowCounter][i] = new Tile(type);
+                        } else {
+                            validLoad = false;
+                        }
+                    }
+                } else {
+                    validLoad = false;
+                }
+            } // end of wall loading
+
+            // Read in patternLines
+            int patternRowCounter = 0;
+            while (checkLoad(validLoad, inputLines, currentLineCounter)
+              && patternRowCounter < PATTERN_LINE_ROWS){
+                // check that row has at least five characters
+                if (inputLines[currentLineCounter].length() >= patternRowCounter + 1){
+                    // Boolean to check that all tiles are inserted at front
+                    bool emptyTileFound = false;
+                    // Read in each character one by one
+                    for (int i = 0; validLoad && i < patternRowCounter + 1; i++){
+                        char input = inputLines[currentLineCounter][i];
+                        Types type = readTypeFromChar(input);
+
+                        if (type != Invalid && type != starter_player){
+                            if (type != Empty){
+                                if (emptyTileFound){
+                                    validLoad = false;
+                                } else {
+                                    patternLineCounts[patternRowCounter]++;
+                                    patternLines[patternRowCounter][i] = new Tile(type);
+                                }
+                            }
+                        } else {
+                            validLoad = false;
+                        }
+                    }
+                } else {
+                    validLoad = false;
+                }
+            } // end of pattern line loading
+
+            // load in floor line
+            if (checkLoad(validLoad, inputLines, currentLineCounter)){
+                // Boolean to check that all tiles are inserted at front
+                bool emptyTileFound = false;
+                // check that floor line has enough characters
+                if (inputLines[currentLineCounter].length() >= FLOOR_LINE_LENGTH){
+                    // Read in floor line
+                    for (int i = 0; validLoad && i < FLOOR_LINE_LENGTH; i++){
+                        char input = inputLines[currentLineCounter][i];
+                        Types type = readTypeFromChar(input);
+
+                        if (type != Invalid){
+                            if (type != Empty){
+                                if (emptyTileFound){
+                                    validLoad = false;
+                                } else {
+                                    floorLineCount++;
+                                    floorLine[i] = new Tile(type);
+                                }
+                            } else {
+                                emptyTileFound = true;
+                            }
+                        } else {
+                            validLoad = false;
+                        }
+                    }
+                } else {
+                    validLoad = false;
+                }
+            }
+
+            // If load is valid so far, then create player with details
+            if (checkLoad(validLoad, inputLines, currentLineCounter)){
+                Player* player = new Player(name, points, patternLines,
+                  patternLineCounts,  wall,  floorLine,  floorLineCount);
+                players.push_back(player);
+            }
+        }
+
+    }
+
 }
 //
-bool checkLoad(bool validLoad, std::vector<std::string>& inputLines, int currentLineCounter){
+bool checkLoad(bool& validLoad, std::vector<std::string>& inputLines, int currentLineCounter){
     bool checkedLoad;
     if (validLoad && inputLines[currentLineCounter].length() > currentLineCounter){
         checkedLoad = true;
     } else {
+        validLoad = false;
         checkedLoad = false;
     }
     return checkedLoad;
@@ -216,20 +380,9 @@ void readTiles(bool& validLoad, std::vector<std::string>& inputLines,
                 currentIndex++;
             } else {
                 // starter_player is treated as unassigned
-                Types colour = starter_player;
-                if (currentTile == 'R'){
-                    colour = Red;
-                } else if (currentTile == 'Y'){
-                    colour = Yellow;
-                } else if (currentTile == 'B'){
-                    colour = Dark_Blue;
-                } else if (currentTile == 'L'){
-                    colour = Light_Blue;
-                } else if (currentTile == 'U') {
-                    colour = Black;
-                }
+                Types colour = readTypeFromChar(currentTile);
 
-                if (colour != starter_player){
+                if (colour != Invalid && colour != starter_player){
                     tiles.push_back(new Tile(colour));
                     currentIndex++;
                 } else {
@@ -244,4 +397,26 @@ void readTiles(bool& validLoad, std::vector<std::string>& inputLines,
             }
         }
 
+}
+
+// May potentially be moved to a util file for use in main program
+Types readTypeFromChar(char input){
+    Types colour = Invalid;
+    if (input == 'R'){
+        colour = Red;
+    } else if (input == 'Y'){
+        colour = Yellow;
+    } else if (input == 'B'){
+        colour = Dark_Blue;
+    } else if (input == 'L'){
+        colour = Light_Blue;
+    } else if (input == 'U') {
+        colour = Black;
+    } else if (input == '.'){
+        colour = Empty;  
+    } else if (input == 'S'){
+        colour = starter_player;
+    }
+
+    return colour;
 }
