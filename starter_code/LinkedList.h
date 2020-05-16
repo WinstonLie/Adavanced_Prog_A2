@@ -4,10 +4,12 @@
 
 #include "Node.h"
 #include <string>
-// #include "Game.h"
+#include "Game.h"
 //LinkedList implementation for Centre Factory
 
 #define ARRAY_MAX_SIZE    100
+
+class Game;
 
 class LinkedList{
     public:
@@ -22,12 +24,14 @@ class LinkedList{
         // Removes all tiles from the list and puts them into the lid
         void clear();
         std::string getCenterTableDetails();
+        //Get all tiles from center factory to display in console
+        std::string getTilesFromCenterTable();
 
     private:
         // Removes tile nodeToDel from the list
         // Sets prevNodes next node to nodeToDels next node
         void removeNode(Node* prevNode, Node* nodeToDel);
-        // Game* game;
+        Game* game;
         int size;
         Node* head;
 };

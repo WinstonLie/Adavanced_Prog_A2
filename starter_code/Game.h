@@ -11,10 +11,13 @@
 #define FACTORY_SIZE    4
 #define NUM_OF_FACTORIES  5
 
+class Player;
+class LinkedList;
+
 class Game{
     public:
         // Constructor that initialises private values and sets players
-        Game(Player** playersToAdd, int playerCount);
+        Game(std::vector<Player*> playersToAdd);
 
         // Load constructor
         Game (std::vector<Player*> playersToAdd, int playerCount, std::vector<Tile*> bag,
@@ -65,10 +68,14 @@ class Game{
         //get centreTable data for saving
         std::string getCentreTable();
 
+        //Returning string representation of tiles in factories
+        std::string displayFactories();
+
+        // Checks to see if at least one factory still contains tiles, including centre of the table
+        // Returns true if at least one tile is present in a factory, else false
+        bool checkIfFactoriesPopulated(Game* game);
 
     private:
-        // Amount of players
-        int playerCount;
 
         // Vector of all players
         std::vector<Player*> players;

@@ -59,7 +59,7 @@ void LinkedList::clear(){
     iterator = head;
     while(iterator != nullptr){
         //insert tiles into the box lid
-        // game->addToBoxLid(iterator->getTileFromNode());
+        game->addToBoxLid(iterator->getTileFromNode());
         //deallocate memory
         iteratorNext = iterator->getNext();
         iterator->setTile(nullptr);
@@ -92,6 +92,17 @@ std::string LinkedList::getCenterTableDetails(){
     }
     data += "$";
     return data;
+}
+std::string LinkedList::getTilesFromCenterTable(){
+    Node* iterator = head;
+    std::string tilesInCenterTable = "";
+    while(iterator != nullptr){
+        
+        tilesInCenterTable += iterator->getTileFromNode()->getType();
+        
+    }
+
+    return tilesInCenterTable;
 }
 
 

@@ -3,7 +3,7 @@
 #define AZUL_PLAYER
 
 #include "Tile.h"
-// #include "Game.h"
+#include "Game.h"
 #include <string>
 
 #define WALL_DIMENSION 5
@@ -17,6 +17,8 @@ const Types WALL_COLOURS[WALL_DIMENSION][WALL_DIMENSION] =
 #define PATTERN_LINE_ROWS 5
 #define FLOOR_LINE_LENGTH 7
 const int FLOOR_LINE_PENALTIES[] = {-1, -1, -2, -2, -2, -3, -3};
+
+class Game;
 
 class Player{
     public:
@@ -46,7 +48,7 @@ class Player{
         // Points earned from placing the tile will be added to total here
         // Returns false if place on wall is already occupied or if pattern line is not full
         //   or if location doesn't match colour of tile
-        bool addTileToWall(int patternLineRow, int row, int column);
+        bool addTilesToWalls();
 
         // Checks to see if there is a completed row on the board
         bool hasEndedGame();
@@ -70,14 +72,17 @@ class Player{
         std::string getFloorLine();
 
         //set game that the player is in
-        // void setGame(Game* game);
+        void setGame(Game* game);
+
+        // Returns a string displaying the board, for use in console
+        std::string displayBoard();
 
     private:
         // Name of the player
         std::string playerName;
         
         // Game that the player is a part of
-        // Game* game;
+        Game* game;
         
         // Points that the player has
         int points;
@@ -104,6 +109,9 @@ class Player{
         //   if direction is not within expected range.
         int tilesInDirection(int row, int column, int direction);
 
+        // Checks to see if the type of tile exists in the row
+        // Returns true if present, else false
+        bool tileInRowOfWall(Types colour, int row);
 };
 
 #endif // AZUL_PLAYER

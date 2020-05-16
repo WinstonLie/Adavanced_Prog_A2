@@ -47,16 +47,14 @@ bool saveGame(Game* game, std::string filePath){
        outputStream << game->getBoxLid() << std::endl;
        outputStream << std::endl;
 
+       //centre table data
+       outputStream << "#Centre Table" << std::endl;
+       outputStream << game->getCentreTable() << std::endl;
+       outputStream << std::endl;
 
        //factory data
        outputStream << "#Factories" << std::endl;
        outputStream << game->getFactories() << std::endl;
-       outputStream << std::endl;
-
-
-       //centre table data
-       outputStream << "#Centre Table" << std::endl;
-       outputStream << game->getCentreTable() << std::endl;
        outputStream << std::endl;
 
        //player taking their turn
@@ -94,7 +92,7 @@ bool saveGame(Game* game, std::string filePath){
        //player 2 data
        outputStream << "#Player2" << std::endl;
        outputStream << game->getPlayer(1)->getPlayerName() << std::endl;
-       outputStream << "INSERT PLAYER SCORE" << std::endl;
+       outputStream << game->getPlayer(1)->getPoints() << std::endl;
        outputStream << std::endl;
 
        outputStream << "#Player2 Wall" << std::endl;
@@ -132,19 +130,21 @@ bool loadGame(Game** game, std::string filePath){
         }
     }
     inputFileStream.close();
-    for (int i = 0; i < inputLines.size(); i++){
-        std::cout << inputLines[i] << std::endl;
-    }
+    // // Code to print read in lines
+    // for (int i = 0; i < inputLines.size(); i++){
+    //     std::cout << inputLines[i] << std::endl;
+    // }
     
     // Create game from input
     // Create empty values for game
     std::vector<Tile*> bag;
     std::vector<Tile*> boxLid;
+    std::vector<Tile*> centreOfTable;
     Tile*** factories;
     int currentPlayerIndex;
     int numberOfPlayers;
     std::vector<Player*> players;
-    bool firstPlayerMarker = true;
+    bool firstPlayerMarker = false;
 
     // Counter for current line
     int currentLineCounter = 0;
@@ -181,6 +181,12 @@ bool loadGame(Game** game, std::string filePath){
         readTiles(validLoad, inputLines, currentLineCounter, boxLid);
     }
     
+    // Read in the centre of table
+    if (checkLoad(validLoad, inputLines, currentLineCounter)){
+        readTiles(validLoad, inputLines, currentLineCounter, centreOfTable);
+    }
+    // TODO
+
     // Assumes 5 factories
     int factoryCount = 5;
 
@@ -439,6 +445,7 @@ bool checkLoad(bool& validLoad, std::vector<std::string>& inputLines, int curren
 }
 
 // Reads tiles until a $ character is reached
+// Doesn't expect empty tiles (represented as .)
 void readTiles(bool& validLoad, std::vector<std::string>& inputLines, 
   int& currentLineCounter, std::vector<Tile*>& tiles){
     int currentIndex = 0;
@@ -453,7 +460,7 @@ void readTiles(bool& validLoad, std::vector<std::string>& inputLines,
                 // starter_player is treated as unassigned
                 Types colour = readTypeFromChar(currentTile);
 
-                if (colour != Invalid && colour != starter_player){
+                if (colour != Invalid){
                     tiles.push_back(new Tile(colour));
                     currentIndex++;
                 } else {

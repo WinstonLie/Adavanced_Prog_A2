@@ -1,11 +1,10 @@
 #include "Game.h"
 #include <random>
+#include <iostream>
 
-Game::Game(Player** playersToAdd, int playerCount){
+Game::Game(std::vector<Player*> playersToAdd){
     //add players given into players vector
-    for(int i = 0; i < playerCount; i++){
-        players.insert(players.end(), playersToAdd[i]);
-    }
+    players = playersToAdd;
 
     //populate bag with 20 of each color
     for(int i = 0; i < 20; i++){
@@ -21,9 +20,6 @@ Game::Game(Player** playersToAdd, int playerCount){
         bag.insert(bag.end(), lightBlueTile);
         bag.insert(bag.end(), blackTile);
     }
-
-    //set playerCount
-    this->playerCount = playerCount;
 
     //set factoryCount
     this->factoryCount = NUM_OF_FACTORIES;
@@ -46,7 +42,7 @@ Game::Game(Player** playersToAdd, int playerCount){
 
 Game::Game (std::vector<Player*> playersToAdd, int playerCount, std::vector<Tile*> bag,
           int factoryCount, Tile*** factories, LinkedList* centreTable, std::vector<Tile*> boxLid,
-          bool firstPlayerMarker) : players{ playersToAdd }, playerCount{ playerCount }, bag{ bag },
+          bool firstPlayerMarker) : players{ playersToAdd }, bag{ bag },
           factoryCount{ factoryCount }, factories{ factories }, centreTable{ centreTable }, boxLid{ boxLid },
           firstPlayerMarker{ firstPlayerMarker } {}
 
@@ -79,12 +75,22 @@ void Game::populateFactories(){
         //put everything in to bag if less
         populateBagFromLid();
     }
+    //seed initialisation
+    int seed = 100;
+    std::default_random_engine engine(seed);
+    
     for(int row = 0; row < NUM_OF_FACTORIES; row++){
 
         for(int col = 0; col < FACTORY_SIZE; col++){
-            // TODO make random
-            factories[row][col] = bag.back();
-            bag.pop_back();
+            int min = 0;
+            int max = bag.size() - 1;
+            
+            std::uniform_int_distribution<int> uniform_dist(min,max);
+            // make random
+            //initializing random values to populate factrories
+            int value = uniform_dist(engine);
+            factories[row][col] = bag[value];
+            bag.erase(bag.begin() + value);
         }
     }
     
@@ -93,7 +99,7 @@ void Game::populateFactories(){
 
 
 int Game::getPlayerCount(){
-    return this->playerCount;
+    return players.size();
 }
 
 
@@ -101,7 +107,7 @@ Player* Game::getPlayer(int index){
     Player* foundPlayer = nullptr;
 
     //checks if index is within player bounds
-    if (index >= 0 && index < playerCount){
+    if (index >= 0 && index < players.size()){
         foundPlayer = players[index];
     }
     return foundPlayer;
@@ -235,4 +241,46 @@ std::string Game::getCentreTable(){
     }
 
     return data;
+}
+
+std::string Game::displayFactories(){
+    std::string tilesInFactories = "";
+    tilesInFactories += "0: ";
+    if (firstPlayerMarker){
+        tilesInFactories += "S ";
+    }
+    tilesInFactories += centreTable->getTilesFromCenterTable() + "\n";
+    for(int i=0;i< NUM_OF_FACTORIES;i++){
+        tilesInFactories += std::to_string(i+1) + ": ";
+        for(int j=0;j < FACTORY_SIZE ; j++){
+
+            if (factories[i][j] == nullptr){
+                //Display nothing if no tile
+                tilesInFactories += "  ";
+
+            }else{
+                tilesInFactories += factories[i][j]->getType() + ' ';
+            }
+        }
+        tilesInFactories += "\n";
+    }
+
+    return tilesInFactories;
+}
+
+bool Game::checkIfFactoriesPopulated(Game* game){
+    bool populated = false;
+    //Check for centreTable to see if there is any tiles
+    if(centreTable->getSize() > 0){
+        populated = true;
+    }
+    //Check for factories 1 to 5
+    for(int row = 0; row < NUM_OF_FACTORIES ; row++){
+        for(int col = 0; col < FACTORY_SIZE ; col++){
+            if(factories[row][col] != nullptr){
+                populated = true;
+            }
+        }
+    }
+    return populated;
 }

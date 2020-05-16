@@ -2,6 +2,7 @@
 #include <string>
 #include "Game.h"
 #include "SaveLoad.cpp"
+#include "PlayGame.h"
 
 void menuDisplay();
 
@@ -52,6 +53,17 @@ bool manageInput(char input){
     //New Game
     if(input == '1'){
         std::cout << "Starting a New Game" << std::endl;
+        // Can add prompt for player count if needed to extend
+        int playerCount = 2;
+        std::vector<Player*> players;
+        for (int i = 0; i < playerCount; i++){
+            std::cout << "Player " << i << " name:" << std::endl;
+            std::string playerName;
+            std::cin >> playerName;
+            players.insert(players.end(),new Player(playerName));
+        }
+        Game* game =  new Game(players);
+        startGame(game);
         checked = true;
     }
     //Load saved game
@@ -59,7 +71,9 @@ bool manageInput(char input){
         std::cout << "Loading Game..." << std::endl;
         Game** game = new Game*;
         loadGame(game, "test.save");
-
+        // TEMP CODE START
+        std::cout << (*game)->getPlayer(0)->displayBoard() << std::endl;
+        // TEMP CODE END
         saveGame(*game, "out.save");
         checked = true;
     }
