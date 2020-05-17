@@ -73,7 +73,7 @@ class Game{
 
         // Checks to see if at least one factory still contains tiles, including centre of the table
         // Returns true if at least one tile is present in a factory, else false
-        bool checkIfFactoriesPopulated(Game* game);
+        bool checkIfFactoriesPopulated();
 
     private:
 

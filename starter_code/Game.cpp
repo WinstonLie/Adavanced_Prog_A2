@@ -273,7 +273,7 @@ std::string Game::displayFactories(){
     return tilesInFactories;
 }
 
-bool Game::checkIfFactoriesPopulated(Game* game){
+bool Game::checkIfFactoriesPopulated(){
     bool populated = false;
     //Check for centreTable to see if there is any tiles
     if(centreTable->getSize() > 0){

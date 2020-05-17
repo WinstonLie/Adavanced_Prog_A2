@@ -11,7 +11,7 @@ void startGame(Game* game, int startPlayer){
     while (gameRunning){
         //Factory offer phase
         game->populateFactories();
-        while (true){
+        while (game->checkIfFactoriesPopulated()){
             Player* player = game->getPlayer(currentPlayerIndex);
             std::cout << "TURN FOR PLAYER: " << player->getPlayerName() << std::endl;
 
@@ -53,24 +53,33 @@ void startGame(Game* game, int startPlayer){
                             if(tileAmount > 0){
                                 // add tiles to pattern line of player
                                 player->addTilesToPatternLine(tiles, tileAmount, patternRow - 1);
+                            // If no tiles were taken, then none could have been taken and players action wasnt taken
                             } else {
                                 validAction = false;
                             }
+                        // If wanting to take tiles from centre
                         } else if (factory == 0){
                             //center of table
                             bool isStartPlayer = game->getTilesFromCentre(colourType, tileAmount, tiles);
+                            // If at least one tile is taken from the centre
                             if(tileAmount > 0){
+                                // If they took the start player tile, then add it to the floor line
                                 if (isStartPlayer){
                                     player->addToFloorLine(new Tile(starter_player));
                                 }
+                                // Add the tiles to the pattern line
                                 player->addTilesToPatternLine(tiles, tileAmount, patternRow - 1);
+                            // If no tiles taken, then action isn't valid
                             } else {
                                 validAction = false;
                             }
                         }
-                    
+                    // If the tiles can't be placed in that pattern row, then action is invalid
                     } else {
-                        
+                        validAction = false;
+                    }
+                    if (validAction){
+                        nextPlayer(game, currentPlayerIndex);
                     }
                 }
             } else if (commandInput == "save"){
