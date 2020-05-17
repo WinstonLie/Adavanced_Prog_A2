@@ -23,4 +23,6 @@ class Tile{
         Types type;
 };
 
+Types readTypeFromChar(char input);
+
 #endif //AZUL_TILES

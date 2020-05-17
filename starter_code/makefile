@@ -3,7 +3,7 @@
 CC=g++
 CFLAGS = -Wall -std=c++14 -O -g
 DEPS = %.h
-OBJ = Tile.o Node.o Player.o LinkedList.o Game.o PlayGame.o main.o 
+OBJ = Tile.o Node.o Player.o LinkedList.o Game.o SaveLoad.o PlayGame.o main.o 
 
 %.o: %.cpp $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)

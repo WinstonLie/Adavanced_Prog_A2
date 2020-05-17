@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include "Game.h"
-#include "SaveLoad.cpp"
+#include "SaveLoad.h"
 #include "PlayGame.h"
 
 void menuDisplay();

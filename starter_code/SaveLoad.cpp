@@ -1,15 +1,9 @@
-#include "Game.h"
+#include "SaveLoad.h"
 #include <ostream>
 #include <istream>
 #include <fstream>
 #include <iostream>
 
-Types readTypeFromChar(char input);
-
-void readTiles(bool& validLoad, std::vector<std::string>& inputLines, 
-  int& currentLineCounter, std::vector<Tile*>& tiles);
-
-;bool checkLoad(bool& validLoad, std::vector<std::string>& inputLines, int currentLineCounter);
 
 bool saveGame(Game* game, std::string filePath){
    bool successfullySaved = false;
@@ -476,26 +470,4 @@ void readTiles(bool& validLoad, std::vector<std::string>& inputLines,
         }// end of while
         currentLineCounter++;
 
-}
-
-// May potentially be moved to a util file for use in main program
-Types readTypeFromChar(char input){
-    Types colour = Invalid;
-    if (input == 'R'){
-        colour = Red;
-    } else if (input == 'Y'){
-        colour = Yellow;
-    } else if (input == 'B'){
-        colour = Dark_Blue;
-    } else if (input == 'L'){
-        colour = Light_Blue;
-    } else if (input == 'U') {
-        colour = Black;
-    } else if (input == '.'){
-        colour = Empty;  
-    } else if (input == 'S'){
-        colour = starter_player;
-    }
-
-    return colour;
 }
