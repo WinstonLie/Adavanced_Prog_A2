@@ -1,0 +1,6 @@
+*.o
+main
+*.gch
+settings.json/
+*.out
+out.save
