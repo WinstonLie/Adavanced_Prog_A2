@@ -155,7 +155,7 @@ bool Game::getTilesFromFactory(int factoryIndex, Types colour, int& tileAmount, 
 }
 
 
-bool Game::getTilesFromCentre(Types colour, int& tileAmount, Tile** tiles){
+bool Game::getTilesFromCentre(Types colour, int& tileAmount, Tile**& tiles){
     //Amount of tiles that are in tiles
     tileAmount = 0;
 
@@ -253,7 +253,9 @@ std::string Game::displayFactories(){
     if (firstPlayerMarker){
         tilesInFactories += "S ";
     }
-    tilesInFactories += centreTable->getTilesFromCenterTable() + "\n";
+    if(centreTable->getSize() > 0){
+        tilesInFactories += centreTable->getTilesFromCenterTable() + "\n";
+    }
     for(int i=0;i< NUM_OF_FACTORIES;i++){
         tilesInFactories += std::to_string(i+1) + ": ";
         for(int j=0;j < FACTORY_SIZE ; j++){

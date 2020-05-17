@@ -48,7 +48,7 @@ class Game{
         //   them into the inputted 'tiles' array
         // Returns true if first player marker has not been taken and remove
         //   the first player marker, otherwise false
-        bool getTilesFromCentre(Types colour, int& tileAmount, Tile** tiles);
+        bool getTilesFromCentre(Types colour, int& tileAmount, Tile**& tiles);
         
         // Returns true if the first player marker has been taken, otherwise false
         bool isFirstPlayerMarkerTaken();

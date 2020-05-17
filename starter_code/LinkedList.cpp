@@ -21,8 +21,7 @@ int LinkedList::getSize(){
         }else{
             hasNext = false;
         }
-    }
-
+    } 
     return count;
 }
 
@@ -32,17 +31,24 @@ void LinkedList::insert(Tile* tile){
     head = newNode;
 }
 
-void LinkedList::removeTiles(Types colour, Tile** tiles, int& tileCount){
+void LinkedList::removeTiles(Types colour, Tile**& tiles, int& tileCount){
     Node* iterator = head;
-    while(iterator->getNext() != nullptr){
+    Node* previous = nullptr;
+    while(iterator != nullptr){
         //check if next node matches the color
-        if(iterator->getNext()->getTileFromNode()->getType() == colour){
+        if(iterator->getTileFromNode()->getType() == colour){
             //put into array
-            tiles[tileCount] = iterator->getNext()->getTileFromNode();
+            tiles[tileCount] = iterator->getTileFromNode();
+            tileCount++;
             //remove tile that matches the colour
-            removeNode(iterator,iterator->getNext());
+            removeNode(previous, iterator);
+            if (iterator == nullptr){
+                iterator = head;
+            }
         }
+        previous = iterator;
         iterator = iterator->getNext();
+
     }
     
 }
@@ -73,23 +79,26 @@ void LinkedList::removeNode(Node* prevNode, Node* nodeToDel){
     //if the head
     if(prevNode == nullptr && nodeToDel != nullptr){
         head = nodeToDel->getNext();
+        nodeToDel->setTile(nullptr);
+        delete nodeToDel;
     }
     //if any other node
     else if(prevNode != nullptr && nodeToDel != nullptr){
         prevNode->setNext(nodeToDel->getNext());
         nodeToDel->setTile(nullptr);
         delete nodeToDel;
-        nodeToDel = nullptr;
     }
 }
 
 std::string LinkedList::getCenterTableDetails(){
     Node* iterator = head;
     std::string data = "";
+
     while(iterator != nullptr){
-        data += iterator->getTileFromNode()->getType();
-        iterator = iterator->getNext();
+    data += iterator->getTileFromNode()->getType();
+    iterator = iterator->getNext();
     }
+    
     data += "$";
     return data;
 }

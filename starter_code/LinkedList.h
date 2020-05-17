@@ -20,7 +20,7 @@ class LinkedList{
         // Inserts tile to the front of the list
         void insert(Tile* tile);
         //Remove tiles of a colour from the center factory and puts the removed tiles into an array
-        void removeTiles(Types colour, Tile** tiles, int& tileCount);
+        void removeTiles(Types colour, Tile**& tiles, int& tileCount);
         // Removes all tiles from the list and puts them into the lid
         void clear();
         std::string getCenterTableDetails();
@@ -32,7 +32,6 @@ class LinkedList{
         // Sets prevNodes next node to nodeToDels next node
         void removeNode(Node* prevNode, Node* nodeToDel);
         Game* game;
-        int size;
         Node* head;
 };
 

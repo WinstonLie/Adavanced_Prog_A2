@@ -1,5 +1,4 @@
 #include "PlayGame.h"
-#
 #include <iostream>
 
 void startGame(Game* game){
@@ -98,5 +97,13 @@ void startGame(Game* game, int startPlayer){
                 std::cout << "\nInvalid Input!" << std::endl;
             }
         }
+    }
+}
+
+void nextPlayer(Game* game, int& currentPlayerIndex){
+    if (currentPlayerIndex != game->getPlayerCount() - 1){
+        currentPlayerIndex++;
+    } else {
+        currentPlayerIndex = 0;
     }
 }
