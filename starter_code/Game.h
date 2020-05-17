@@ -42,7 +42,7 @@ class Game{
         // Removes the tiles of the inputted colour from the specified factory and places
         //   them into the inputted 'tiles' array
         // Returns true if factory was emptied, else false
-        bool getTilesFromFactory(int factoryIndex, Types colour, int& tileAmount, Tile** tiles);
+        bool getTilesFromFactory(int factoryIndex, Types colour, int& tileAmount, Tile**& tiles);
         
         // Removes the tiles of the inputted colour from the centre factory and places
         //   them into the inputted 'tiles' array
@@ -98,5 +98,8 @@ class Game{
 
         // If true, then first player marker is still in the centre
         bool firstPlayerMarker;
+
+        //Checks if colour is present in the specific row
+        bool checkColourExistence(int row, Types colour);
 };
 #endif // AZUL_GAME

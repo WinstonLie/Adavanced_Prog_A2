@@ -77,6 +77,9 @@ class Player{
         // Returns a string displaying the board, for use in console
         std::string displayBoard();
 
+        // Returns true if tile can be placed into pattern line, else false
+        bool canPlaceInPatternRow(Types colour, int patternRowIndex);
+
     private:
         // Name of the player
         std::string playerName;

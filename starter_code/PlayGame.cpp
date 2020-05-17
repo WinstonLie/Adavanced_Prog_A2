@@ -1,4 +1,5 @@
 #include "PlayGame.h"
+#
 #include <iostream>
 
 void startGame(Game* game){
@@ -28,23 +29,73 @@ void startGame(Game* game, int startPlayer){
                 // recieve factory, colour, storage row
                 int factory = -1;
                 char colourChar = '_'; // Underscore means invalid
-                int storageRow = -1;
+                int patternRow = -1;
+                bool validAction = true;
                 
-                std::cin >> factory  >> colourChar >> storageRow;
+                std::cin >> factory >> colourChar >> patternRow;
                 std::cin.clear();
-                std::cout << "inputs" << factory << colourChar << storageRow << std::endl;
+                std::cout << "inputs" << factory << colourChar << patternRow << std::endl;
                 Types colourType = readTypeFromChar(colourChar);
                 // Initial checks, to make sure that input is within range to be checked
                 // to prevent out of bounds error
-                if (colourType != Invalid && factory >= 0 && factory < NUM_OF_FACTORIES &&
-                  storageRow >= 0 && storageRow < PATTERN_LINE_ROWS){
-                    // check to see if factory has a tile of desired colour, and
-                    // if pattern row is for colour or if its empty
+                if (colourType != Invalid && factory >= 0 && factory < NUM_OF_FACTORIES + 1 &&
+                  patternRow >= 0 && patternRow < PATTERN_LINE_ROWS + 1){
+                    // check if tile can be placed in pattern row
+                    // at least one 
+                    if (player->canPlaceInPatternRow(colourType, patternRow - 1)){
+                        // check to see if factory has a tile of desired colour, and
+                        // if pattern row is for colour or if its empty
+                        int tileAmount = -1;
+                        Tile** tiles = nullptr;
+                        // if factory chosen (not centre tiles)
+                        if (factory != 0){
+                            game->getTilesFromFactory(factory - 1, colourType, tileAmount, tiles);
+                            // If any tiles were taken, then add tiles to player
+                            if(tileAmount > 0){
+                                // add tiles to pattern line of player
+                                player->addTilesToPatternLine(tiles, tileAmount, patternRow - 1);
+                            } else {
+                                validAction = false;
+                            }
+                        } else if (factory == 0){
+                            //center of table
+                            bool isStartPlayer = game->getTilesFromCentre(colourType, tileAmount, tiles);
+                            if(tileAmount > 0){
+                                if (isStartPlayer){
+                                    player->addToFloorLine(new Tile(starter_player));
+                                }
+                                player->addTilesToPatternLine(tiles, tileAmount, patternRow - 1);
+                            } else {
+                                validAction = false;
+                            }
+                        }
+                    
+                    } else {
+                        
+                    }
                 }
             } else if (commandInput == "save"){
-                // recieve file path then save
+                std::string filename = "";
+                bool saved;
+                
+                //get file name from player
+                std::cin >> filename;
+
+                //check if filename was entered
+                if(filename != ""){
+                    saved = saveGame(game, filename);
+
+                    if(saved == false){
+                        std::cout << "\nError: Saving failed..." << std::endl;
+                    }
+                }else{
+                    std::cout << "\nPlease input a proper file name" << std::endl;
+                }
+                
+            } else if(commandInput == "exit" || std::cin.eof()){
+                //close the game
             } else{
-                std::cout << "Invalid Input!" << std::endl;
+                std::cout << "\nInvalid Input!" << std::endl;
             }
         }
     }

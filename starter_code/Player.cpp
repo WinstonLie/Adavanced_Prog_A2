@@ -1,4 +1,5 @@
 #include "Player.h"
+#include <iostream>
 
 Player::Player(std::string playerName)
     : playerName{ playerName }
@@ -48,21 +49,20 @@ bool Player::addTilesToPatternLine(Tile** tiles, int tileCount, int patternLineR
     bool successfulTileAdd = false;
     // Check that patternLine is valid
     if (patternLineRow >= 0 && patternLineRow < PATTERN_LINE_ROWS){
-        //Check to see if the wall has the specific colour at that row
-        if (tileInRowOfWall(tiles[0]->getType(),patternLineRow)){
         // Checks to see if either row is empty or first tile matches inserted one inside row
             if (patternLineRowCounts[patternLineRow] == 0 ||
-            patternLines[patternLineRow][0]->getType() == tiles[0]->getType()){
+              patternLines[patternLineRow][0]->getType() == tiles[0]->getType()){
                 // Counts how many tiles have been input
                 int inputTileCounter = 0;
                 // counter for pattern line
-                int* patternLineCounter = &patternLineRowCounts[patternLineRow];
                 // While there are tiles to input, insert into pattern line
-                while (*patternLineCounter < patternLineRow + 1 && inputTileCounter < tileCount){
-                patternLines[patternLineRow][*patternLineCounter] = tiles[inputTileCounter];
-                inputTileCounter++;
-                *patternLineCounter++;
+                while (patternLineRowCounts[patternLineRow] < patternLineRow + 1 && inputTileCounter < tileCount){
+                    patternLines[patternLineRow][patternLineRowCounts[patternLineRow]] = tiles[inputTileCounter];
+                    std::cout << "In While loop: "  << inputTileCounter << patternLines[patternLineRow][patternLineRowCounts[patternLineRow]]->getType() << std::endl;
+                    inputTileCounter++;
+                    patternLineRowCounts[patternLineRow]++;
                 }
+                std::cout << patternLineRowCounts[patternLineRow] << std::endl;
 
                 // If there are tiles left over, insert into floor line
                 while (inputTileCounter < tileCount){
@@ -74,9 +74,9 @@ bool Player::addTilesToPatternLine(Tile** tiles, int tileCount, int patternLineR
                 successfulTileAdd = true;
             }
 
-        }
+        
     }
-
+    std::cout << successfulTileAdd << std::endl;
     // Returns true if operation was valid, otherwise false
     return successfulTileAdd;
 }
@@ -85,11 +85,11 @@ void Player::addToFloorLine(Tile* tile){
     // Checks to see if floor line has space left
     if (floorLineCount < FLOOR_LINE_LENGTH){
         // If room left, then add tile to floor line
-        floorLine[floorLineCount - 1] = tile;
+        floorLine[floorLineCount] = tile;
         floorLineCount++;
     } else {
         // If no room left, send tile to game to put inside lid
-        // game->addToBoxLid(tile);
+        game->addToBoxLid(tile);
     }
 }
 
@@ -308,9 +308,8 @@ std::string Player::getWall(){
                 data += '.';
             }
         }
-        data += "$\n";
+        data += "\n";
     }
-    data += '$';
 
     return data;
 }
@@ -326,9 +325,8 @@ std::string Player::getPatternLine(){
                 data += '.';
             }
         }
-        data += "$\n";
+        data += "\n";
     }
-    data += "$";
 
     return data;
 }
@@ -343,7 +341,6 @@ std::string Player::getFloorLine(){
             data += '.';
         }
     }
-    data += "$";
 
     return data;
 }
@@ -356,7 +353,7 @@ bool Player::tileInRowOfWall(Types colour, int row){
     bool found = false;
     //if color found in row, means it exist in this row
     for(int i=0; i < WALL_DIMENSION ; i++){
-        if(wall[row][i]->getType() == colour){
+        if(wall[row][i] != nullptr && wall[row][i]->getType() == colour){
             found = true;
         }
     }
@@ -414,4 +411,26 @@ std::string Player::displayBoard(){
     }
     displayOutput += '\n';
     return displayOutput;
+}
+
+bool Player::canPlaceInPatternRow(Types colour, int patternRowIndex){
+    bool canPlace = false;
+    if (patternRowIndex >= 0 && patternRowIndex < PATTERN_LINE_ROWS){
+        //if there is still space to put a tile
+        std::cout << "check boundaries" << std::endl;
+        if (patternLineRowCounts[patternRowIndex] < patternRowIndex + 1){
+            std::cout << "Checks counts of pattern row" << std::endl;
+            //if the tile that's already in the row is of the same colour 
+            if(patternLines[patternRowIndex][0] == nullptr || patternLines[patternRowIndex][0]->getType() == colour){
+                std::cout << "After if null or types match check" << std::endl;
+                //if tile of the colour not found in the wall 
+                if(!tileInRowOfWall(colour, patternRowIndex)){
+                    std::cout << "Checks if tile already in wall" << std::endl;
+                    canPlace = true;
+                }
+            }
+        }
+        
+    }
+    return canPlace;
 }

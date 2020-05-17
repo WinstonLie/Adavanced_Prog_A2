@@ -114,7 +114,9 @@ Player* Game::getPlayer(int index){
 }
 
 
-bool Game::getTilesFromFactory(int factoryIndex, Types colour, int& tileAmount, Tile** tiles){
+bool Game::getTilesFromFactory(int factoryIndex, Types colour, int& tileAmount, Tile**& tiles){
+    // TODO change code so nothing is taken if no tiles match colour
+    
     // Output boolean, changes to true if factory is emptied
     bool successfulFactoryRemoval = false;
     
@@ -127,18 +129,21 @@ bool Game::getTilesFromFactory(int factoryIndex, Types colour, int& tileAmount, 
     if (factoryIndex >= 0 && factoryIndex < factoryCount){
         // Checks that factory is not empty
         if (factories[factoryIndex][0] != nullptr){
-            // Loops through every spot in factory
-            for (int i = 0; i < FACTORY_SIZE; i++){
-                // If the spot in the factory matches colour, then put it into output array
-                if (factories[factoryIndex][i]->getType() == colour){
-                    tiles[tileAmount] = factories[factoryIndex][i];
-                    tileAmount++;
-                // If not matching colour, then put it into the centre
-                } else {
-                    centreTable->insert(factories[factoryIndex][i]);
+            //check if there exists a tile of the specific colour in the specific row
+            if(checkColourExistence(factoryIndex, colour)){
+                 // Loops through every spot in factory
+                for (int i = 0; i < FACTORY_SIZE; i++){
+                    // If the spot in the factory matches colour, then put it into output array
+                    if (factories[factoryIndex][i]->getType() == colour){
+                        tiles[tileAmount] = factories[factoryIndex][i];
+                        tileAmount++;
+                    // If not matching colour, then put it into the centre
+                    } else {
+                        centreTable->insert(factories[factoryIndex][i]);
+                    }
+                    // Remove the tile pointer from the factory
+                    factories[factoryIndex][i] = nullptr;
                 }
-                // Remove the tile pointer from the factory
-                factories[factoryIndex][i] = nullptr;
             }
             // As factory tiles has been removed, set output to true
             successfulFactoryRemoval = true;
@@ -225,7 +230,6 @@ std::string Game::getFactories(){
         }
         data += "$\n";
     }
-    data += '$';
 
     return data;
 }
@@ -259,7 +263,7 @@ std::string Game::displayFactories(){
                 tilesInFactories += "  ";
 
             }else{
-                tilesInFactories += factories[i][j]->getType() + ' ';
+                tilesInFactories += std::toupper(factories[i][j]->getType()) + ' ';
             }
         }
         tilesInFactories += "\n";
@@ -283,4 +287,14 @@ bool Game::checkIfFactoriesPopulated(Game* game){
         }
     }
     return populated;
+}
+
+bool Game::checkColourExistence(int row, Types colour){
+    bool exists = false;
+    for (int i = 0; i < FACTORY_SIZE; i++){
+        if (factories[row][i]->getType() == colour){
+            exists = true;
+        }
+    }
+    return exists;
 }

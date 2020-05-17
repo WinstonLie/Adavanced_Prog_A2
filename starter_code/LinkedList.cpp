@@ -97,9 +97,8 @@ std::string LinkedList::getTilesFromCenterTable(){
     Node* iterator = head;
     std::string tilesInCenterTable = "";
     while(iterator != nullptr){
-        
-        tilesInCenterTable += iterator->getTileFromNode()->getType();
-        
+        tilesInCenterTable += std::toupper(iterator->getTileFromNode()->getType());
+        iterator = iterator->getNext();
     }
 
     return tilesInCenterTable;

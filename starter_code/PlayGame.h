@@ -3,6 +3,7 @@
 #define PLAYGAME_H
 
 #include "Game.h"
+#include "SaveLoad.h"
 
 // Starts the game
 void startGame(Game* game);
