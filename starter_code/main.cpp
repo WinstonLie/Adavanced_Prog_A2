@@ -71,10 +71,11 @@ bool manageInput(char input){
         std::cout << "Loading Game..." << std::endl;
         Game** game = new Game*;
         loadGame(game, "test.save");
-        // TEMP CODE START
-        std::cout << (*game)->getPlayer(0)->displayBoard() << std::endl;
-        // TEMP CODE END
+        std::cout << "Saving loaded game to out.save" << std::endl;
         saveGame(*game, "out.save");
+
+        //TODO pass through current player and if game in currently running
+        startGame(*game);
         checked = true;
     }
     //gets credit

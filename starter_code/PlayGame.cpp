@@ -26,9 +26,9 @@ void startGame(Game* game, int startPlayer){
             if (std::cin.good() && commandInput == "turn"){
 
                 // recieve factory, colour, storage row
-                std::string factory = "-1";
-                std::string colour = "-1";
-                std::string storageRow = "-1";
+                int factory = -1;
+                char colour = '_';
+                int storageRow = -1;
                 
                 std::cin >> factory  >> colour >> storageRow;
                 std::cin.clear();
