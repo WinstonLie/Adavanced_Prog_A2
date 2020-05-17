@@ -139,6 +139,7 @@ bool loadGame(Game** game, std::string filePath){
     int numberOfPlayers;
     std::vector<Player*> players;
     bool firstPlayerMarker = false;
+    bool isInProgress = false;
 
     // Counter for current line
     int currentLineCounter = 0;
@@ -153,15 +154,16 @@ bool loadGame(Game** game, std::string filePath){
     }
 
     // Check that no errors found so far and that there is a next line
+    // Check date
     if (checkLoad(validLoad, inputLines, currentLineCounter)){
-        // Check if the date is in the correct format
-        // TODO
+        // Nothing is to be done with the date, ignore this line
         currentLineCounter++;
     }
 
     // Get game status
     if (checkLoad(validLoad, inputLines, currentLineCounter)){
-        // TODO
+        std::size_t found = inputLines[currentLineCounter].find("True");
+        isInProgress = (found != std::string::npos);
         currentLineCounter++;
     }
 
@@ -406,6 +408,49 @@ bool loadGame(Game** game, std::string filePath){
             } else {
                 // delete created objects for player
                 // TODO
+                // Go through pattern lines, wall and floor line
+                // and remove any tiles found
+                
+                // Delete pattern line
+                if (patternLines != nullptr){
+                    for (int i = 0; i < PATTERN_LINE_ROWS; i++){
+                        if (patternLines[i] != nullptr){
+                            for (int r = 0; r < patternLineCounts[i]; r++){
+                                if (patternLines[i][r] != nullptr){
+                                    delete patternLines[i][r];
+                                }
+                            }
+                            delete patternLines[i];
+                        }
+                    }
+                    delete patternLines;
+                }
+
+                // Delete wall
+                if (wall != nullptr){
+                    for (int i = 0; i < WALL_DIMENSION; i++){
+                        if (wall[i] != nullptr){
+                            for (int r = 0; r < WALL_DIMENSION; r++){
+                                if (wall[i][r] != nullptr){
+                                    delete wall[i][r];
+                                }
+                            }
+                            delete wall[i];
+                        }
+                    }
+                    delete wall;
+                }
+                
+                // Delete floor line
+                if (floorLine != nullptr){
+                    for (int i = 0; i < floorLineCount; i++){
+                        if (floorLine[i] != nullptr){
+                            
+                            delete floorLine[i];
+                        }
+                    }
+                    delete floorLine;
+                }
             }
         }
 
@@ -422,6 +467,34 @@ bool loadGame(Game** game, std::string filePath){
     } else {
         //delete created objects
         // TODO
+        // Deletes all tiles from respective tile vectors, if added
+        std::vector<Tile*>* tileVectors[3] = {&bag, &boxLid, &centreOfTable};
+        for (int i = 0; i < 3; i++){
+            while ((*tileVectors[i]).size() > 0){
+                delete (*tileVectors[i]).back();
+                (*tileVectors[i]).pop_back();
+            }
+        }
+
+        // Deletes players if they were added
+        while (players.size() > 0){
+            delete players.back();
+            players.pop_back();
+        }
+        // Delete all factories
+        if (factories != nullptr){
+            for (int i = 0; i < NUM_OF_FACTORIES; i++){
+                if (factories[i] != nullptr){
+                    for (int r = 0; r < FACTORY_SIZE; r++){
+                        if (factories[i][r] != nullptr){
+                            delete factories[i][r];
+                        }
+                    }
+                    delete factories[i];
+                }
+            }
+            delete factories;
+        }
         std::cout << "invalid load" << std::endl;
     }
 

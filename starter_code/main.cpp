@@ -70,12 +70,15 @@ bool manageInput(char input){
     else if(input == '2'){
         std::cout << "Loading Game..." << std::endl;
         Game** game = new Game*;
+        *game = nullptr;
         loadGame(game, "test.save");
-        std::cout << "Saving loaded game to out.save" << std::endl;
-        saveGame(*game, "out.save");
+        if (*game != nullptr){
+            std::cout << "Saving loaded game to out.save" << std::endl;
+            saveGame(*game, "out.save");
 
-        //TODO pass through current player and if game in currently running
-        startGame(*game);
+            //TODO pass through current player and if game in currently running
+            startGame(*game);
+        }
         checked = true;
     }
     //gets credit
