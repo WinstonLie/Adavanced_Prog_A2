@@ -1,6 +1,6 @@
 *.o
 main
 *.gch
-settings.json/
+.vscode/
 *.out
 out.save
