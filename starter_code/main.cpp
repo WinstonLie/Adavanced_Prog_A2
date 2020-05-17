@@ -57,7 +57,7 @@ bool manageInput(char input){
         int playerCount = 2;
         std::vector<Player*> players;
         for (int i = 0; i < playerCount; i++){
-            std::cout << "Player " << i << " name:" << std::endl;
+            std::cout << "Player " << i+1 << " name:" << std::endl;
             std::string playerName;
             std::cin >> playerName;
             players.insert(players.end(),new Player(playerName));

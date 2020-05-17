@@ -270,7 +270,7 @@ void Player::updateFinalPoints(){
     int colourCount = WALL_DIMENSION;
     int maxCount = WALL_DIMENSION;
     int counts[colourCount];
-    Types colours[colourCount] = {Dark_Blue, Yellow, Red, Black, Light_Blue};
+    Types colours[WALL_DIMENSION] = {Dark_Blue, Yellow, Red, Black, Light_Blue};
     // Go through every row and column of wall
     for (int i = 0; i < WALL_DIMENSION; i++){
         for (int r = 0; r < WALL_DIMENSION; r++){
