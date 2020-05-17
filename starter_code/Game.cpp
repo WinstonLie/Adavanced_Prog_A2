@@ -6,6 +6,10 @@ Game::Game(std::vector<Player*> playersToAdd){
     //add players given into players vector
     players = playersToAdd;
 
+    for (int i = 0; i < players.size(); i++){
+        players[i]->setGame(this);
+    }
+
     //populate bag with 20 of each color
     for(int i = 0; i < 20; i++){
         Tile* redTile = new Tile(Red); 
@@ -191,7 +195,7 @@ bool Game::isFirstPlayerMarkerTaken(){
 
 void Game::addToBoxLid(Tile* tile){
     //insert into boxLid vector
-    boxLid.insert(boxLid.end(), tile);
+    boxLid.push_back(tile);
 }
 
 
@@ -254,6 +258,8 @@ std::string Game::displayFactories(){
     }
     if(centreTable->getSize() > 0){
         tilesInFactories += centreTable->getTilesFromCenterTable() + "\n";
+    } else {
+        tilesInFactories += "\n";
     }
     for(int i=0;i< NUM_OF_FACTORIES;i++){
         tilesInFactories += std::to_string(i+1) + ": ";

@@ -12,4 +12,5 @@ void startGame(Game* game, int startPlayer);
 
 void nextPlayer(Game* game, int& currentPlayerIndex);
 
+
 #endif //PLAYGAME_H

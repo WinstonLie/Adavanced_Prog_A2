@@ -4,6 +4,7 @@
 
 #include "Tile.h"
 #include "Game.h"
+#include <vector>
 #include <string>
 
 #define WALL_DIMENSION 5
@@ -48,7 +49,7 @@ class Player{
         // Points earned from placing the tile will be added to total here
         // Returns false if place on wall is already occupied or if pattern line is not full
         //   or if location doesn't match colour of tile
-        bool addTilesToWalls();
+        bool addTilesToWalls(std::vector<int>& rowsMoved, std::vector<int>& pointsEarned, int& pointSubtracted);
 
         // Checks to see if there is a completed row on the board
         bool hasEndedGame();

@@ -58,12 +58,9 @@ bool Player::addTilesToPatternLine(Tile** tiles, int tileCount, int patternLineR
                 // While there are tiles to input, insert into pattern line
                 while (patternLineRowCounts[patternLineRow] < patternLineRow + 1 && inputTileCounter < tileCount){
                     patternLines[patternLineRow][patternLineRowCounts[patternLineRow]] = tiles[inputTileCounter];
-                    std::cout << "In While loop: "  << inputTileCounter << patternLines[patternLineRow][patternLineRowCounts[patternLineRow]]->getType() << std::endl;
                     inputTileCounter++;
                     patternLineRowCounts[patternLineRow]++;
                 }
-                std::cout << patternLineRowCounts[patternLineRow] << std::endl;
-
                 // If there are tiles left over, insert into floor line
                 while (inputTileCounter < tileCount){
                     addToFloorLine(tiles[inputTileCounter]);
@@ -93,13 +90,12 @@ void Player::addToFloorLine(Tile* tile){
     }
 }
 
-bool Player::addTilesToWalls(){
+bool Player::addTilesToWalls(std::vector<int>& rowsMoved, std::vector<int>& pointsEarned, int& pointSubtracted){
     // Value to be returned
     bool isFirstPlayer = false;
     for (int i = 0; i < PATTERN_LINE_ROWS; i++){
         // Checks that wall is empty and that pattern line row is full and that colour matches wall
-        if (patternLineRowCounts[i] == i + 1 && patternLines[i][0] != nullptr
-        && tileInRowOfWall(patternLines[i][0]->getType(), i)){
+        if (patternLineRowCounts[i] == i + 1){
             int row = i;
             int column = -1;
             for (int r = 0; r < WALL_DIMENSION; r++){
@@ -112,11 +108,11 @@ bool Player::addTilesToWalls(){
             // Removes tile pointer from patternLines
             patternLines[i][0] = nullptr;
             // Puts all other tiles in row (if any exist) into lid
-            for (int i = 1; i < patternLineRowCounts[i]; i++){
-                game->addToBoxLid(patternLines[i][i]);
-                patternLines[i][i] = nullptr;
+            for (int r = 1; r < patternLineRowCounts[i]; r++){
+                game->addToBoxLid(patternLines[i][r]);
+                patternLines[i][r] = nullptr;
             }
-
+            int pointsForRound = 0;
             // Calculate points for new tile placement and add to points
             // Count concurrent tiles in all directions of tile
             // Count horizontal (tiles to left and right)
@@ -125,26 +121,30 @@ bool Player::addTilesToWalls(){
             int verticalTiles = tilesInDirection(row, column, 0) + tilesInDirection(row, column, 2);
             // If no adjacent tiles, add one point
             if (horizontalTiles == 0 && verticalTiles == 0){
-                points += 1;
+                pointsForRound += 1;
             // If adjacent tiles found, then 
             } else {
                 // If there are horizontal tiles, add amount of tiles plus the one that was just placed
                 if (horizontalTiles != 0){
-                    points += horizontalTiles + 1;
+                    pointsForRound += horizontalTiles + 1;
                 }
                 
                 // If there are vertical tiles, add amount of tiles plus the one that was just placed
                 if (verticalTiles != 0){
-                    points += verticalTiles + 1;
+                    pointsForRound += verticalTiles + 1;
                 }
             }
+            points += pointsForRound;
+            rowsMoved.push_back(i);
+            pointsEarned.push_back(pointsForRound);
         }
     } // end of for loop
 
     // Subtracts floor line values and empties tiles into lid
     // Also clears floor line
+    pointSubtracted = 0;
     for (int r = 0; r < floorLineCount; r++){
-        points += FLOOR_LINE_PENALTIES[r];
+        pointSubtracted += FLOOR_LINE_PENALTIES[r];
         // starting player tile doesn't go back into lid, gets deleted and re-created
         if (floorLine[r]->getType() != starter_player){
             game->addToBoxLid(floorLine[r]);
@@ -154,6 +154,7 @@ bool Player::addTilesToWalls(){
         }
         floorLine[r] = nullptr;
     }
+    points += pointSubtracted;
     floorLineCount = 0;
 
     // Returns output value
@@ -417,15 +418,11 @@ bool Player::canPlaceInPatternRow(Types colour, int patternRowIndex){
     bool canPlace = false;
     if (patternRowIndex >= 0 && patternRowIndex < PATTERN_LINE_ROWS){
         //if there is still space to put a tile
-        std::cout << "check boundaries" << std::endl;
         if (patternLineRowCounts[patternRowIndex] < patternRowIndex + 1){
-            std::cout << "Checks counts of pattern row" << std::endl;
             //if the tile that's already in the row is of the same colour 
             if(patternLines[patternRowIndex][0] == nullptr || patternLines[patternRowIndex][0]->getType() == colour){
-                std::cout << "After if null or types match check" << std::endl;
                 //if tile of the colour not found in the wall 
                 if(!tileInRowOfWall(colour, patternRowIndex)){
-                    std::cout << "Checks if tile already in wall" << std::endl;
                     canPlace = true;
                 }
             }
