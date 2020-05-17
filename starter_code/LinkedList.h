@@ -30,7 +30,7 @@ class LinkedList{
     private:
         // Removes tile nodeToDel from the list
         // Sets prevNodes next node to nodeToDels next node
-        void removeNode(Node* prevNode, Node* nodeToDel);
+        void removeNode(Node* prevNode, Node*& nodeToDel);
         Game* game;
         Node* head;
 };

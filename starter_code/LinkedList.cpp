@@ -42,12 +42,21 @@ void LinkedList::removeTiles(Types colour, Tile**& tiles, int& tileCount){
             tileCount++;
             //remove tile that matches the colour
             removeNode(previous, iterator);
-            if (iterator == nullptr){
+        }
+        // If the node was not deleted, then move on to next node
+        if (iterator != nullptr){
+            previous = iterator;
+            iterator = iterator->getNext();
+        // If node was deleted,
+        } else {
+            // If there is a previous node, set the new current node to the new next node
+            if (previous != nullptr){
+                iterator = previous->getNext();
+            // If there is no previous node, set current to head
+            } else {
                 iterator = head;
             }
         }
-        previous = iterator;
-        iterator = iterator->getNext();
 
     }
     
@@ -75,18 +84,20 @@ void LinkedList::clear(){
    
 }
 
-void LinkedList::removeNode(Node* prevNode, Node* nodeToDel){
+void LinkedList::removeNode(Node* prevNode, Node*& nodeToDel){
     //if the head
     if(prevNode == nullptr && nodeToDel != nullptr){
         head = nodeToDel->getNext();
         nodeToDel->setTile(nullptr);
         delete nodeToDel;
+        nodeToDel = nullptr;
     }
     //if any other node
     else if(prevNode != nullptr && nodeToDel != nullptr){
         prevNode->setNext(nodeToDel->getNext());
         nodeToDel->setTile(nullptr);
         delete nodeToDel;
+        nodeToDel = nullptr;
     }
 }
 

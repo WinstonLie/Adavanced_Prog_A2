@@ -237,7 +237,6 @@ std::string Game::getFactories(){
 
 std::string Game::getCentreTable(){
     std::string data = "";
-
     if(centreTable->getSize() != 0){
         data += centreTable->getCenterTableDetails();
     } else {
