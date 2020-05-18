@@ -3,9 +3,10 @@
 #include <istream>
 #include <fstream>
 #include <iostream>
+#include <ctime>
 
 
-bool saveGame(Game* game, std::string filePath){
+bool saveGame(Game* game, int currentPlayer, std::string filePath){
    bool successfullySaved = false;
    std::ofstream outputStream;
    outputStream.open(filePath);
@@ -18,15 +19,18 @@ bool saveGame(Game* game, std::string filePath){
        outputStream << std::endl;
 
 
+       time_t currentTime = time(0);
+       char* saveTime = ctime(&currentTime);
+
        //date of saving
        outputStream << "#Save Date" << std::endl;
-       outputStream << "GENERATE DATE HERE" << std::endl;
+       outputStream << saveTime << std::endl;
        outputStream << std::endl;
 
 
        //game status
        outputStream << "#Game Status" << std::endl;
-       outputStream << "INSERT 1 IF ONGOING OR 0 IF FINISHED" << std::endl;
+       outputStream << "GameInProgress: True" << std::endl;
        outputStream << std::endl;
 
 
@@ -53,7 +57,7 @@ bool saveGame(Game* game, std::string filePath){
 
        //player taking their turn
        outputStream << "#Current Player" << std::endl;
-       outputStream << "INSERT Player Number??" << std::endl;
+       outputStream << currentPlayer << std::endl;
        outputStream << std::endl;
 
 
@@ -62,44 +66,29 @@ bool saveGame(Game* game, std::string filePath){
        outputStream << game->getPlayerCount() << std::endl;
        outputStream << std::endl;
        
-       
-       //player 1 data
-       outputStream << "#Player Status" << std::endl;
-       outputStream << "#Player1" << std::endl;
-       outputStream << game->getPlayer(0)->getPlayerName() << std::endl;
-       outputStream << game->getPlayer(0)->getPoints() << std::endl;
-       outputStream << std::endl;
 
-       outputStream << "#Player1 Wall" << std::endl;
-       outputStream << game->getPlayer(0)->getWall() << std::endl;
-       outputStream << std::endl;
+       //player data
+        for(int i = 0; i < game->getPlayerCount(); i++){
+           Player* player = game->getPlayer(i);
 
-       outputStream << "#Player1 PatternLine" << std::endl;
-       outputStream << game->getPlayer(0)->getPatternLine() << std::endl;
-       outputStream << std::endl;
+            outputStream << "#Player Status" << std::endl;
+            outputStream << "#Player" << i+1 << std::endl;
+            outputStream << player->getPlayerName() << std::endl;
+            outputStream << player->getPoints() << std::endl;
+            outputStream << std::endl;
 
-       outputStream << "#Player1 PenaltyPanel" << std::endl;
-       outputStream << game->getPlayer(0)->getFloorLine() << std::endl;
-       outputStream << std::endl;
-       
+            outputStream << "#Player" << i+1 << " Wall" << std::endl;
+            outputStream << player->getWall() << std::endl;
+            outputStream << std::endl;
 
-       //player 2 data
-       outputStream << "#Player2" << std::endl;
-       outputStream << game->getPlayer(1)->getPlayerName() << std::endl;
-       outputStream << game->getPlayer(1)->getPoints() << std::endl;
-       outputStream << std::endl;
+            outputStream << "#Player" << i+1 << " PatternLine" << std::endl;
+            outputStream << player->getPatternLine() << std::endl;
+            outputStream << std::endl;
 
-       outputStream << "#Player2 Wall" << std::endl;
-       outputStream << game->getPlayer(1)->getWall() << std::endl;
-       outputStream << std::endl;
-
-       outputStream << "#Player2 PatternLine" << std::endl;
-       outputStream << game->getPlayer(1)->getPatternLine() << std::endl;
-       outputStream << std::endl;
-
-       outputStream << "#Player2 PenaltyPanel" << std::endl;
-       outputStream << game->getPlayer(1)->getFloorLine() << std::endl;
-       outputStream << std::endl;
+            outputStream << "#Player" << i+1 << " PenaltyPanel" << std::endl;
+            outputStream << player->getFloorLine() << std::endl;
+            outputStream << std::endl;
+        }
        
        //successfully saved set to true
        successfullySaved = true;
@@ -110,7 +99,7 @@ bool saveGame(Game* game, std::string filePath){
    return successfullySaved;
 }
 
-bool loadGame(Game** game, std::string filePath){
+bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex){
     bool validLoad = true;
     // Read all valid lines from file into vector
     std::vector<std::string> inputLines;
@@ -135,7 +124,6 @@ bool loadGame(Game** game, std::string filePath){
     std::vector<Tile*> boxLid;
     std::vector<Tile*> centreOfTable;
     Tile*** factories;
-    int currentPlayerIndex;
     int numberOfPlayers;
     std::vector<Player*> players;
     bool firstPlayerMarker = false;
@@ -221,7 +209,7 @@ bool loadGame(Game** game, std::string filePath){
     // Current player
     if (checkLoad(validLoad, inputLines, currentLineCounter)){
         // Parse line into an integer for the current player
-        currentPlayerIndex = std::stoi(inputLines[currentLineCounter]);
+        currentPlayerIndex = std::stoi(inputLines[currentLineCounter]) - 1;
         currentLineCounter++;
     }
 

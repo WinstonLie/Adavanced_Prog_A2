@@ -19,7 +19,8 @@ void startGame(Game* game, int startPlayerIndex){
             std::cout << "Factories:" << std::endl;
             std::cout << game->displayFactories() + "\n" << std::endl;
 
-            std::cout << player->displayBoard();
+            std::cout << player->displayMosaic();
+            std::cout << player->displayPenalty();
             //Recieve input
             std::cout << ">";
             std::string commandInput = "";
@@ -50,40 +51,10 @@ void startGame(Game* game, int startPlayerIndex){
                 // Initial checks, to make sure that input is within range to be checked
                 // to prevent out of bounds error
                 if (colourType != Invalid && factory >= 0 && factory < NUM_OF_FACTORIES + 1 &&
-                  patternRow >= 0 && patternRow < PATTERN_LINE_ROWS + 1){
-                    // check if tile can be placed in pattern row
-                    // at least one 
-                    if (player->canPlaceInPatternRow(colourType, patternRow - 1)){
-                        // check to see if factory has a tile of desired colour, and
-                        // if pattern row is for colour or if its empty
-                        int tileAmount = -1;
-                        Tile** tiles = nullptr;
-                        // if factory chosen (not centre tiles)
-                        if (factory != 0){
-                            game->getTilesFromFactory(factory - 1, colourType, tileAmount, tiles);
-                            // If any tiles were taken, then add tiles to player
-                            if(tileAmount > 0){
-                                // add tiles to pattern line of player
-                                player->addTilesToPatternLine(tiles, tileAmount, patternRow - 1);
-                                validTurn = true;
-                            }
-                        // If wanting to take tiles from centre
-                        } else if (factory == 0){
-                            //center of table
-                            bool isStartPlayer = game->getTilesFromCentre(colourType, tileAmount, tiles);
-                            // If at least one tile is taken from the centre
-                            if(tileAmount > 0){
-                                // If they took the start player tile, then add it to the floor line
-                                if (isStartPlayer){
-                                    
-                                    player->addToFloorLine(new Tile(starter_player));
-                                }
-                                // Add the tiles to the pattern line
-                                player->addTilesToPatternLine(tiles, tileAmount, patternRow - 1);
-                                validTurn = true;
-                            }
-                        }    
-                    }
+                    patternRow > 0 && patternRow < PATTERN_LINE_ROWS + 2){
+
+                    //Move tiles
+                    validTurn = moveTiles(game, player, factory, colourType, patternRow);
                 }
                 // If the turn was successful then move to next player
                 if (validTurn){
@@ -106,7 +77,7 @@ void startGame(Game* game, int startPlayerIndex){
 
                 //check if filename was entered
                 if(filename != ""){
-                    saved = saveGame(game, filename);
+                    saved = saveGame(game, currentPlayerIndex + 1, filename);
 
                     if(saved == false){
                         std::cout << "Error: Saving failed...\n" << std::endl;
@@ -116,7 +87,10 @@ void startGame(Game* game, int startPlayerIndex){
                 }
                 
             } else if(commandInput == "EXIT" || std::cin.eof()){
+
                 //close the game or go to menu (ask Dale)
+
+
             } else{
                 std::cout << "Invalid Input!\n" << std::endl;
             }
@@ -128,42 +102,45 @@ void startGame(Game* game, int startPlayerIndex){
         for(int i = 0; i < commands.size(); i++){
             std::cout << commands[i] << std::endl;
         }
-
+        
         // Add tiles to wall, calculate points
         bool hasEndedGame = false;
-        for (int i = 0; i < game->getPlayerCount(); i++){
-            Player* player = game->getPlayer(i);
-            std::vector<int> rowsMoved;
-            std::vector<int> pointsEarned;
-            int pointsSubtracted = 0;
-            player->addTilesToWalls(rowsMoved, pointsEarned, pointsSubtracted);
-            if (rowsMoved.size() != 0){
-                std::cout << "Tiles moved to wall by " << player->getPlayerName() << ':' << std::endl;
-                for (int r = 0; r < rowsMoved.size(); r++){
-                    std::cout << "Row " << rowsMoved[r] << " moved, gained "
-                      << pointsEarned[r] << " points" << std::endl;
-                }
-                if (player->hasEndedGame()){
-                    hasEndedGame = true;
-                }
-            } else {
-                std:: cout << "No tiles were moved to wall by " << player->getPlayerName() << std::endl;
-            }
-            if (pointsSubtracted != 0){
-                pointsSubtracted *= -1;
-                std::cout << pointsSubtracted << " points were subtracted due to the broken line" << std::endl;
-            } else {
-                std::cout << "No penalty points were applied" << std::endl;   
-            }
-            std::cout << std::endl;
-        }
+        hasEndedGame = updateEndRoundDetails(game, currentPlayerIndex);
+     
         //Add tiles into the wall
         if (hasEndedGame){
+            int playerCount = game->getPlayerCount();
+            std::vector<Player*> players;
+            for (int i = 0; i < playerCount; i++){
+                Player* player = game->getPlayer(i);
+                player->updateFinalPoints();
+                players.push_back(player);
+            }
+            int highestPoints = -1;
+            int highestPlayerIndex = 0;
+            int currentRanking = 1;
+            while (players.size() > 0){
+                for (int i = 0; i < players.size(); i++){
+                    if (players[i]->getPoints() > highestPoints){
+                        highestPlayerIndex = i;
+                    }
+                }
+                std::cout << "Player rank " << currentRanking << ": "
+                  << players[highestPlayerIndex]->getPlayerName() << " - "
+                  << players[highestPlayerIndex]->getPoints() << "points" << std::endl; 
+                
+                //update players container
+                players.erase(players.begin() + highestPlayerIndex);
+                currentRanking++;
+                highestPoints = -1;
+                highestPlayerIndex = 0;
+            }
+
             // calculate final points, decide winner and print results
         } else {
             //to next round
         }
-        //Calculate scoring
+
     }
 }
 
@@ -173,4 +150,95 @@ void nextPlayer(Game* game, int& currentPlayerIndex){
     } else {
         currentPlayerIndex = 0;
     }
+}
+
+bool moveTiles(Game* game,Player* player, int factory, Types colourType, int patternRow){
+    bool moved = false;
+    // check to see if factory has a tile of desired colour, and
+    // if pattern row is for colour or if its empty
+    int tileAmount = -1;
+    Tile** tiles = nullptr;
+    // check if tile can be placed in pattern row
+    // at least one 
+    //or if patternRow is 6 -> place in broken
+    if ((patternRow < 6 && player->canPlaceInPatternRow(colourType, patternRow - 1))
+        || patternRow == 6){
+        // if factory chosen (not centre tiles)
+        if (factory > 0 && factory < NUM_OF_FACTORIES + 1){
+            game->getTilesFromFactory(factory - 1, colourType, tileAmount, tiles);
+            // If any tiles were taken, then add tiles to player
+            if(tileAmount > 0){
+                // Add to the board of player
+                addToBoard(player,patternRow,tileAmount,tiles);
+                moved = true;
+            }
+        // If wanting to take tiles from centre
+        } else if (factory == 0){
+            //center of table
+            bool isStartPlayer = game->getTilesFromCentre(colourType, tileAmount, tiles);
+            // If at least one tile is taken from the centre
+            if(tileAmount > 0){
+                // If they took the start player tile, then add it to the floor line
+                if (isStartPlayer){
+                    //Add starting player marker into the broken
+                    player->addToFloorLine(new Tile(starter_player));
+                }
+                
+                // Add to the board of player
+                addToBoard(player, patternRow, tileAmount, tiles);
+                moved = true;
+            }
+        }
+    }
+    return moved;   
+}
+
+void addToBoard(Player* player, int patternRow, int tileAmount, Tile** tiles){
+    if (patternRow < 6){
+        // add tiles to pattern line of player
+        player->addTilesToPatternLine(tiles, tileAmount, patternRow - 1);
+    // If patternRow is 6, then add to penalty
+    } else {
+        for(int i = 0; i < tileAmount; i++){
+            player->addToFloorLine(tiles[i]);
+        }
+    } 
+}
+
+bool updateEndRoundDetails(Game* game,int currentPlayerIndex){
+    bool hasEndedGame = false;
+    for (int i = 0; i < game->getPlayerCount(); i++){
+        Player* player = game->getPlayer(i);
+        std::vector<int> rowsMoved;
+        std::vector<int> pointsEarned;
+        int pointsSubtracted = 0;
+        bool hasTakenFirstPlayer = player->addTilesToWalls(rowsMoved, pointsEarned, pointsSubtracted);
+        if (hasTakenFirstPlayer){
+            currentPlayerIndex = i;
+        }
+        if (rowsMoved.size() != 0){
+            std::cout << "Tiles moved to wall by " << player->getPlayerName() << ':' << std::endl;
+            for (int r = 0; r < rowsMoved.size(); r++){
+                std::cout << "Row " << rowsMoved[r] << " moved, gained "
+                    << pointsEarned[r] << " points" << std::endl;
+            }
+            if (player->hasEndedGame()){
+                hasEndedGame = true;
+            }
+        } else {
+            std:: cout << "No tiles were moved to wall by " << player->getPlayerName() << std::endl;
+        }
+        if (pointsSubtracted != 0){
+            pointsSubtracted *= -1;
+            std::cout << pointsSubtracted << " points were subtracted due to the broken line" << std::endl;
+        } else {
+            std::cout << "No penalty points were applied" << std::endl;   
+        }
+        std::cout << "Overall points: " << player->getPoints() << std::endl;
+        //Display all player mosaic at the end of a round
+        std::cout << player->displayMosaic();
+        std::cout << std::endl;
+
+    }// end of for loop
+    return hasEndedGame;
 }

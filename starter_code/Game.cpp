@@ -11,7 +11,7 @@ Game::Game(std::vector<Player*> playersToAdd, int randomSeed) : randomSeed{ rand
     }
 
     //populate bag with 20 of each color
-    for(int i = 0; i < 20; i++){
+    for(int i = 0; i < TILES_PER_COLOUR; i++){
         Tile* redTile = new Tile(Red); 
         Tile* yellowTile = new Tile(Yellow);
         Tile* darkBlueTile = new Tile(Dark_Blue);
@@ -97,7 +97,7 @@ void Game::populateFactories(){
         }
     }
     
-    
+    firstPlayerMarker = true;
 }
 
 
@@ -132,14 +132,18 @@ bool Game::getTilesFromFactory(int factoryIndex, Types colour, int& tileAmount, 
     if (factoryIndex >= 0 && factoryIndex < factoryCount){
         // Checks that factory is not empty
         if (factories[factoryIndex][0] != nullptr){
+
             //check if there exists a tile of the specific colour in the specific row
             if(checkColourExistence(factoryIndex, colour)){
                  // Loops through every spot in factory
                 for (int i = 0; i < FACTORY_SIZE; i++){
+
                     // If the spot in the factory matches colour, then put it into output array
                     if (factories[factoryIndex][i]->getType() == colour){
+                        
                         tiles[tileAmount] = factories[factoryIndex][i];
                         tileAmount++;
+
                     // If not matching colour, then put it into the centre
                     } else {
                         centreTable->insert(factories[factoryIndex][i]);
@@ -260,7 +264,7 @@ std::string Game::displayFactories(){
     } else {
         tilesInFactories += "\n";
     }
-    for(int i=0;i< NUM_OF_FACTORIES;i++){
+    for(int i=0 ;i < NUM_OF_FACTORIES ; i++){
         tilesInFactories += std::to_string(i+1) + ": ";
         for(int j=0;j < FACTORY_SIZE ; j++){
 

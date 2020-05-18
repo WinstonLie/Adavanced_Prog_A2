@@ -112,6 +112,8 @@ bool Player::addTilesToWalls(std::vector<int>& rowsMoved, std::vector<int>& poin
                 game->addToBoxLid(patternLines[i][r]);
                 patternLines[i][r] = nullptr;
             }
+            //Resets counter for number of tiles in this row
+            patternLineRowCounts[i] = 0;
             int pointsForRound = 0;
             // Calculate points for new tile placement and add to points
             // Count concurrent tiles in all directions of tile
@@ -155,6 +157,9 @@ bool Player::addTilesToWalls(std::vector<int>& rowsMoved, std::vector<int>& poin
         floorLine[r] = nullptr;
     }
     points += pointSubtracted;
+    if (points < 0){
+        points = 0;
+    }
     floorLineCount = 0;
 
     // Returns output value
@@ -363,7 +368,7 @@ bool Player::tileInRowOfWall(Types colour, int row){
 }
 
 
-std::string Player::displayBoard(){
+std::string Player::displayMosaic(){
     std::string displayOutput = "";
     displayOutput += "Mosaic for " + playerName + ":\n";
     // For every for of wall (and pattern line)
@@ -403,9 +408,13 @@ std::string Player::displayBoard(){
         }
         // Move to next line
         displayOutput += '\n';
-    } // End of row loop
-
+     // End of row loop
+    }
+    return displayOutput;
+}
+std::string Player::displayPenalty(){
     // Display floor line
+    std::string displayOutput = "";
     displayOutput += "broken: ";
     for (int i = 0; i < floorLineCount; i++){
         displayOutput += floorLine[i]->getType() + ' ';

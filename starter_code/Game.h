@@ -8,9 +8,10 @@
 #include <string>
 #include <vector>
 
-#define FACTORY_SIZE    4
+#define FACTORY_SIZE      4
 #define NUM_OF_FACTORIES  5
-#define DEFAULT_SEED 100
+#define DEFAULT_SEED      100
+#define TILES_PER_COLOUR  20
 
 class Player;
 class LinkedList;

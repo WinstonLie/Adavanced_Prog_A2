@@ -1,7 +1,7 @@
 # Obtained template from https://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/
 
 CC=g++
-CFLAGS = -Wall -std=c++14 -O -g
+CFLAGS = -std=c++14 -O -g
 DEPS = %.h
 OBJ = Tile.o Node.o Player.o LinkedList.o Game.o SaveLoad.o PlayGame.o 
 # tried to make object file for main, but didnt work

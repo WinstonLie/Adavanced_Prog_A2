@@ -47,8 +47,7 @@ class Player{
         // Adds a tile from the pattern line to the wall.
         // All tiles except first will be moved to floor line
         // Points earned from placing the tile will be added to total here
-        // Returns false if place on wall is already occupied or if pattern line is not full
-        //   or if location doesn't match colour of tile
+        // Returns true if they contained the first player marker in their floor line
         bool addTilesToWalls(std::vector<int>& rowsMoved, std::vector<int>& pointsEarned, int& pointSubtracted);
 
         // Checks to see if there is a completed row on the board
@@ -76,7 +75,10 @@ class Player{
         void setGame(Game* game);
 
         // Returns a string displaying the board, for use in console
-        std::string displayBoard();
+        std::string displayMosaic();
+
+        // Returns the penalty line for the player
+        std::string displayPenalty();
 
         // Returns true if tile can be placed into pattern line, else false
         bool canPlaceInPatternRow(Types colour, int patternRowIndex);

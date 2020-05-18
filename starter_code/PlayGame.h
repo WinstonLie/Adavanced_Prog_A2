@@ -12,5 +12,10 @@ void startGame(Game* game, int startPlayerIndex);
 
 void nextPlayer(Game* game, int& currentPlayerIndex);
 
+bool moveTiles(Game* game,Player* player, int factory, Types colourType, int patternRow);
+
+void addToBoard(Player* player, int patternRow, int tileAmount, Tile** tiles);
+
+bool updateEndRoundDetails(Game* game, int currentPlayerIndex);
 
 #endif //PLAYGAME_H
