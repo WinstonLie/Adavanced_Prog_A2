@@ -10,6 +10,7 @@
 
 #define FACTORY_SIZE    4
 #define NUM_OF_FACTORIES  5
+#define DEFAULT_SEED 100
 
 class Player;
 class LinkedList;
@@ -17,12 +18,12 @@ class LinkedList;
 class Game{
     public:
         // Constructor that initialises private values and sets players
-        Game(std::vector<Player*> playersToAdd);
+        Game(std::vector<Player*> playersToAdd, int randomSeed = DEFAULT_SEED);
 
         // Load constructor
         Game (std::vector<Player*> playersToAdd, int playerCount, std::vector<Tile*> bag,
           int factoryCount, Tile*** factories, LinkedList* centreTable, std::vector<Tile*> boxLid,
-          bool firstPlayerMarker);
+          bool firstPlayerMarker, int randomSeed = DEFAULT_SEED);
         
         // Decontructor
         ~Game();
@@ -75,6 +76,8 @@ class Game{
         // Returns true if at least one tile is present in a factory, else false
         bool checkIfFactoriesPopulated();
 
+        // Returns the random seed being used for game
+        int getRandomSeed();
     private:
 
         // Vector of all players
@@ -98,6 +101,9 @@ class Game{
 
         // If true, then first player marker is still in the centre
         bool firstPlayerMarker;
+
+        // Seed for the random number generator
+        int randomSeed;
 
         //Checks if colour is present in the specific row
         bool checkColourExistence(int row, Types colour);

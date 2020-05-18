@@ -2,7 +2,7 @@
 #include <random>
 #include <iostream>
 
-Game::Game(std::vector<Player*> playersToAdd){
+Game::Game(std::vector<Player*> playersToAdd, int randomSeed) : randomSeed{ randomSeed }{
     //add players given into players vector
     players = playersToAdd;
 
@@ -46,9 +46,9 @@ Game::Game(std::vector<Player*> playersToAdd){
 
 Game::Game (std::vector<Player*> playersToAdd, int playerCount, std::vector<Tile*> bag,
           int factoryCount, Tile*** factories, LinkedList* centreTable, std::vector<Tile*> boxLid,
-          bool firstPlayerMarker) : players{ playersToAdd }, bag{ bag },
+          bool firstPlayerMarker, int randomSeed) : players{ playersToAdd }, bag{ bag },
           factoryCount{ factoryCount }, factories{ factories }, centreTable{ centreTable }, boxLid{ boxLid },
-          firstPlayerMarker{ firstPlayerMarker } {}
+          firstPlayerMarker{ firstPlayerMarker }, randomSeed{ randomSeed } {}
 
 
 Game::~Game(){
@@ -79,9 +79,8 @@ void Game::populateFactories(){
         //put everything in to bag if less
         populateBagFromLid();
     }
-    //seed initialisation
-    int seed = 100;
-    std::default_random_engine engine(seed);
+    //random engine initialisation with seed
+    std::default_random_engine engine(randomSeed);
     
     for(int row = 0; row < NUM_OF_FACTORIES; row++){
 
@@ -294,6 +293,10 @@ bool Game::checkIfFactoriesPopulated(){
         }
     }
     return populated;
+}
+
+int Game::getRandomSeed(){
+    return randomSeed;
 }
 
 bool Game::checkColourExistence(int row, Types colour){

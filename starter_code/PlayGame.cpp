@@ -5,10 +5,10 @@ void startGame(Game* game){
     startGame(game, 0);
 }
 
-void startGame(Game* game, int startPlayer){
+void startGame(Game* game, int startPlayerIndex){
     std::vector<std::string> commands;
     bool gameRunning = true;
-    int currentPlayerIndex = startPlayer;
+    int currentPlayerIndex = startPlayerIndex;
     while (gameRunning){
         //Factory offer phase
         game->populateFactories();

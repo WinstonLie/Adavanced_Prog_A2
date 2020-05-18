@@ -62,7 +62,18 @@ bool manageInput(char input){
             std::cin >> playerName;
             players.insert(players.end(),new Player(playerName));
         }
-        Game* game =  new Game(players);
+        std::cout << "Insert seed or -1 for default:" << std::endl;
+        int randomSeed = -1;
+        std::cin >> randomSeed;
+        Game* game = nullptr;
+        // If a random seed was inserted, then use it in the game
+        if (randomSeed != -1){
+            game =  new Game(players, randomSeed);
+        // If no seed was inserted, use the default value set in Game.h
+        } else {
+            game =  new Game(players);
+        }
+        // Starts the game
         startGame(game);
         checked = true;
     }

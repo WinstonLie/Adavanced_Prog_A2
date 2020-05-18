@@ -8,7 +8,7 @@
 // Starts the game
 void startGame(Game* game);
 
-void startGame(Game* game, int startPlayer);
+void startGame(Game* game, int startPlayerIndex);
 
 void nextPlayer(Game* game, int& currentPlayerIndex);
 
