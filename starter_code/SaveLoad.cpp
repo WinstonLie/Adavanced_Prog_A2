@@ -47,6 +47,9 @@ bool saveGame(Game* game, int currentPlayer, std::string filePath){
 
        //centre table data
        outputStream << "#Centre Table" << std::endl;
+       if (game->isFirstPlayerMarkerTaken() == false){
+           outputStream << 'S';
+       }
        outputStream << game->getCentreTable() << std::endl;
        outputStream << std::endl;
 
@@ -99,7 +102,7 @@ bool saveGame(Game* game, int currentPlayer, std::string filePath){
    return successfullySaved;
 }
 
-bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex){
+bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& isInProgress){
     bool validLoad = true;
     // Read all valid lines from file into vector
     std::vector<std::string> inputLines;
@@ -123,11 +126,11 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex){
     std::vector<Tile*> bag;
     std::vector<Tile*> boxLid;
     std::vector<Tile*> centreOfTable;
-    Tile*** factories;
+    Tile*** factories = nullptr;
     int numberOfPlayers;
     std::vector<Player*> players;
     bool firstPlayerMarker = false;
-    bool isInProgress = false;
+    isInProgress = false;
 
     // Counter for current line
     int currentLineCounter = 0;
@@ -137,7 +140,6 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex){
       inputLines[currentLineCounter].compare("Fri 1630 - Dale") == 0){
         currentLineCounter++;
     } else {
-        std::cout << "invalid file line";
         validLoad = false;
     }
 
@@ -235,8 +237,11 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex){
             // Initialise empty wall
             Tile*** wall = new Tile**[WALL_DIMENSION];
             for (int i = 0; i < WALL_DIMENSION; i++){
+
                 wall[i] = new Tile*[WALL_DIMENSION];
+
                 for (int r = 0; r < WALL_DIMENSION; r++){
+
                     wall[i][r] = nullptr;
                 }
             }
@@ -244,11 +249,15 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex){
             // Initialise empty pattern lines
             Tile*** patternLines = new Tile**[PATTERN_LINE_ROWS];
             int* patternLineCounts = new int[PATTERN_LINE_ROWS];
+
             for (int i = 0; i < PATTERN_LINE_ROWS; i++){
+
                 patternLines[i] = new Tile*[i + 1];
                 patternLineCounts[i] = 0;
                 for (int r = 0; r < i + 1; r++){
+
                     patternLines[i][r] = nullptr;
+
                 }
             }
 
@@ -261,6 +270,7 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex){
 
             // Read in name
             if (checkLoad(validLoad, inputLines, currentLineCounter)){
+
                 name = inputLines[currentLineCounter];
                 currentLineCounter++;
             }
@@ -277,8 +287,10 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex){
             // While the loading is successful and still have rows left to load
             while (checkLoad(validLoad, inputLines, currentLineCounter)
               && wallRowCounter < WALL_DIMENSION){
+
                 // check that row has at least five characters
                 if (inputLines[currentLineCounter].length() >= WALL_DIMENSION){
+
                     // Read in each character one by one
                     for (int i = 0; validLoad && i < WALL_DIMENSION; i++){
                         char input = inputLines[currentLineCounter][i];
@@ -287,12 +299,16 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex){
 
                         // If the type is valid for the wall, insert it into wall
                         if (type != Invalid && type != starter_player && type != Empty){
+
                             wall[wallRowCounter][i] = new Tile(type);
+
                         // If wall spot is empty, leave a nullptr
                         } else if (type == Empty) {
+
                             wall[wallRowCounter][i] = nullptr;
                         // If type is invalid or starter_player, then input is invalid
                         } else {
+
                             validLoad = false;
                         }
                     }
@@ -302,6 +318,7 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex){
                 // If length of input is less than the expected columns, then loading is
                 // incorrect
                 } else {
+
                     validLoad = false;
                 }
             } // end of wall loading
@@ -310,10 +327,12 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex){
             int patternRowCounter = 0;
             while (patternRowCounter < PATTERN_LINE_ROWS
               && checkLoad(validLoad, inputLines, currentLineCounter)){
+
                 // check that row has enough characters
                 if (inputLines[currentLineCounter].length() >= patternRowCounter + 1){
                     // Boolean to check that all tiles are inserted at front
                     bool emptyTileFound = false;
+                    
                     // Read in each character one by one
                     for (int i = 0; validLoad && i < patternRowCounter + 1; i++){
                         char input = inputLines[currentLineCounter][i];
@@ -448,8 +467,8 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex){
     if (validLoad){
         LinkedList* centreTable = new LinkedList();// TODO add in values
         // Calls loading constructor for Game
-        *game = new Game(players, numberOfPlayers, bag, factoryCount, 
-          factories, centreTable,  boxLid, firstPlayerMarker);
+        *game = new Game(players, numberOfPlayers, new Bag(bag), factoryCount, 
+          factories, centreTable,  new BoxLid(boxLid), firstPlayerMarker);
         // Confirms load is valid in console
         std::cout << "valid load" << std::endl;
     } else {
@@ -483,7 +502,6 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex){
             }
             delete factories;
         }
-        std::cout << "invalid load" << std::endl;
     }
 
 }

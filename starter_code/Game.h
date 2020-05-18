@@ -5,8 +5,10 @@
 #include "Player.h"
 #include "Tile.h"
 #include "LinkedList.h"
+#include "Bag.h"
+#include "BoxLid.h"
 #include <string>
-#include <vector>
+
 
 #define FACTORY_SIZE      4
 #define NUM_OF_FACTORIES  5
@@ -22,8 +24,8 @@ class Game{
         Game(std::vector<Player*> playersToAdd, int randomSeed = DEFAULT_SEED);
 
         // Load constructor
-        Game (std::vector<Player*> playersToAdd, int playerCount, std::vector<Tile*> bag,
-          int factoryCount, Tile*** factories, LinkedList* centreTable, std::vector<Tile*> boxLid,
+        Game (std::vector<Player*> playersToAdd, int playerCount, Bag* bag,
+          int factoryCount, Tile*** factories, LinkedList* centreTable, BoxLid* boxLid,
           bool firstPlayerMarker, int randomSeed = DEFAULT_SEED);
         
         // Decontructor
@@ -85,7 +87,7 @@ class Game{
         std::vector<Player*> players;
 
         // Bag that holds tiles
-        std::vector<Tile*> bag;
+        Bag* bag;
 
         // Amount of factories
         int factoryCount;
@@ -98,7 +100,7 @@ class Game{
         LinkedList* centreTable;
 
         // Vector for the lid
-        std::vector<Tile*> boxLid;
+        BoxLid* boxLid;
 
         // If true, then first player marker is still in the centre
         bool firstPlayerMarker;

@@ -3,6 +3,8 @@
 #include <iostream>
 
 Game::Game(std::vector<Player*> playersToAdd, int randomSeed) : randomSeed{ randomSeed }{
+    bag = new Bag();
+    boxLid = new BoxLid();
     //add players given into players vector
     players = playersToAdd;
 
@@ -18,11 +20,11 @@ Game::Game(std::vector<Player*> playersToAdd, int randomSeed) : randomSeed{ rand
         Tile* lightBlueTile = new Tile(Light_Blue);
         Tile* blackTile = new Tile(Black);
         
-        bag.insert(bag.end(), redTile);
-        bag.insert(bag.end(), yellowTile);
-        bag.insert(bag.end(), darkBlueTile);
-        bag.insert(bag.end(), lightBlueTile);
-        bag.insert(bag.end(), blackTile);
+        bag->insertIntoBag(redTile);
+        bag->insertIntoBag(yellowTile);
+        bag->insertIntoBag(darkBlueTile);
+        bag->insertIntoBag(lightBlueTile);
+        bag->insertIntoBag(blackTile);
     }
 
     //set factoryCount
@@ -44,8 +46,8 @@ Game::Game(std::vector<Player*> playersToAdd, int randomSeed) : randomSeed{ rand
     this->firstPlayerMarker = true;
 }
 
-Game::Game (std::vector<Player*> playersToAdd, int playerCount, std::vector<Tile*> bag,
-          int factoryCount, Tile*** factories, LinkedList* centreTable, std::vector<Tile*> boxLid,
+Game::Game (std::vector<Player*> playersToAdd, int playerCount, Bag* bag,
+          int factoryCount, Tile*** factories, LinkedList* centreTable, BoxLid* boxLid,
           bool firstPlayerMarker, int randomSeed) : players{ playersToAdd }, bag{ bag },
           factoryCount{ factoryCount }, factories{ factories }, centreTable{ centreTable }, boxLid{ boxLid },
           firstPlayerMarker{ firstPlayerMarker }, randomSeed{ randomSeed } {}
@@ -55,27 +57,27 @@ Game::~Game(){
 
     //delete all deletable variables
     players.clear();
-    bag.clear();
+    delete bag;
     delete factories;
     delete centreTable;
-    boxLid.clear();
+    delete boxLid;
 }
 
 
 void Game::populateBagFromLid(){
-    //iterate through the whole box lid
-    for(std::vector<Tile*>::iterator it = boxLid.begin(); it < boxLid.end(); it++){
-        //add tiles from box lid into bag
-        bag.insert(bag.end(), *it);
-        //remove tile from box lid without deleting the tile
-        boxLid.erase(it);
+    int lidSize = boxLid->getSize();
+    while (lidSize > 0){
+        int lastLidIndex = lidSize - 1;
+        bag->insertIntoBag(boxLid->get(lastLidIndex));
+        boxLid->removeFromBoxLid(lastLidIndex);
+        lidSize--;
     }
 }
 
 
 void Game::populateFactories(){
     //check for number of tiles in bag
-    if (bag.size() < FACTORY_SIZE * factoryCount){
+    if (bag->getSize() < FACTORY_SIZE * factoryCount){
         //put everything in to bag if less
         populateBagFromLid();
     }
@@ -86,14 +88,14 @@ void Game::populateFactories(){
 
         for(int col = 0; col < FACTORY_SIZE; col++){
             int min = 0;
-            int max = bag.size() - 1;
+            int max = bag->getSize() - 1;
             
             std::uniform_int_distribution<int> uniform_dist(min,max);
             // make random
             //initializing random values to populate factrories
             int value = uniform_dist(engine);
-            factories[row][col] = bag[value];
-            bag.erase(bag.begin() + value);
+            factories[row][col] = bag->get(value);
+            bag->removeFromBag(value);
         }
     }
     
@@ -192,21 +194,21 @@ bool Game::getTilesFromCentre(Types colour, int& tileAmount, Tile**& tiles){
 
 
 bool Game::isFirstPlayerMarkerTaken(){
-    return firstPlayerMarker;
+    return !firstPlayerMarker;
 }
 
 
 void Game::addToBoxLid(Tile* tile){
     //insert into boxLid vector
-    boxLid.push_back(tile);
+    boxLid->insertIntoBoxLid(tile);
 }
 
 
 std::string Game::getBag(){
     std::string data = "";
 
-    for(int i = 0; i < bag.size(); i++){
-        data += bag[i]->getType();
+    for(int i = 0; i < bag->getSize(); i++){
+        data += bag->get(i)->getType();
     }
     data += '$';
 
@@ -217,8 +219,8 @@ std::string Game::getBag(){
 std::string Game::getBoxLid(){
     std::string data = "";
 
-    for(int i = 0; i < boxLid.size(); i++){
-        data += boxLid[i]->getType();
+    for(int i = 0; i < boxLid->getSize(); i++){
+        data += boxLid->get(i)->getType();
     }
     data += '$';
 

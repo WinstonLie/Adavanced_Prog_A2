@@ -75,7 +75,17 @@ bool manageInput(char input){
         }
         // Starts the game
         startGame(game);
-        checked = true;
+        
+        delete game;
+        
+        if (std::cin.eof()){
+
+            std::cout << "Game closing due to end of file input..." << std::endl;
+            checked = false;
+            
+        } else {
+            checked = true;
+        }
     }
     //Load saved game
     else if(input == '2'){
@@ -86,12 +96,34 @@ bool manageInput(char input){
         Game** game = new Game*;
         *game = nullptr;
         int currentPlayerIndex = 0;
-        loadGame(game, fileName, currentPlayerIndex);
+        bool isInProgress = false;
+        loadGame(game, fileName, currentPlayerIndex, isInProgress);
         if (*game != nullptr){
-            //TODO pass through current player and if game in currently running
-            startGame(*game, currentPlayerIndex);
+            startGame(*game, currentPlayerIndex, isInProgress);
+
+            //Deallocating memory for the game and game 
+            delete *game;
+            
+            //check for end of file
+            if (std::cin.eof()){
+
+                std::cout << "Game closing due to end of file input" << std::endl;
+                checked = false;
+
+            } else {
+
+                checked = true;
+
+            }
+
+        }else{
+            std::cout << "Invalid File Name input!" << std::endl;
+            checked = true;
         }
-        checked = true;
+
+        // Deletes pointer to pointer of game
+        delete game;
+        
     }
     //gets credit
     else if(input == '3'){

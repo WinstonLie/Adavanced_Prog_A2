@@ -5,14 +5,17 @@ void startGame(Game* game){
     startGame(game, 0);
 }
 
-void startGame(Game* game, int startPlayerIndex){
+void startGame(Game* game, int startPlayerIndex, bool isInProgress){
     std::vector<std::string> commands;
     bool gameRunning = true;
     int currentPlayerIndex = startPlayerIndex;
     while (gameRunning){
-        //Factory offer phase
-        game->populateFactories();
-        while (game->checkIfFactoriesPopulated()){
+        if (isInProgress == false){
+            //Factory offer phase
+            game->populateFactories();
+            isInProgress = true;
+        }
+        while (gameRunning && game->checkIfFactoriesPopulated()){
             Player* player = game->getPlayer(currentPlayerIndex);
             std::cout << "TURN FOR PLAYER: " << player->getPlayerName() << std::endl;
 
@@ -86,27 +89,49 @@ void startGame(Game* game, int startPlayerIndex){
                     std::cout << "Please input a proper file name\n" << std::endl;
                 }
                 
-            } else if(commandInput == "EXIT" || std::cin.eof()){
-
-                //close the game or go to menu (ask Dale)
-
-
+            } else if(commandInput == "EXIT"){
+                
+                std::cout << "Game will exit without saving. Enter 'y' to quit game.)" << std::endl;
+                
+                char input = ' ';
+                std::cin >> input;
+                input = toupper(input);
+                
+                if(input == 'Y'){
+                    
+                    gameRunning = false;
+                    
+                }else {
+                    
+                    std::cout << "Continuing game..." << std::endl;
+                    
+                }
+                
+            }else if (std::cin.eof()){
+                
+                gameRunning = false; 
+        
             } else{
+                
                 std::cout << "Invalid Input!\n" << std::endl;
             }
         } // end of factory offer phase while loop
-        std::cout << "Round ended" << std::endl;
-
-        //print all commands issued that round
-        std::cout << "\n Commands Issued" << std::endl;
-        for(int i = 0; i < commands.size(); i++){
-            std::cout << commands[i] << std::endl;
-        }
-        
+    
         // Add tiles to wall, calculate points
         bool hasEndedGame = false;
-        hasEndedGame = updateEndRoundDetails(game, currentPlayerIndex);
-     
+        if (gameRunning){
+            std::cout << "Round ended" << std::endl;
+
+            //print all commands issued that round
+            std::cout << "\n Commands Issued" << std::endl;
+        
+            for(int i = 0; i < commands.size(); i++){
+                
+                std::cout << commands[i] << std::endl;
+            }
+            //get round points for each player and details
+            hasEndedGame = updateEndRoundDetails(game, currentPlayerIndex);
+        }
         //Add tiles into the wall
         if (hasEndedGame){
             int playerCount = game->getPlayerCount();
@@ -135,6 +160,7 @@ void startGame(Game* game, int startPlayerIndex){
                 highestPoints = -1;
                 highestPlayerIndex = 0;
             }
+            gameRunning = false;
 
             // calculate final points, decide winner and print results
         } else {
