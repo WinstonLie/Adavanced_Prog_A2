@@ -87,6 +87,7 @@ void Game::populateFactories(){
     for(int row = 0; row < NUM_OF_FACTORIES; row++){
 
         for(int col = 0; col < FACTORY_SIZE; col++){
+
             int min = 0;
             int max = bag->getSize() - 1;
             
@@ -292,7 +293,9 @@ bool Game::checkIfFactoriesPopulated(){
     }
     //Check for factories 1 to 5
     for(int row = 0; row < NUM_OF_FACTORIES ; row++){
+
         for(int col = 0; col < FACTORY_SIZE ; col++){
+            //if a single tile is found
             if(factories[row][col] != nullptr){
                 populated = true;
             }

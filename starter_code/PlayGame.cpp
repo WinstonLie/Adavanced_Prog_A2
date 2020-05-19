@@ -5,15 +5,17 @@ void startGame(Game* game){
     startGame(game, 0);
 }
 
-void startGame(Game* game, int startPlayerIndex, bool isInProgress){
+void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
     std::vector<std::string> commands;
     bool gameRunning = true;
     int currentPlayerIndex = startPlayerIndex;
     while (gameRunning){
-        if (isInProgress == false){
+        if (fromLoadedGame == false){
             //Factory offer phase
             game->populateFactories();
-            isInProgress = true;
+        } else {
+            // Skips the factory population for first round of loaded games
+            fromLoadedGame = false;
         }
         while (gameRunning && game->checkIfFactoriesPopulated()){
             Player* player = game->getPlayer(currentPlayerIndex);
@@ -84,6 +86,9 @@ void startGame(Game* game, int startPlayerIndex, bool isInProgress){
 
                     if(saved == false){
                         std::cout << "Error: Saving failed...\n" << std::endl;
+                    }else{
+
+                        std::cout << "Saved successfully to " << filename << std::endl;
                     }
                 }else{
                     std::cout << "Please input a proper file name\n" << std::endl;
@@ -153,7 +158,9 @@ void startGame(Game* game, int startPlayerIndex, bool isInProgress){
             while (players.size() > 0){
 
                 for (int i = 0; i < players.size(); i++){
+
                     if (players[i]->getPoints() > highestPoints){
+                        //update highest ranking player and points
                         highestPlayerIndex = i;
                         highestPoints = players[i]->getPoints();
                     }

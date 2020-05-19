@@ -96,10 +96,10 @@ bool manageInput(char input){
         Game** game = new Game*;
         *game = nullptr;
         int currentPlayerIndex = 0;
-        bool isInProgress = false;
-        loadGame(game, fileName, currentPlayerIndex, isInProgress);
+        bool fromLoadedGame = false;
+        loadGame(game, fileName, currentPlayerIndex, fromLoadedGame);
         if (*game != nullptr){
-            startGame(*game, currentPlayerIndex, isInProgress);
+            startGame(*game, currentPlayerIndex, fromLoadedGame);
 
             //Deallocating memory for the game and game 
             delete *game;

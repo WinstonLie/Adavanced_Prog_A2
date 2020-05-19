@@ -471,9 +471,6 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& 
 
     // Creates game and adds in data if loaded successfully
     if (validLoad){
-        if (firstPlayerMarker){
-            centreOfTable.push_back(new Tile(starter_player));
-        }
         LinkedList* centreTable = new LinkedList(centreOfTable);
         // Calls loading constructor for Game
         *game = new Game(players, numberOfPlayers, new Bag(bag), factoryCount, 
@@ -543,7 +540,10 @@ void readTiles(bool& validLoad, std::vector<std::string>& inputLines,
                 Types colour = readTypeFromChar(currentTile);
 
                 if (colour != Invalid){
-                    tiles.push_back(new Tile(colour));
+                    // starter player will be added after for centre table
+                    if (colour != starter_player){
+                        tiles.push_back(new Tile(colour));
+                    }
                     currentIndex++;
                 } else {
                     validLoad = false;

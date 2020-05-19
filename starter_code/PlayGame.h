@@ -8,7 +8,7 @@
 // Starts the game
 void startGame(Game* game);
 
-void startGame(Game* game, int startPlayerIndex, bool isInProgress = false);
+void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame = false);
 
 void nextPlayer(Game* game, int& currentPlayerIndex);
 
