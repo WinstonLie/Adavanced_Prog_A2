@@ -19,6 +19,9 @@ const Types WALL_COLOURS[WALL_DIMENSION][WALL_DIMENSION] =
 #define FLOOR_LINE_LENGTH 7
 const int FLOOR_LINE_PENALTIES[] = {-1, -1, -2, -2, -2, -3, -3};
 
+//Has the same dimension as walls
+#define COLOUR_COUNT      5
+
 #define DIRECTION_NORTH 0
 #define DIRECTION_EAST 1
 #define DIRECTION_SOUTH 2

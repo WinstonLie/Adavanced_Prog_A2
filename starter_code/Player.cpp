@@ -317,9 +317,8 @@ void Player::updateEndGamePoints(){
     }
 
     // Get counts for every colour (assumes same amount of colours as dimension of wall)
-    int colourCount = WALL_DIMENSION;
     int maxCount = WALL_DIMENSION;
-    int counts[colourCount] = {0};
+    int counts[COLOUR_COUNT] = {0};
     Types colours[WALL_DIMENSION] = {Dark_Blue, Yellow, Red, Black, Light_Blue};
 
     // Go through every row and column of wall
@@ -329,7 +328,7 @@ void Player::updateEndGamePoints(){
             if (wall[i][r] != nullptr){
 
                 //Loop through all colours to check what colour it is, and add it to the totals
-                for (int w = 0; w < colourCount; w++){
+                for (int w = 0; w < COLOUR_COUNT; w++){
                     if (wall[i][r]->getType() == colours[w]){
                         counts[w]++;
                     }
@@ -339,7 +338,7 @@ void Player::updateEndGamePoints(){
     }
 
     // Go through every colour count and if it is max, add points
-    for (int i = 0; i < colourCount; i++){
+    for (int i = 0; i < COLOUR_COUNT; i++){
         if (counts[i] == maxCount){
             points += 10;
         }
