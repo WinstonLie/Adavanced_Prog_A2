@@ -5,6 +5,14 @@ LinkedList::LinkedList(){
     head = nullptr;
 }
 
+LinkedList::LinkedList(std::vector<Tile*> centreTable){
+    head = nullptr;
+    // Inserts tile pointers from vector, put them into linked list
+    for (int i = 0; i < centreTable.size(); i++){
+        insert(centreTable[i]);
+    }
+}
+
 LinkedList::~LinkedList(){
     //destructor
 }

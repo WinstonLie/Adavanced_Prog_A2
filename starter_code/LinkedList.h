@@ -5,6 +5,7 @@
 #include "Node.h"
 #include <string>
 #include "Game.h"
+#include <vector>
 //LinkedList implementation for Centre Factory
 
 #define ARRAY_MAX_SIZE    100
@@ -14,6 +15,10 @@ class Game;
 class LinkedList{
     public:
         LinkedList();
+
+        // Constructor for when loading, converts vector to linked list
+        LinkedList(std::vector<Tile*> centreTable);
+
         ~LinkedList();
         // Returns the size of the list
         int getSize();

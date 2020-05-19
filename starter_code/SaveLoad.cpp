@@ -129,7 +129,9 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& 
     Tile*** factories = nullptr;
     int numberOfPlayers;
     std::vector<Player*> players;
-    bool firstPlayerMarker = false;
+
+    // Is set to false if marker is found in a floor line
+    bool firstPlayerMarker = true;
     isInProgress = false;
 
     // Counter for current line
@@ -230,6 +232,7 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& 
     if (checkLoad(validLoad, inputLines, currentLineCounter)){
         // For every expected player, go through a loop
         int playerCounter = 0;
+
         while (validLoad && playerCounter < numberOfPlayers){
             // Initialise player variables
             std::string name = "";
@@ -465,7 +468,10 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& 
 
     // Creates game and adds in data if loaded successfully
     if (validLoad){
-        LinkedList* centreTable = new LinkedList();// TODO add in values
+        if (firstPlayerMarker){
+            centreOfTable.push_back(new Tile(starter_player));
+        }
+        LinkedList* centreTable = new LinkedList(centreOfTable);
         // Calls loading constructor for Game
         *game = new Game(players, numberOfPlayers, new Bag(bag), factoryCount, 
           factories, centreTable,  new BoxLid(boxLid), firstPlayerMarker);
