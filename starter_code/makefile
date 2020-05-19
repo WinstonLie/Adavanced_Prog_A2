@@ -2,7 +2,7 @@
 
 CC=g++
 CFLAGS = -std=c++14 -O -g
-DEPS = %.h
+DEPS = Tile.h Node.h Player.h CentreTable.h Bag.h BoxLid.h Factory.h Game.h SaveLoad.h PlayGame.h
 OBJ = Tile.o Node.o Player.o CentreTable.o Bag.o BoxLid.o Factory.o Game.o SaveLoad.o PlayGame.o
 # tried to make object file for main, but didnt work
 # most likely due to lack of header file
