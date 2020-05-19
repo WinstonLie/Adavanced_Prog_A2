@@ -60,7 +60,9 @@ Game::Game (std::vector<Player*> playersToAdd, int playerCount, Bag* bag,
 Game::~Game(){
 
     //delete all deletable variables
-    players.clear();
+    for(int i =0 ; i < players.size(); i++){
+        delete players[i];
+    }
     delete bag;
     delete factories;
     delete centreTable;

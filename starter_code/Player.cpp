@@ -14,6 +14,11 @@ Player::Player(std::string playerName)
         // Row 1 (index 0) has 1 max length, row 2 has 2 etc
         // Pattern lines not set to nullptr as o 
         patternLines[i] = new Tile*[i + 1];
+        // Sets all pointers to nullptr
+        for (int r = 0; r < i + 1; r++){
+            patternLines[i][r] = nullptr;
+        }
+        // Sets the amount of tiles in row to 0
         patternLineRowCounts[i] = 0;
     }
 
@@ -29,6 +34,9 @@ Player::Player(std::string playerName)
 
     // Initialise floor line
     floorLine = new Tile*[FLOOR_LINE_LENGTH];
+    for (int i = 0; i < FLOOR_LINE_LENGTH; i++){
+        floorLine[i] = nullptr;
+    }
 
     // Initialise floor line count
     floorLineCount = 0;
@@ -41,7 +49,37 @@ Player::Player(std::string playerName, int points, Tile*** patternLine,
           floorLineCount{ floorLineCount } {}
 
 Player::~Player(){
-    // TODO
+    // Doesn't delete game as it is not owned by player
+
+    //delete patternLines [Produces Segmentation Fault]
+    for(int i = 0; i < PATTERN_LINE_ROWS ; i++){
+        for(int r = 0; r < patternLineRowCounts[i] ; i++){
+            delete patternLines[i][r];
+            patternLines[i][r] = nullptr;
+        }
+    }
+
+    //delete floorline
+    for(int i = 0 ; i < FLOOR_LINE_LENGTH ; i++){
+        delete floorLine[i];
+        floorLine[i] = nullptr;
+    }
+
+    //delete wall
+    for(int i = 0 ; i < WALL_DIMENSION ; i++){
+        for ( int j = 0 ;  j < WALL_DIMENSION ; j++){
+            delete wall[i][j];
+            wall[i][j] = nullptr;
+        }
+    }
+
+    //delete counts
+    delete patternLineRowCounts;
+    patternLineRowCounts = nullptr;
+
+    //set game of this player to nullptr
+    this->setGame(nullptr);
+
 }
 
 bool Player::addTilesToPatternLine(Tile** tiles, int tileCount, int patternLineRow){
@@ -49,20 +87,24 @@ bool Player::addTilesToPatternLine(Tile** tiles, int tileCount, int patternLineR
     bool successfulTileAdd = false;
     // Check that patternLine is valid
     if (patternLineRow >= 0 && patternLineRow < PATTERN_LINE_ROWS){
+
         // Checks to see if either row is empty or first tile matches inserted one inside row
             if (patternLineRowCounts[patternLineRow] == 0 ||
               patternLines[patternLineRow][0]->getType() == tiles[0]->getType()){
                 // Counts how many tiles have been input
                 int inputTileCounter = 0;
+
                 // counter for pattern line
                 // While there are tiles to input, insert into pattern line
                 while (patternLineRowCounts[patternLineRow] < patternLineRow + 1 && inputTileCounter < tileCount){
+
                     patternLines[patternLineRow][patternLineRowCounts[patternLineRow]] = tiles[inputTileCounter];
                     inputTileCounter++;
                     patternLineRowCounts[patternLineRow]++;
                 }
                 // If there are tiles left over, insert into floor line
                 while (inputTileCounter < tileCount){
+
                     addToFloorLine(tiles[inputTileCounter]);
                     inputTileCounter++;
                 }
@@ -241,6 +283,8 @@ bool Player::hasEndedGame(){
         if (wall[rowCount][columnCount] == nullptr){
             // Move on to next row
             rowCount++;
+            // Resets columns to leftmost one
+            columnCount = 0;
         // If last column of row has been reached without finding a nullptr, then set
         // output to true
         } else if (columnCount == WALL_DIMENSION - 1){
@@ -420,7 +464,8 @@ std::string Player::displayPenalty(){
     std::string displayOutput = "";
     displayOutput += "broken: ";
     for (int i = 0; i < floorLineCount; i++){
-        displayOutput += floorLine[i]->getType() + ' ';
+        std::string tileString(1, std::toupper(floorLine[i]->getType()));
+        displayOutput += tileString + " ";
     }
     displayOutput += '\n';
     return displayOutput;

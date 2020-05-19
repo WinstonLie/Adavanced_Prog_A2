@@ -263,7 +263,7 @@ bool updateEndRoundDetails(Game* game,int currentPlayerIndex){
         if (rowsMoved.size() != 0){
             std::cout << "Tiles moved to wall by " << player->getPlayerName() << ':' << std::endl;
             for (int r = 0; r < rowsMoved.size(); r++){
-                std::cout << "Row " << rowsMoved[r] << " moved, gained "
+                std::cout << "Row " << rowsMoved[r] + 1 << " moved, gained "
                     << pointsEarned[r] << " points" << std::endl;
             }
             if (player->hasEndedGame()){
