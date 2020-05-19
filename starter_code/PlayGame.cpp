@@ -129,30 +129,39 @@ void startGame(Game* game, int startPlayerIndex, bool isInProgress){
                 
                 std::cout << commands[i] << std::endl;
             }
+            //Add tiles into the wall
             //get round points for each player and details
             hasEndedGame = updateEndRoundDetails(game, currentPlayerIndex);
         }
-        //Add tiles into the wall
+        
         if (hasEndedGame){
+            //get number of players
             int playerCount = game->getPlayerCount();
             std::vector<Player*> players;
+            //add player to the vector after updating end game points
             for (int i = 0; i < playerCount; i++){
+
                 Player* player = game->getPlayer(i);
-                player->updateFinalPoints();
+                player->updateEndGamePoints();
                 players.push_back(player);
             }
+            //initialization of values for determining highest points of a player
             int highestPoints = -1;
             int highestPlayerIndex = 0;
             int currentRanking = 1;
+
             while (players.size() > 0){
+
                 for (int i = 0; i < players.size(); i++){
                     if (players[i]->getPoints() > highestPoints){
                         highestPlayerIndex = i;
+                        highestPoints = players[i]->getPoints();
                     }
                 }
+                //printing out details
                 std::cout << "Player rank " << currentRanking << ": "
                   << players[highestPlayerIndex]->getPlayerName() << " - "
-                  << players[highestPlayerIndex]->getPoints() << "points" << std::endl; 
+                  << players[highestPlayerIndex]->getPoints() << " points" << std::endl; 
                 
                 //update players container
                 players.erase(players.begin() + highestPlayerIndex);

@@ -424,8 +424,11 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& 
                 // Delete pattern line
                 if (patternLines != nullptr){
                     for (int i = 0; i < PATTERN_LINE_ROWS; i++){
+
                         if (patternLines[i] != nullptr){
+
                             for (int r = 0; r < patternLineCounts[i]; r++){
+
                                 if (patternLines[i][r] != nullptr){
                                     delete patternLines[i][r];
                                 }

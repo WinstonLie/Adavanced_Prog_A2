@@ -19,6 +19,11 @@ const Types WALL_COLOURS[WALL_DIMENSION][WALL_DIMENSION] =
 #define FLOOR_LINE_LENGTH 7
 const int FLOOR_LINE_PENALTIES[] = {-1, -1, -2, -2, -2, -3, -3};
 
+#define DIRECTION_NORTH 0
+#define DIRECTION_EAST 1
+#define DIRECTION_SOUTH 2
+#define DIRECTION_WEST 3
+
 class Game;
 
 class Player{
@@ -57,7 +62,7 @@ class Player{
         int getPoints();
         
         // Adds up end-game additional points to current score
-        void updateFinalPoints();
+        void updateEndGamePoints();
 
         //returns player name
         std::string getPlayerName();

@@ -118,9 +118,9 @@ bool Player::addTilesToWalls(std::vector<int>& rowsMoved, std::vector<int>& poin
             // Calculate points for new tile placement and add to points
             // Count concurrent tiles in all directions of tile
             // Count horizontal (tiles to left and right)
-            int horizontalTiles = tilesInDirection(row, column, 1) + tilesInDirection(row, column, 3);
+            int horizontalTiles = tilesInDirection(row, column, DIRECTION_EAST) + tilesInDirection(row, column, DIRECTION_WEST);
             // Count vertical (tiles above and below)
-            int verticalTiles = tilesInDirection(row, column, 0) + tilesInDirection(row, column, 2);
+            int verticalTiles = tilesInDirection(row, column, DIRECTION_NORTH) + tilesInDirection(row, column, DIRECTION_SOUTH);
             // If no adjacent tiles, add one point
             if (horizontalTiles == 0 && verticalTiles == 0){
                 pointsForRound += 1;
@@ -170,7 +170,7 @@ int Player::tilesInDirection(int row, int column, int direction){
     // Tiles found in specified direction, will be returned
     int tileCount = 0;
     // Checks to see if direction is valid
-    if (direction >= 0 && direction <= 3){
+    if (direction >= DIRECTION_NORTH && direction <= DIRECTION_WEST){
         // Initialises incremend and end points for values
         // increments are added every loop, when current row/column equals end
             // point, then end looping
@@ -181,22 +181,22 @@ int Player::tilesInDirection(int row, int column, int direction){
         int yEndPoint;
         // Sets increment/endpoint values according to direction
         // Directions for 0,1,2,3 are north,east,south,west
-        if (direction == 0){
+        if (direction == DIRECTION_NORTH){
             xIncrement = 0;
             yIncrement = -1;
             xEndPoint = -2;
             yEndPoint = -1;
-        } else if (direction == 1){
+        } else if (direction == DIRECTION_EAST){
             xIncrement = 1;
             yIncrement = 0;
-            xEndPoint = WALL_DIMENSION + 1;
+            xEndPoint = WALL_DIMENSION;
             yEndPoint = -2;
-        } else if (direction == 2){
+        } else if (direction == DIRECTION_SOUTH){
             xIncrement = 0;
             yIncrement = 1;
             xEndPoint = -2;
-            yEndPoint = WALL_DIMENSION + 1;
-        } else if (direction == 3){
+            yEndPoint = WALL_DIMENSION;
+        } else if (direction == DIRECTION_WEST){
             xIncrement = -1;
             yIncrement = 0;
             xEndPoint = -1;
@@ -259,15 +259,15 @@ int Player::getPoints(){
     return points;
 }
 
-void Player::updateFinalPoints(){
+void Player::updateEndGamePoints(){
     // Check for completed rows and columns
     for (int i = 0; i < WALL_DIMENSION; i++){
         // Check for completed rows
-        if (tilesInDirection(i, -1, 1) == WALL_DIMENSION){
+        if (tilesInDirection(i, -1, DIRECTION_EAST) == WALL_DIMENSION){
             points += 2;
         }
         // Check for completed columns
-        if (tilesInDirection(-1, i, 2) == WALL_DIMENSION){
+        if (tilesInDirection(-1, i, DIRECTION_SOUTH) == WALL_DIMENSION){
             points += 7;
         }
     }
