@@ -475,10 +475,14 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& 
 
     // Creates game and adds in data if loaded successfully
     if (validLoad){
-        LinkedList* centreTable = new LinkedList(centreOfTable);
+        CentreTable* centreTable = new CentreTable(centreOfTable);
+        Factory** factories_ = new Factory*[NUM_OF_FACTORIES];
+        for (int i = 0; i < NUM_OF_FACTORIES; i++){
+            factories_[i] = new Factory(factories[i]);
+        }
         // Calls loading constructor for Game
         *game = new Game(players, numberOfPlayers, new Bag(bag), factoryCount, 
-          factories, centreTable,  new BoxLid(boxLid), firstPlayerMarker);
+          factories_, centreTable,  new BoxLid(boxLid), firstPlayerMarker);
         // Confirms load is valid in console
         std::cout << "valid load" << std::endl;
     } else {

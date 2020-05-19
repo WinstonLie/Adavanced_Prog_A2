@@ -4,19 +4,20 @@
 
 #include "Player.h"
 #include "Tile.h"
-#include "LinkedList.h"
+#include "CentreTable.h"
 #include "Bag.h"
 #include "BoxLid.h"
+#include "Factory.h"
 #include <string>
 
 
-#define FACTORY_SIZE      4
+
 #define NUM_OF_FACTORIES  5
 #define DEFAULT_SEED      100
 #define TILES_PER_COLOUR  20
 
 class Player;
-class LinkedList;
+class CentreTable;
 
 class Game{
     public:
@@ -25,7 +26,7 @@ class Game{
 
         // Load constructor
         Game (std::vector<Player*> playersToAdd, int playerCount, Bag* bag,
-          int factoryCount, Tile*** factories, LinkedList* centreTable, BoxLid* boxLid,
+          int factoryCount, Factory** factories, CentreTable* centreTable, BoxLid* boxLid,
           bool firstPlayerMarker, int randomSeed = DEFAULT_SEED);
         
         // Decontructor
@@ -94,10 +95,10 @@ class Game{
 
         // Two dimensional array for factories, with every row
         // being a different factory
-        Tile*** factories;
+        // Tile*** factories;
 
         // The factory for the centre of the table
-        LinkedList* centreTable;
+        CentreTable* centreTable;
 
         // Vector for the lid
         BoxLid* boxLid;
@@ -108,7 +109,6 @@ class Game{
         // Seed for the random number generator
         int randomSeed;
 
-        //Checks if colour is present in the specific row
-        bool checkColourExistence(int row, Types colour);
+        Factory** factories;
 };
 #endif // AZUL_GAME
