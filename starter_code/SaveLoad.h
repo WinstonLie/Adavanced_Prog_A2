@@ -2,6 +2,7 @@
 #define SAVELOAD_H
 
 #include "Game.h"
+#include <stdexcept>
 
 bool saveGame(Game* game, int currentPlayer, std::string filePath);
 

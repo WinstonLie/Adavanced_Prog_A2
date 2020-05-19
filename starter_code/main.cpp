@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "SaveLoad.h"
 #include "PlayGame.h"
+#include <stdexcept>
 
 void menuDisplay();
 
