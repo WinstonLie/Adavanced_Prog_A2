@@ -48,6 +48,8 @@ Game::Game (std::vector<Player*> playersToAdd, int playerCount, Bag* bag,
           bool firstPlayerMarker, int randomSeed) : players{ playersToAdd }, bag{ bag },
           factoryCount{ factoryCount }, factories{ factories }, centreTable{ centreTable }, boxLid{ boxLid },
           firstPlayerMarker{ firstPlayerMarker }, randomSeed{ randomSeed } {
+            
+            //initializing players to the game
             for (int i = 0; i < players.size(); i++){
                 players[i]->setGame(this);
             }
@@ -65,8 +67,8 @@ Game::~Game(){
     for (int i = 0; i < NUM_OF_FACTORIES; i++){
         delete factories[i];
     }
+    //deleting game components
     delete factories;
-
     delete centreTable;
     delete boxLid;
 }
