@@ -125,7 +125,10 @@ std::string LinkedList::getTilesFromCenterTable(){
     Node* iterator = head;
     std::string tilesInCenterTable = "";
     while(iterator != nullptr){
-        tilesInCenterTable += std::toupper(iterator->getTileFromNode()->getType());
+        char type = iterator->getTileFromNode()->getType();
+        type = toupper(type);
+        std::string s(1, type);
+        tilesInCenterTable += s + " ";
         iterator = iterator->getNext();
     }
 

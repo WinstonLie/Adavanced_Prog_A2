@@ -12,7 +12,7 @@ GameInProgress: True
 LURBLURYBLURBLUYBLRYBLURYBLURBUYBRYLU$
 
 #Boxlid
-YBRYYYUULBLULYURYRRRUULRYBLRBLURBLURYBLURYBURYBYBLURYBLYBLURYB$
+YRYYYUULLYURULRLLURURYBLURYBURYBYBLURYBLYBLURYB$
 
 #Centre Table
 L$
@@ -34,14 +34,14 @@ $
 #Player Status
 #Player1
 name1
-10
+25
 
 #Player1 Wall
 BYRU.
-.....
-.....
-.....
-.....
+LB...
+U.B..
+R..B.
+Y...B
 
 
 #Player1 PatternLine
@@ -58,14 +58,14 @@ F......
 #Player Status
 #Player2
 name2
-0
+20
 
 #Player2 Wall
-.....
-.....
-.....
-.....
-.....
+..R..
+.BYRU
+..B..
+..L..
+...L.
 
 
 #Player2 PatternLine
@@ -73,7 +73,7 @@ name2
 ..
 ...
 ....
-.....
+UUUUU
 
 
 #Player2 PenaltyPanel

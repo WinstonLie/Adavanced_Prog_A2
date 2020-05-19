@@ -14,6 +14,7 @@ Types Tile::getType(){
 
 // May potentially be moved to a util file for use in main program
 Types readTypeFromChar(char input){
+    input = std::toupper(input);
     Types colour = Invalid;
     if (input == 'R'){
         colour = Red;
@@ -27,7 +28,7 @@ Types readTypeFromChar(char input){
         colour = Black;
     } else if (input == '.'){
         colour = Empty;  
-    } else if (input == 'S'){
+    } else if (input == 'F'){
         colour = starter_player;
     }
 

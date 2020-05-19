@@ -1,0 +1,61 @@
+Fri 1630 - Dale
+
+#Saved Date
+00:33:35 16-05-2020
+
+#Game Status
+GameInProgress: True
+
+#Bag
+BLRYU BLRYU BLRYU BLRYU BLRYU BLRYU BLRYU BLRYU BLRYU BLRYU BLRYU BLRYU BLRYU BLRYU BLRYU BLRYU BLRYU BLRYU BLRYU BLRYU$
+
+#Boxlid
+$
+
+#Factories
+f$
+$
+$
+$
+$
+$
+
+#Current Player
+1
+
+#number of players
+2
+
+#Player1
+p1
+0
+.....
+.....
+.....
+.....
+.....
+
+.
+..
+...
+....
+.....
+
+.......
+
+#Player2
+p2
+0
+.....
+.....
+.....
+.....
+.....
+
+.
+..
+...
+....
+.....
+
+.......

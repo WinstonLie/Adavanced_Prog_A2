@@ -27,7 +27,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
             std::cout << player->displayMosaic();
             std::cout << player->displayPenalty();
             //Recieve input
-            std::cout << ">";
+            std::cout << "> ";
             std::string commandInput = "";
             std::cin >> commandInput;
 
@@ -37,7 +37,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
             }
 
             if (std::cin.good() && commandInput == "TURN"){
-
+                
                 // recieve factory, colour, storage row
                 int factory = -1;
                 char colourChar = '_'; // Underscore means invalid
@@ -51,11 +51,10 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
                 std::string factoryString = std::to_string(factory);
                 std::string patternRowString = std::to_string(patternRow);
 
-                std::cin.clear();
                 Types colourType = readTypeFromChar(colourChar);
                 // Initial checks, to make sure that input is within range to be checked
                 // to prevent out of bounds error
-                if (colourType != Invalid && factory >= 0 && factory < NUM_OF_FACTORIES + 1 &&
+                if (colourType != Invalid && colourType != starter_player && factory >= 0 && factory < NUM_OF_FACTORIES + 1 &&
                     patternRow > 0 && patternRow < PATTERN_LINE_ROWS + 2){
 
                     //Move tiles
@@ -119,7 +118,10 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
             } else{
                 
                 std::cout << "Invalid Input!\n" << std::endl;
-            }
+            }// end of command checking
+            
+            // Ignores the rest of the line
+            std::cin.ignore(10000, '\n');
         } // end of factory offer phase while loop
     
         // Add tiles to wall, calculate points

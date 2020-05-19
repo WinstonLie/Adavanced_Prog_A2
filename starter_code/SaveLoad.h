@@ -12,4 +12,7 @@ void readTiles(bool& validLoad, std::vector<std::string>& inputLines,
 
 bool checkLoad(bool& validLoad, std::vector<std::string>& inputLines, int currentLineCounter);
 
+// Reads the string inputted, sets integer to first parameter if valid and sets second boolean
+// false if 
+// void readInt()
 #endif //SAVELOAD_H

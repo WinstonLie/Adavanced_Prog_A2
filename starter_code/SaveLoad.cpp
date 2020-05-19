@@ -48,7 +48,7 @@ bool saveGame(Game* game, int currentPlayer, std::string filePath){
        //centre table data
        outputStream << "#Centre Table" << std::endl;
        if (game->isFirstPlayerMarkerTaken() == false){
-           outputStream << 'S';
+           outputStream << 'F';
        }
        outputStream << game->getCentreTable() << std::endl;
        outputStream << std::endl;
@@ -280,9 +280,13 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& 
 
             // Read in points
             if (checkLoad(validLoad, inputLines, currentLineCounter)){
-                // Parse points
-                points = std::stoi(inputLines[currentLineCounter]);
-                currentLineCounter++;
+                try {
+                    // Parse points
+                    points = std::stoi(inputLines[currentLineCounter]);
+                    currentLineCounter++;
+                } catch (std::invalid_argument e){
+                    validLoad = false;
+                }
             }
 
             // Read in wall

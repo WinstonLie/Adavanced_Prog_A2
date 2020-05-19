@@ -1,13 +1,15 @@
 #ifndef AZUL_TILES
 #define AZUL_TILES
 
+#include <string>
+
 enum Types {
             Red = 'R',
             Yellow = 'Y',
             Dark_Blue = 'B',
             Light_Blue = 'L',
             Black = 'U',
-            starter_player = 'S',
+            starter_player = 'F',
             Empty = '.',
             Invalid = '_'
         };

@@ -50,7 +50,11 @@ Game::Game (std::vector<Player*> playersToAdd, int playerCount, Bag* bag,
           int factoryCount, Tile*** factories, LinkedList* centreTable, BoxLid* boxLid,
           bool firstPlayerMarker, int randomSeed) : players{ playersToAdd }, bag{ bag },
           factoryCount{ factoryCount }, factories{ factories }, centreTable{ centreTable }, boxLid{ boxLid },
-          firstPlayerMarker{ firstPlayerMarker }, randomSeed{ randomSeed } {}
+          firstPlayerMarker{ firstPlayerMarker }, randomSeed{ randomSeed } {
+            for (int i = 0; i < players.size(); i++){
+                players[i]->setGame(this);
+            }
+          }
 
 
 Game::~Game(){
@@ -67,6 +71,7 @@ Game::~Game(){
 void Game::populateBagFromLid(){
     int lidSize = boxLid->getSize();
     while (lidSize > 0){
+
         int lastLidIndex = lidSize - 1;
         bag->insertIntoBag(boxLid->get(lastLidIndex));
         boxLid->removeFromBoxLid(lastLidIndex);
@@ -260,7 +265,7 @@ std::string Game::displayFactories(){
     std::string tilesInFactories = "";
     tilesInFactories += "0: ";
     if (firstPlayerMarker){
-        tilesInFactories += "S ";
+        tilesInFactories += "F ";
     }
     if(centreTable->getSize() > 0){
         tilesInFactories += centreTable->getTilesFromCenterTable() + "\n";
@@ -276,7 +281,10 @@ std::string Game::displayFactories(){
                 tilesInFactories += "  ";
 
             }else{
-                tilesInFactories += std::toupper(factories[i][j]->getType()) + ' ';
+                char tileType = factories[i][j]->getType();
+                tileType = toupper(tileType);
+                std::string s(1, tileType);
+                tilesInFactories += s + " ";
             }
         }
         tilesInFactories += "\n";

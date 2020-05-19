@@ -63,9 +63,18 @@ bool manageInput(char input){
             players.insert(players.end(),new Player(playerName));
         }
         std::cout << "Insert seed or -1 for default:" << std::endl;
+        std::string seedInput = "";
+        std::cin >> seedInput;
         int randomSeed = -1;
-        std::cin >> randomSeed;
-        Game* game = nullptr;
+        bool successfulConversion = true;
+        try {
+            randomSeed = std::stoi(seedInput);
+        } catch (std::invalid_argument e){
+            successfulConversion = false;
+        }
+    
+        if(successfulConversion){
+            Game* game = nullptr;
         // If a random seed was inserted, then use it in the game
         if (randomSeed != -1){
             game =  new Game(players, randomSeed);
@@ -86,6 +95,10 @@ bool manageInput(char input){
         } else {
             checked = true;
         }
+        }else{
+            std::cout << "Invalid seed. Please enter a number" << std::endl;
+            checked = true;
+        }  
     }
     //Load saved game
     else if(input == '2'){
@@ -134,8 +147,8 @@ bool manageInput(char input){
     else if(input == '4'){
         std::cout << "Quitting The Game" << std::endl;
         checked = false;
-    }
-    else{
+
+    }else{
         std::cout << "Error: Invalid Input";
         std::cout <<  std::endl;
         checked = true;
