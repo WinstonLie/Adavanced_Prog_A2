@@ -113,6 +113,7 @@ bool manageInput(char input){
     //Load saved game
     else if(input == '2'){
         std::cout << "\nPlease input file name" << std::endl;
+        std::cout << ">" ; 
         std::string fileName = "";
         std::getline(std::cin, fileName);
 

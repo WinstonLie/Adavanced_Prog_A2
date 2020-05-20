@@ -80,7 +80,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
 
                     std::string command = "(" +player->getPlayerName()
                       + ") > " + commandInput + " " + std::to_string(factory)
-                      + " " + std::to_string(colourType) + " " + std::to_string(patternRow);
+                      + " " + (char) colourType + " " + std::to_string(patternRow);
 
                     commands.push_back(command);
                     
@@ -114,7 +114,8 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
             } else if(commandInput == "EXIT"){
                 
                 std::cout << "Game will exit without saving. Enter 'y' to quit game.)" << std::endl;
-                
+                std::cout << ">";
+
                 std::string input = "";
                 std::getline(std::cin, input);
                 
@@ -338,28 +339,6 @@ bool processLine(std::string line, std::size_t charAfterFirstWordIndex, int& fac
           if (words[i] == ""){
               successfulInput = false;
           }
-        //   std::size_t indexOfNextWord = -1;
-        //   std::size_t indexOfLastChar = -1;
-        //   try {
-        //     //validate the input
-        //     indexOfNextWord = line.find_first_not_of(' ', currentPos);
-        //     indexOfLastChar = line.find_first_of(' ', indexOfNextWord);
-            
-        //     if (indexOfLastChar == line.npos){
-        //         indexOfLastChar = line.size();
-        //     }
-
-        //   } catch (std::exception e){
-        //       indexOfNextWord = line.npos;
-        //   }
-          
-        //   if (indexOfNextWord != line.npos){
-        //       words[i] = line.substr(indexOfNextWord, indexOfLastChar - indexOfNextWord);
-        //       std::cout << words[i] << '.';
-        //       currentPos = indexOfLastChar + 1;
-        //   } else if (i != 2) {
-        //       successfulInput = false;
-        //   }
       }
 
       // If three words were detected
@@ -409,7 +388,6 @@ std::string getNextWord(std::string line, std::size_t& currentIndex, bool toUppe
                 nextWord[i] = toupper(nextWord[i]);
             }
         }
-        std::cout << nextWord << '.';
         currentIndex = indexOfLastChar + 1;
     }
 
