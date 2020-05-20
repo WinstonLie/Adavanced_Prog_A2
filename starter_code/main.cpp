@@ -18,6 +18,7 @@ int main(void){
     // goes false when quitting or invalid input occurs
     bool menu_loop = true;
     while (menu_loop){
+        
         // Displays main menu options
         menuDisplay();
         std::cout << "\n> ";
@@ -66,17 +67,22 @@ bool manageInput(char input){
         // Can add prompt for player count if needed to extend
         int playerCount = 2;
         std::vector<Player*> players;
+
         for (int i = 0; i < playerCount; i++){
+
             std::cout << "Player " << i+1 << " name:" << std::endl;
             std::string playerName;
             std::getline(std::cin, playerName);
+
             players.insert(players.end(),new Player(playerName));
         }
+
         std::cout << "Insert seed or -1 for default:" << std::endl;
         std::string seedInput = "";
         std::getline(std::cin, seedInput);
         int randomSeed = -1;
         bool successfulConversion = true;
+
         try {
             randomSeed = std::stoi(seedInput);
         } catch (std::invalid_argument e){
@@ -122,6 +128,8 @@ bool manageInput(char input){
         int currentPlayerIndex = 0;
         bool fromLoadedGame = false;
         loadGame(game, fileName, currentPlayerIndex, fromLoadedGame);
+
+        //validation if it was successfully loaded
         if (*game != nullptr){
             startGame(*game, currentPlayerIndex, fromLoadedGame);
 

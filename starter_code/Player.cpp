@@ -10,6 +10,7 @@ Player::Player(std::string playerName)
     // Initialise patternLines and their lengths
     patternLines = new Tile**[PATTERN_LINE_ROWS];
     patternLineRowCounts = new int[PATTERN_LINE_ROWS];
+
     for (int i = 0; i < PATTERN_LINE_ROWS; i++){
         // Row 1 (index 0) has 1 max length, row 2 has 2 etc
         // Pattern lines not set to nullptr as o 
@@ -25,6 +26,7 @@ Player::Player(std::string playerName)
     // Initialise wall
     wall = new Tile**[WALL_DIMENSION];
     for (int i = 0; i < WALL_DIMENSION; i++){
+
         wall[i] = new Tile*[WALL_DIMENSION];
         // Sets all spots in wall to nullptr
         for (int r = 0; r < WALL_DIMENSION; r++){
@@ -53,7 +55,9 @@ Player::~Player(){
 
     //delete patternLines [Produces Segmentation Fault]
     for(int i = 0; i < PATTERN_LINE_ROWS ; i++){
+
         for(int r = 0; r < patternLineRowCounts[i] ; i++){
+
             delete patternLines[i][r];
             patternLines[i][r] = nullptr;
         }
@@ -61,13 +65,16 @@ Player::~Player(){
 
     //delete floorline
     for(int i = 0 ; i < FLOOR_LINE_LENGTH ; i++){
+
         delete floorLine[i];
         floorLine[i] = nullptr;
     }
 
     //delete wall
     for(int i = 0 ; i < WALL_DIMENSION ; i++){
+
         for ( int j = 0 ;  j < WALL_DIMENSION ; j++){
+
             delete wall[i][j];
             wall[i][j] = nullptr;
         }
@@ -136,34 +143,43 @@ bool Player::addTilesToWalls(std::vector<int>& rowsMoved, std::vector<int>& poin
     // Value to be returned
     bool isFirstPlayer = false;
     for (int i = 0; i < PATTERN_LINE_ROWS; i++){
+
         // Checks that wall is empty and that pattern line row is full and that colour matches wall
         if (patternLineRowCounts[i] == i + 1){
             int row = i;
             int column = -1;
+
             for (int r = 0; r < WALL_DIMENSION; r++){
+
                 if (WALL_COLOURS[i][r] == patternLines[i][0]->getType()){
                     column = r;
                 } else if (patternLines[i][0] == nullptr){
                 }
             }
+
             // Places first tile from patternLine into wall
             wall[row][column] = patternLines[i][0];
             // Removes tile pointer from patternLines
             patternLines[i][0] = nullptr;
+
             // Puts all other tiles in row (if any exist) into lid
             for (int r = 1; r < patternLineRowCounts[i]; r++){
                 game->addToBoxLid(patternLines[i][r]);
                 patternLines[i][r] = nullptr;
             }
+
             //Resets counter for number of tiles in this row
             patternLineRowCounts[i] = 0;
             int pointsForRound = 0;
+
+
             // Calculate points for new tile placement and add to points
             // Count concurrent tiles in all directions of tile
             // Count horizontal (tiles to left and right)
             int horizontalTiles = tilesInDirection(row, column, DIRECTION_EAST) + tilesInDirection(row, column, DIRECTION_WEST);
             // Count vertical (tiles above and below)
             int verticalTiles = tilesInDirection(row, column, DIRECTION_NORTH) + tilesInDirection(row, column, DIRECTION_SOUTH);
+
             // If no adjacent tiles, add one point
             if (horizontalTiles == 0 && verticalTiles == 0){
                 pointsForRound += 1;
@@ -171,11 +187,13 @@ bool Player::addTilesToWalls(std::vector<int>& rowsMoved, std::vector<int>& poin
             } else {
                 // If there are horizontal tiles, add amount of tiles plus the one that was just placed
                 if (horizontalTiles != 0){
+
                     pointsForRound += horizontalTiles + 1;
                 }
                 
                 // If there are vertical tiles, add amount of tiles plus the one that was just placed
                 if (verticalTiles != 0){
+
                     pointsForRound += verticalTiles + 1;
                 }
             }
@@ -189,11 +207,14 @@ bool Player::addTilesToWalls(std::vector<int>& rowsMoved, std::vector<int>& poin
     // Also clears floor line
     pointSubtracted = 0;
     for (int r = 0; r < floorLineCount; r++){
+
         pointSubtracted += FLOOR_LINE_PENALTIES[r];
         // starting player tile doesn't go back into lid, gets deleted and re-created
         if (floorLine[r]->getType() != starter_player){
+
             game->addToBoxLid(floorLine[r]);
         } else {
+
             isFirstPlayer = true;
             delete floorLine[r];
         }
@@ -250,6 +271,7 @@ int Player::tilesInDirection(int row, int column, int direction){
         int currentRow = row;
         int currentColumn = column;
         bool endOfDirection = false;
+
         // While the end of wall hasn't been found
         while (endOfDirection == false){
             // Increment the row and column by pre-defined amount
@@ -280,6 +302,7 @@ bool Player::hasEndedGame(){
     bool endedGame = false;
     // Loops through each row in wall
     while (endedGame == false && rowCount < WALL_DIMENSION){
+
         // Checks to see if value at spot is nullptr
         if (wall[rowCount][columnCount] == nullptr){
             // Move on to next row
@@ -305,6 +328,7 @@ int Player::getPoints(){
 }
 
 void Player::updateEndGamePoints(){
+
     // Check for completed rows and columns
     for (int i = 0; i < WALL_DIMENSION; i++){
         // Check for completed rows
@@ -324,12 +348,14 @@ void Player::updateEndGamePoints(){
 
     // Go through every row and column of wall
     for (int i = 0; i < WALL_DIMENSION; i++){
+
         for (int r = 0; r < WALL_DIMENSION; r++){
             // If there is a tile then add to the count of that tiles colour
             if (wall[i][r] != nullptr){
 
                 //Loop through all colours to check what colour it is, and add it to the totals
                 for (int w = 0; w < COLOUR_COUNT; w++){
+
                     if (wall[i][r]->getType() == colours[w]){
                         counts[w]++;
                     }
@@ -340,6 +366,7 @@ void Player::updateEndGamePoints(){
 
     // Go through every colour count and if it is max, add points
     for (int i = 0; i < COLOUR_COUNT; i++){
+
         if (counts[i] == maxCount){
             points += 10;
         }
@@ -354,7 +381,9 @@ std::string Player::getWall(){
     std::string data = "";
 
     for(int i = 0; i < WALL_DIMENSION; i++){
+
         for(int j = 0; j < WALL_DIMENSION; j++){
+
             if (wall[i][j] != nullptr){
                 data += wall[i][j]->getType();
             } else {
@@ -371,7 +400,9 @@ std::string Player::getPatternLine(){
     std::string data = "";
 
     for(int i = 0; i < PATTERN_LINE_ROWS ; i++){
+
         for(int j = 0 ; j < i+1 ; j++){
+
             if (patternLines[i][j] != nullptr){
                 data += patternLines[i][j]->getType();
             } else {
@@ -388,6 +419,7 @@ std::string Player::getFloorLine(){
     std::string data = "";
 
     for(int i = 0; i < FLOOR_LINE_LENGTH; i++){
+
         if (floorLine[i] != nullptr){
             data += floorLine[i]->getType();
         } else {
@@ -406,6 +438,7 @@ bool Player::tileInRowOfWall(Types colour, int row){
     bool found = false;
     //if color found in row, means it exist in this row
     for(int i=0; i < WALL_DIMENSION ; i++){
+
         if(wall[row][i] != nullptr && wall[row][i]->getType() == colour){
             found = true;
         }
@@ -418,9 +451,12 @@ bool Player::tileInRowOfWall(Types colour, int row){
 std::string Player::displayMosaic(){
     std::string displayOutput = "";
     displayOutput += "Mosaic for " + playerName + ":\n";
+
     // For every for of wall (and pattern line)
     for (int i = 0; i < WALL_DIMENSION; i++){
+
         displayOutput += std::to_string(i + 1) + ": ";
+
         // align pattern lines to right
         // Adds empty spaces for columns that don't exist
         for (int r = 0; r < WALL_DIMENSION - (i + 1); r++){
@@ -434,6 +470,7 @@ std::string Player::displayMosaic(){
 
         // Adds filled in tiles, aligned to right of the display
         for (int r = 0; r < patternLineRowCounts[i]; r++){
+
             // Check isnt needed
             if (patternLines[i][r] != nullptr){
                 displayOutput += patternLines[i][r]->getType();
@@ -446,6 +483,7 @@ std::string Player::displayMosaic(){
         displayOutput += "|| ";
         // Add wall
         for (int r = 0; r < WALL_DIMENSION; r++){
+
             if (wall[i][r] != nullptr){
                 displayOutput += wall[i][r]->getType();
             } else {
@@ -463,7 +501,9 @@ std::string Player::displayPenalty(){
     // Display floor line
     std::string displayOutput = "";
     displayOutput += "broken: ";
+
     for (int i = 0; i < floorLineCount; i++){
+
         std::string tileString(1, std::toupper(floorLine[i]->getType()));
         displayOutput += tileString + " ";
     }
@@ -474,10 +514,13 @@ std::string Player::displayPenalty(){
 bool Player::canPlaceInPatternRow(Types colour, int patternRowIndex){
     bool canPlace = false;
     if (patternRowIndex >= 0 && patternRowIndex < PATTERN_LINE_ROWS){
+
         //if there is still space to put a tile
         if (patternLineRowCounts[patternRowIndex] < patternRowIndex + 1){
+
             //if the tile that's already in the row is of the same colour 
             if(patternLines[patternRowIndex][0] == nullptr || patternLines[patternRowIndex][0]->getType() == colour){
+                
                 //if tile of the colour not found in the wall 
                 if(!tileInRowOfWall(colour, patternRowIndex)){
                     canPlace = true;

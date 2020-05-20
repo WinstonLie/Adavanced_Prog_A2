@@ -9,6 +9,7 @@ Tile::~Tile(){
 }
 
 Types Tile::getType(){
+
     return this->type;
 }
 
@@ -16,6 +17,7 @@ Types Tile::getType(){
 Types readTypeFromChar(char input){
     input = std::toupper(input);
     Types colour = Invalid;
+    
     if (input == 'R'){
         colour = Red;
     } else if (input == 'Y'){

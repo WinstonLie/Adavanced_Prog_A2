@@ -109,13 +109,16 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& 
     std::ifstream inputFileStream;
     inputFileStream.open(filePath);
     std::string currentLine;
+
     while (inputFileStream.good()){
+
         std::getline(inputFileStream, currentLine);
         if (!currentLine.empty() && currentLine[0] != '#' && currentLine[0] != '\r'){
             inputLines.push_back(currentLine);
         }
     }
     inputFileStream.close();
+    
     // // Code to print read in lines
     // for (int i = 0; i < inputLines.size(); i++){
     //     std::cout << inputLines[i] << std::endl;
@@ -173,7 +176,7 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& 
     if (checkLoad(validLoad, inputLines, currentLineCounter)){
         readTiles(validLoad, inputLines, currentLineCounter, centreOfTable);
     }
-    // TODO
+    
 
     // Assumes 5 factories
     int factoryCount = 5;
@@ -348,8 +351,10 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& 
 
                         // Checks that type is invalid
                         if (type != Invalid && type != starter_player){
+
                             // If type is empty then leave index as nullptr
                             if (type != Empty){
+
                                 // If a tile has been found after an empty spot,
                                 // then save file is incorrect 
                                 if (emptyTileFound){
@@ -387,10 +392,13 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& 
                         Types type = readTypeFromChar(input);
 
                         if (type != Invalid){
+
                             if (type != Empty){
+
                                 if (emptyTileFound || (type == starter_player && firstPlayerMarker == false)){
                                     validLoad = false;
                                 } else {
+
                                     if (type == starter_player){
                                         firstPlayerMarker = false;
                                     }
@@ -421,7 +429,7 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& 
                 playerCounter++;
             } else {
                 // delete created objects for player
-                // TODO
+                
                 // Go through pattern lines, wall and floor line
                 // and remove any tiles found
                 
@@ -446,7 +454,9 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& 
                 // Delete wall
                 if (wall != nullptr){
                     for (int i = 0; i < WALL_DIMENSION; i++){
+
                         if (wall[i] != nullptr){
+
                             for (int r = 0; r < WALL_DIMENSION; r++){
                                 if (wall[i][r] != nullptr){
                                     delete wall[i][r];
@@ -460,7 +470,9 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& 
                 
                 // Delete floor line
                 if (floorLine != nullptr){
+
                     for (int i = 0; i < floorLineCount; i++){
+
                         if (floorLine[i] != nullptr){
                             
                             delete floorLine[i];
@@ -475,6 +487,7 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& 
 
     // Creates game and adds in data if loaded successfully
     if (validLoad){
+
         CentreTable* centreTable = new CentreTable(centreOfTable);
         Factory** factories_ = new Factory*[NUM_OF_FACTORIES];
         for (int i = 0; i < NUM_OF_FACTORIES; i++){
@@ -484,7 +497,7 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& 
         *game = new Game(players, numberOfPlayers, new Bag(bag), factoryCount, 
           factories_, centreTable,  new BoxLid(boxLid), firstPlayerMarker);
         // Confirms load is valid in console
-        std::cout << "valid load" << std::endl;
+        std::cout << "valid load\n" << std::endl;
     } else {
         //delete created objects
         // TODO

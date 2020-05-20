@@ -6,6 +6,7 @@ Factory::Factory(){
     factory = new Tile*[FACTORY_SIZE];
 
     for (int i = 0; i < FACTORY_SIZE; i++){
+
         factory[i] = nullptr;
     }
 
@@ -14,6 +15,7 @@ Factory::Factory(){
 Factory::~Factory(){
     //Deletes all tiles in array, then the array itself
     for (int i = 0; i < FACTORY_SIZE; i++){
+
         if (factory[i] != nullptr){
             delete factory[i];
         }
@@ -32,6 +34,7 @@ bool Factory::hasTiles(){
     bool hasTiles = false;
 
     if (factory[0] != nullptr){
+
         hasTiles = true;
     }
 
@@ -45,6 +48,7 @@ bool Factory::hasColour(Types colour){
     if (hasTiles()){
         // Goes through every element in factory to check if it has the colour
         for (int i = 0; hasColour == false && i < FACTORY_SIZE; i++){
+
             if (factory[i]->getType() == colour){
                 hasColour = true;
             }
@@ -102,10 +106,12 @@ void Factory::getTiles(Types colour, Tile**& tiles, int& tileCount, Tile**& cent
 
             // If tile matches colour, then add it to output
             if (factory[i]->getType() == colour){
+
                 tiles[tileCount] = factory[i];
                 tileCount++;
             // If it doesn't match, add it to the centre array
             } else {
+                
                 centreTiles[centreTilesCount] = factory[i];
                 centreTilesCount++;
             }

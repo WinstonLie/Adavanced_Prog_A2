@@ -5,15 +5,18 @@
 Game::Game(std::vector<Player*> playersToAdd, int randomSeed) : randomSeed{ randomSeed }{
     bag = new Bag();
     boxLid = new BoxLid();
+
     //add players given into players vector
     players = playersToAdd;
 
     for (int i = 0; i < players.size(); i++){
+
         players[i]->setGame(this);
     }
 
     //populate bag with 20 of each color
     for(int i = 0; i < TILES_PER_COLOUR; i++){
+
         Tile* redTile = new Tile(Red); 
         Tile* yellowTile = new Tile(Yellow);
         Tile* darkBlueTile = new Tile(Dark_Blue);
@@ -51,6 +54,7 @@ Game::Game (std::vector<Player*> playersToAdd, int playerCount, Bag* bag,
             
             //initializing players to the game
             for (int i = 0; i < players.size(); i++){
+
                 players[i]->setGame(this);
             }
           }
@@ -80,6 +84,7 @@ void Game::populateBagFromLid(){
     int lidSize = boxLid->getSize();
     while (lidSize > 0){
 
+        //insertion into bag and remove from lid
         int lastLidIndex = lidSize - 1;
         bag->insertIntoBag(boxLid->get(lastLidIndex));
         boxLid->removeFromBoxLid(lastLidIndex);
@@ -151,6 +156,7 @@ bool Game::getTilesFromFactory(int factoryIndex, Types colour, int& tileAmount, 
     tiles = new Tile*[FACTORY_SIZE];
     // Checks that index is within range
     if (factoryIndex >= 0 && factoryIndex < factoryCount){
+
         // Checks that factory is not empty
         if (factories[factoryIndex]->hasTiles()){
              // Creates new variables to house the values that go to the centre
@@ -202,6 +208,7 @@ bool Game::getTilesFromCentre(Types colour, int& tileAmount, Tile**& tiles){
 
         //checks if it is first time taking from centreTable
         if (firstPlayerMarker){
+
             hasTakenFirstPlayer = true;
             firstPlayerMarker = false;
         }
@@ -284,15 +291,21 @@ std::string Game::getCentreTable(){
 std::string Game::displayFactories(){
     std::string tilesInFactories = "";
     tilesInFactories += "0: ";
+
     if (firstPlayerMarker){
+
         tilesInFactories += "F ";
     }
+
     if(centreTable->getSize() > 0){
+
         tilesInFactories += centreTable->getTilesFromCenterTable() + "\n";
     } else {
+
         tilesInFactories += "\n";
     }
     for(int i=0 ;i < NUM_OF_FACTORIES ; i++){
+
         tilesInFactories += std::to_string(i+1) + ": ";
         std::string tileString = factories[i]->getTileString();
         for(int j=0;j < FACTORY_SIZE ; j++){
@@ -302,6 +315,7 @@ std::string Game::displayFactories(){
                 tilesInFactories += "  ";
 
             }else{
+                //accumulating tile types to display
                 char tileType = tileString[j];
                 tileType = toupper(tileType);
                 std::string s(1, tileType);
@@ -318,6 +332,7 @@ bool Game::checkIfFactoriesPopulated(){
     bool populated = false;
     //Check for centreTable to see if there is any tiles
     if(centreTable->getSize() > 0){
+        
         populated = true;
     }
     //Check for factories 1 to 5 until a tile has been found
