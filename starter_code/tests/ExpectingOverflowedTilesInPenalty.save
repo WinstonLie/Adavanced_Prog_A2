@@ -1,34 +1,34 @@
-# This test checks that the bag can be filled up from the box lid
+#Commands To Test after loading file
+#Turn 3 Y 3 <Jordan>
+#Turn 4 L 1 <Rodrigo>
+#Tile 'Y' should show on your penalty line (Broken)
 
-# Turn should be "turn 0 L *", with * being any of the pattern rows
-
-# If the factories for the next round generate, then test is successful
 
 #Saving File Tag
 Fri 1630 - Dale
 
 #Save Date
-Mon May 18 20:27:12 2020
+Wed May 20 16:18:12 2020
 
 
 #Game Status
 GameInProgress: True
 
 #Bag
-RYLU$
+UYBLURYBBLRYBLULYBLURYBLURRBYYRUBLURYBLYRYRLURYBLURYBLBRYBLURYBUURLBLURYBLURYBLU$
 
 #Boxlid
-YBRYYYUULBLULYURYRRRUULRYBLRBLURBLURYBLURYBURYBYBLURYBLYBLURYBLURBLURYBLURBLUYBLRYBLURYBLURBUYB$
+$
 
 #Centre Table
-L$
+FLUBR$
 
 #Factories
 $
 $
-$
-$
-$
+UBYY$
+LUUB$
+ULLR$
 
 
 #Current Player
@@ -39,11 +39,11 @@ $
 
 #Player Status
 #Player1
-name1
-1
+Jordan
+0
 
 #Player1 Wall
-B....
+.....
 .....
 .....
 .....
@@ -53,17 +53,17 @@ B....
 #Player1 PatternLine
 .
 ..
-...
+YY.
 ....
 .....
 
 
 #Player1 PenaltyPanel
-F......
+.......
 
 #Player Status
 #Player2
-name2
+Rodrigo
 0
 
 #Player2 Wall
@@ -76,7 +76,7 @@ name2
 
 #Player2 PatternLine
 .
-..
+RR
 ...
 ....
 .....

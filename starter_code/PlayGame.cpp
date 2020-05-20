@@ -18,6 +18,9 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
             fromLoadedGame = false;
         }
         while (gameRunning && game->checkIfFactoriesPopulated()){
+
+            std::cout << "\n=== START ROUND ===\n" << std::endl;
+
             Player* player = game->getPlayer(currentPlayerIndex);
             std::cout << "TURN FOR PLAYER: " << player->getPlayerName() << std::endl;
 
@@ -28,30 +31,41 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
             std::cout << player->displayPenalty();
             //Recieve input
             std::cout << "> ";
-            std::string commandInput = "";
-            std::cin >> commandInput;
+            std::string commandLineInput = "";
+            std::getline(std::cin, commandLineInput);
 
-            //make user input all uppercase
-            for(int i = 0; i < commandInput.length(); i ++){
-                commandInput[i] = toupper(commandInput[i]);
-            }
+            
+
+            std::string commandInput = "";
+            std::size_t currentLineIndex = 0;
+            commandInput = getNextWord(commandLineInput, currentLineIndex);
+            // try {
+            //     // Extracts the first word of line
+            //     currentLineIndex = commandLineInput.find_first_of(' ');
+
+            //     if (currentLineIndex == commandLineInput.npos){
+            //         currentLineIndex = commandLineInput.size(); 
+            //     }
+
+            //     commandInput = commandLineInput.substr(0, currentLineIndex);
+            // } catch (std::exception e){}
 
             if (std::cin.good() && commandInput == "TURN"){
                 
+                // std::string factoryInput, colourCharInput,
+                //   patternRowInput = "";
+
                 // recieve factory, colour, storage row
                 int factory = -1;
-                char colourChar = '_'; // Underscore means invalid
+                // char colourChar = '_'; // Underscore means invalid
+                Types colourType = Invalid;
                 int patternRow = -1;
                 bool validTurn = false;
-                
-                std::cin >> factory >> colourChar >> patternRow;
-                
-                //make user input uppercase
-                colourChar = toupper(colourChar);
-                std::string factoryString = std::to_string(factory);
-                std::string patternRowString = std::to_string(patternRow);
+                processLine(commandLineInput, currentLineIndex, factory,
+                  colourType, patternRow);
+                // std::cin >> factoryInput >> colourCharInput >> patternRowInput;
 
-                Types colourType = readTypeFromChar(colourChar);
+                // Types colourType = readTypeFromChar(colourChar);
                 // Initial checks, to make sure that input is within range to be checked
                 // to prevent out of bounds error
                 if (colourType != Invalid && colourType != starter_player && factory >= 0 && factory < NUM_OF_FACTORIES + 1 &&
@@ -63,7 +77,11 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
                 // If the turn was successful then move to next player
                 if (validTurn){
                     std::cout << "Turn successful\n" << std::endl;
-                    std::string command = "(" +player->getPlayerName() + ") > " + commandInput + " " + factoryString + " " + colourChar + " " + patternRowString;
+
+                    std::string command = "(" +player->getPlayerName()
+                      + ") > " + commandInput + " " + std::to_string(factory)
+                      + " " + std::to_string(colourType) + " " + std::to_string(patternRow);
+
                     commands.push_back(command);
                     
                     //Switch to next player
@@ -77,7 +95,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
                 bool saved;
                 
                 //get file name from player
-                std::cin >> filename;
+                filename = getNextWord(commandLineInput, currentLineIndex, false);
 
                 //check if filename was entered
                 if(filename != ""){
@@ -97,11 +115,10 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
                 
                 std::cout << "Game will exit without saving. Enter 'y' to quit game.)" << std::endl;
                 
-                char input = ' ';
-                std::cin >> input;
-                input = toupper(input);
+                std::string input = "";
+                std::getline(std::cin, input);
                 
-                if(input == 'Y'){
+                if(input.size() == 1 && toupper(input[0]) == 'Y'){
                     
                     gameRunning = false;
                     
@@ -109,6 +126,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
                     
                     std::cout << "Continuing game..." << std::endl;
                     
+
                 }
                 
             }else if (std::cin.eof()){
@@ -121,63 +139,25 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
             }// end of command checking
             
             // Ignores the rest of the line
-            std::cin.ignore(10000, '\n');
+            // std::cin.ignore(10000, '\n');
         } // end of factory offer phase while loop
     
         // Add tiles to wall, calculate points
         bool hasEndedGame = false;
         if (gameRunning){
-            std::cout << "Round ended" << std::endl;
 
-            //print all commands issued that round
-            std::cout << "\n Commands Issued" << std::endl;
-        
-            for(int i = 0; i < commands.size(); i++){
-                
-                std::cout << commands[i] << std::endl;
-            }
+            //print out commands of the round
+            getCommands(commands);
+
             //Add tiles into the wall
             //get round points for each player and details
             hasEndedGame = updateEndRoundDetails(game, currentPlayerIndex);
         }
         
         if (hasEndedGame){
-            //get number of players
-            int playerCount = game->getPlayerCount();
-            std::vector<Player*> players;
-            //add player to the vector after updating end game points
-            for (int i = 0; i < playerCount; i++){
+            //Print out end of game details including total points, winner and rankings
+            updateEndGameDetails(game);
 
-                Player* player = game->getPlayer(i);
-                player->updateEndGamePoints();
-                players.push_back(player);
-            }
-            //initialization of values for determining highest points of a player
-            int highestPoints = -1;
-            int highestPlayerIndex = 0;
-            int currentRanking = 1;
-
-            while (players.size() > 0){
-
-                for (int i = 0; i < players.size(); i++){
-
-                    if (players[i]->getPoints() > highestPoints){
-                        //update highest ranking player and points
-                        highestPlayerIndex = i;
-                        highestPoints = players[i]->getPoints();
-                    }
-                }
-                //printing out details
-                std::cout << "Player rank " << currentRanking << ": "
-                  << players[highestPlayerIndex]->getPlayerName() << " - "
-                  << players[highestPlayerIndex]->getPoints() << " points" << std::endl; 
-                
-                //update players container
-                players.erase(players.begin() + highestPlayerIndex);
-                currentRanking++;
-                highestPoints = -1;
-                highestPlayerIndex = 0;
-            }
             gameRunning = false;
 
             // calculate final points, decide winner and print results
@@ -187,6 +167,48 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
 
     }
 }
+
+void updateEndGameDetails(Game* game){
+    std::cout << "=== GAME OVER ===\n " << std::endl;
+    //get number of players
+    int playerCount = game->getPlayerCount();
+    std::vector<Player*> players;
+    //add player to the vector after updating end game points
+    for (int i = 0; i < playerCount; i++){
+
+        Player* player = game->getPlayer(i);
+        player->updateEndGamePoints();
+        players.push_back(player);
+    }
+    //initialization of values for determining highest points of a player
+    int highestPoints = -1;
+    int highestPlayerIndex = 0;
+    int currentRanking = 1;
+
+    while (players.size() > 0){
+
+        for (int i = 0; i < players.size(); i++){
+
+            if (players[i]->getPoints() > highestPoints){
+                //update highest ranking player and points
+                highestPlayerIndex = i;
+                highestPoints = players[i]->getPoints();
+            }
+        }
+        //printing out details
+        std::cout << "Player rank " << currentRanking << ": "
+            << players[highestPlayerIndex]->getPlayerName() << " - "
+            << players[highestPlayerIndex]->getPoints() << " points" << std::endl; 
+        
+        //update players container
+        players.erase(players.begin() + highestPlayerIndex);
+        currentRanking++;
+        highestPoints = -1;
+        highestPlayerIndex = 0;
+    }
+
+}
+
 
 void nextPlayer(Game* game, int& currentPlayerIndex){
     if (currentPlayerIndex != game->getPlayerCount() - 1){
@@ -237,7 +259,7 @@ bool moveTiles(Game* game,Player* player, int factory, Types colourType, int pat
     return moved;   
 }
 
-void addToBoard(Player* player, int patternRow, int tileAmount, Tile** tiles){
+void addToBoard(Player* player, int patternRow, int tileAmount, Tile**& tiles){
     if (patternRow < 6){
         // add tiles to pattern line of player
         player->addTilesToPatternLine(tiles, tileAmount, patternRow - 1);
@@ -246,10 +268,12 @@ void addToBoard(Player* player, int patternRow, int tileAmount, Tile** tiles){
         for(int i = 0; i < tileAmount; i++){
             player->addToFloorLine(tiles[i]);
         }
-    } 
+    }
+    delete tiles;
+    tiles = nullptr; 
 }
 
-bool updateEndRoundDetails(Game* game,int currentPlayerIndex){
+bool updateEndRoundDetails(Game* game,int& currentPlayerIndex){
     bool hasEndedGame = false;
     for (int i = 0; i < game->getPlayerCount(); i++){
         Player* player = game->getPlayer(i);
@@ -285,4 +309,109 @@ bool updateEndRoundDetails(Game* game,int currentPlayerIndex){
 
     }// end of for loop
     return hasEndedGame;
+}
+
+void getCommands(std::vector<std::string> commands){
+    std::cout << "Round ended" << std::endl;
+
+    //print all commands issued that round
+    std::cout << "\n Commands Issued" << std::endl;
+
+    for(int i = 0; i < commands.size(); i++){
+        
+        std::cout << commands[i] << std::endl;
+    }
+
+}
+
+bool processLine(std::string line, std::size_t charAfterFirstWordIndex, int& factory,
+  Types& colourType, int& patternRow){
+      // Expects three 'words' (inputs seperated by spaces) to be input
+      int expectedInputs = 3;
+      size_t currentPos = charAfterFirstWordIndex;
+      bool successfulInput = true;
+      std::string words[expectedInputs];
+      
+      //loop through the input
+      for (int i = 0; successfulInput && i < expectedInputs; i++){
+          words[i] = getNextWord(line, currentPos,true);
+          if (words[i] == ""){
+              successfulInput = false;
+          }
+        //   std::size_t indexOfNextWord = -1;
+        //   std::size_t indexOfLastChar = -1;
+        //   try {
+        //     //validate the input
+        //     indexOfNextWord = line.find_first_not_of(' ', currentPos);
+        //     indexOfLastChar = line.find_first_of(' ', indexOfNextWord);
+            
+        //     if (indexOfLastChar == line.npos){
+        //         indexOfLastChar = line.size();
+        //     }
+
+        //   } catch (std::exception e){
+        //       indexOfNextWord = line.npos;
+        //   }
+          
+        //   if (indexOfNextWord != line.npos){
+        //       words[i] = line.substr(indexOfNextWord, indexOfLastChar - indexOfNextWord);
+        //       std::cout << words[i] << '.';
+        //       currentPos = indexOfLastChar + 1;
+        //   } else if (i != 2) {
+        //       successfulInput = false;
+        //   }
+      }
+
+      // If three words were detected
+      if (successfulInput){
+        if (words[1].size() == 1){
+
+            // Reads the first chara
+            colourType = readTypeFromChar(words[1][0]);
+
+        } else {
+            successfulInput = false;
+        }
+
+        try {
+            factory = std::stoi(words[0]);
+            patternRow = std::stoi(words[2]);
+        } catch (std::invalid_argument e){
+            successfulInput = false;
+        }
+      }
+
+      return successfulInput;
+}
+
+std::string getNextWord(std::string line, std::size_t& currentIndex, bool toUpper){
+    std::string nextWord = "";
+    std::size_t indexOfNextWord = -1;
+    std::size_t indexOfLastChar = -1;
+    try {
+    //validate the input
+    indexOfNextWord = line.find_first_not_of(' ', currentIndex);
+    indexOfLastChar = line.find_first_of(' ', indexOfNextWord);
+    
+    if (indexOfLastChar == line.npos){
+        indexOfLastChar = line.size();
+    }
+
+    } catch (std::exception e){
+        indexOfNextWord = line.npos;
+    }
+    
+    if (indexOfNextWord != line.npos){
+        nextWord = line.substr(indexOfNextWord, indexOfLastChar - indexOfNextWord);
+        //make user input all uppercase
+        if (toUpper){
+            for(int i = 0; i < nextWord.length(); i ++){
+                nextWord[i] = toupper(nextWord[i]);
+            }
+        }
+        std::cout << nextWord << '.';
+        currentIndex = indexOfLastChar + 1;
+    }
+
+    return nextWord;
 }

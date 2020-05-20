@@ -22,14 +22,23 @@ int main(void){
         menuDisplay();
         std::cout << "\n> ";
         // Inputs character from user
-        char input;
-        std::cin >> input;
+        std::string input;
+        char inputChar = '_';
+        std::getline(std::cin, input);
+
+        if (input.size() == 1){
+            //gets the first character of string
+            inputChar = input[0];
+        }
         std::cout << std::endl;
+
         // If not eof then process input
         // If eof or quitting then end loop
         if (std::cin.good()){
-            menu_loop = manageInput(input);
+
+            menu_loop = manageInput(inputChar);
         } else {
+
             menu_loop = false;
         }
     }
@@ -60,12 +69,12 @@ bool manageInput(char input){
         for (int i = 0; i < playerCount; i++){
             std::cout << "Player " << i+1 << " name:" << std::endl;
             std::string playerName;
-            std::cin >> playerName;
+            std::getline(std::cin, playerName);
             players.insert(players.end(),new Player(playerName));
         }
         std::cout << "Insert seed or -1 for default:" << std::endl;
         std::string seedInput = "";
-        std::cin >> seedInput;
+        std::getline(std::cin, seedInput);
         int randomSeed = -1;
         bool successfulConversion = true;
         try {
@@ -104,8 +113,8 @@ bool manageInput(char input){
     //Load saved game
     else if(input == '2'){
         std::cout << "\nPlease input file name" << std::endl;
-        std::string fileName;
-        std::cin >> fileName;
+        std::string fileName = "";
+        std::getline(std::cin, fileName);
 
         Game** game = new Game*;
         *game = nullptr;

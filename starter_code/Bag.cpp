@@ -5,10 +5,20 @@ Bag::Bag(){
     
 }
 
-Bag::Bag(std::vector<Tile*> otherBag): bag{ bag }{}
+Bag::Bag(std::vector<Tile*> otherBag){
+
+    for(int i = 0 ; i < otherBag.size() ; i++){
+        //Populating bag with copy
+        bag.push_back(otherBag[i]);
+    }
+}
 
 Bag::~Bag(){
     //destructor
+    for (int i = 0 ; i < bag.size() ; i++){
+
+        delete bag[i];
+    }
 }
 
 void Bag::insertIntoBag(Tile* tile){
@@ -16,7 +26,14 @@ void Bag::insertIntoBag(Tile* tile){
 }
 
 void Bag::removeFromBag(int value){
-    bag.erase(bag.begin() + value);
+    //initializing temp
+    Tile* tile = bag[value];
+
+    //swap
+    bag[value] = bag[bag.size() - 1];
+    bag[bag.size() - 1] = tile;
+
+    bag.pop_back();
 }
 
 int Bag::getSize(){

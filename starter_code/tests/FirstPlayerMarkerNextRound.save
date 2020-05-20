@@ -1,9 +1,8 @@
-# This test confirms that the end of the game happens correctly, and the
-# points get added up correctly for the last placed tile and for the completed row
+# Tests that the person who holds the first player marker has their turn first next round
 
-#Turn taken should be "turn 0 L 1" 
+# Turn can be anything, pattern lines/wall aren't being tested
 
-# Points for player 1 should be 16, player 2 should be 0
+# Next round, first player should be name1, as they hold the first player marker
 
 #Saving File Tag
 Fri 1630 - Dale
@@ -16,7 +15,7 @@ Mon May 18 20:27:12 2020
 GameInProgress: True
 
 #Bag
-LURBLURYBLURBLUYBLRYBLURYBLURBUYBRYLU$
+LURBLURBYRUYBLURBLUYBLRYBLURYBLURBUYBRYLU$
 
 #Boxlid
 YBRYYYUULBLULYURYRRRUULRYBLRBLURBLURYBLURYBURYBYBLURYBLYBLURYB$
@@ -41,10 +40,10 @@ $
 #Player Status
 #Player1
 name1
-10
+0
 
 #Player1 Wall
-BYRU.
+.....
 .....
 .....
 .....

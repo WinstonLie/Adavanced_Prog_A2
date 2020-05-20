@@ -70,6 +70,10 @@ bool Factory::setTiles(Tile** tiles, int tileCount){
         successfullySet = true;
     }
 
+    // Deletes original tile container, sets to nullptr
+    delete tiles;
+    tiles = nullptr;
+
     return successfullySet;
 }
 

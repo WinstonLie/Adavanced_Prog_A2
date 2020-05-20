@@ -1,3 +1,11 @@
+# This test confirms that the end of the game happens correctly, and the
+# points get added up correctly for the last placement for completed rows,
+# columns and all tiles of a colour
+
+#Turn taken should be "turn 0 L 1" 
+
+# Points for player 1 should be 48, player 2 should be 34
+
 #Saving File Tag
 Fri 1630 - Dale
 

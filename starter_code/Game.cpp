@@ -62,12 +62,14 @@ Game::~Game(){
     for(int i =0 ; i < players.size(); i++){
         delete players[i];
     }
-    delete bag;
     
+    //deleting factories
     for (int i = 0; i < NUM_OF_FACTORIES; i++){
         delete factories[i];
     }
+
     //deleting game components
+    delete bag;
     delete factories;
     delete centreTable;
     delete boxLid;
@@ -95,7 +97,6 @@ void Game::populateFactories(){
     //random engine initialisation with seed
     std::default_random_engine engine(randomSeed);
 
-    
     
     for(int row = 0; row < NUM_OF_FACTORIES; row++){
 
@@ -170,6 +171,8 @@ bool Game::getTilesFromFactory(int factoryIndex, Types colour, int& tileAmount, 
                    // As factory tiles has been removed, set output to true
                 successfulFactoryRemoval = true;
             }
+
+            delete centreTiles;
 
             
         }

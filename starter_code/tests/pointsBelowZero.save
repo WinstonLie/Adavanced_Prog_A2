@@ -1,9 +1,8 @@
-# This test confirms that the end of the game happens correctly, and the
-# points get added up correctly for the last placed tile and for the completed row
+# This test confirms that points can not get below 0
 
-#Turn taken should be "turn 0 L 1" 
+# Turn can be anything, as second players' points aren't being testss
 
-# Points for player 1 should be 16, player 2 should be 0
+# Points for player 1 should be 0, if its below 0 then its incorrect
 
 #Saving File Tag
 Fri 1630 - Dale
@@ -16,10 +15,10 @@ Mon May 18 20:27:12 2020
 GameInProgress: True
 
 #Bag
-LURBLURYBLURBLUYBLRYBLURYBLURBUYBRYLU$
+LURBLURYBLURBLBYRUUYBLRYBLURYBLURYBRYYYUULBLULYURYRRRUULRYBLRBLURBLUBUYBRYLU$
 
 #Boxlid
-YBRYYYUULBLULYURYRRRUULRYBLRBLURBLURYBLURYBURYBYBLURYBLYBLURYB$
+YBLUYBUYBYBLUYBLYBLUYB$
 
 #Centre of table
 L$
@@ -33,7 +32,7 @@ $
 
 
 #Current Player
-1
+2
 
 #Number of Players
 2
@@ -41,10 +40,10 @@ $
 #Player Status
 #Player1
 name1
-10
+1
 
 #Player1 Wall
-BYRU.
+.....
 .....
 .....
 .....
@@ -60,7 +59,7 @@ BYRU.
 
 
 #Player1 PenaltyPanel
-F......
+FRRRRR.
 
 #Player Status
 #Player2

@@ -1,27 +1,27 @@
-# This test checks that the bag can be filled up from the box lid
+# Tests that tiles get put on wall correctly and that factories get refilled
 
-# Turn should be "turn 0 L *", with * being any of the pattern rows
+#Turn should consist of moving the tile to 5th row
 
-# If the factories for the next round generate, then test is successful
+#Scores should be 4 for Winston and 2 for Rodrigo
 
 #Saving File Tag
 Fri 1630 - Dale
 
 #Save Date
-Mon May 18 20:27:12 2020
+Tue May 19 19:43:15 2020
 
 
 #Game Status
 GameInProgress: True
 
 #Bag
-RYLU$
+YBLURYBLRBLURBLURYBLURYBURYBYBLURYBLYBLURYBLURBLURYBLURBLUYBLRYBLURYBLURBUYBRYLU$
 
 #Boxlid
-YBRYYYUULBLULYURYRRRUULRYBLRBLURBLURYBLURYBURYBYBLURYBLYBLURYBLURBLURYBLURBLUYBLRYBLURYBLURBUYB$
+$
 
 #Centre Table
-L$
+YY$
 
 #Factories
 $
@@ -39,11 +39,11 @@ $
 
 #Player Status
 #Player1
-name1
-1
+Winston
+0
 
 #Player1 Wall
-B....
+.....
 .....
 .....
 .....
@@ -51,19 +51,19 @@ B....
 
 
 #Player1 PatternLine
-.
-..
-...
-....
+U
+UU
+YYY
+LLLL
 .....
 
 
 #Player1 PenaltyPanel
-F......
+.......
 
 #Player Status
 #Player2
-name2
+Rodrigo
 0
 
 #Player2 Wall
@@ -75,13 +75,13 @@ name2
 
 
 #Player2 PatternLine
-.
-..
-...
-....
+B
+RR
+RRR
+UU..
 .....
 
 
 #Player2 PenaltyPanel
-.......
+F......
 

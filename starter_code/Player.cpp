@@ -143,10 +143,13 @@ bool Player::addTilesToWalls(std::vector<int>& rowsMoved, std::vector<int>& poin
             for (int r = 0; r < WALL_DIMENSION; r++){
                 if (WALL_COLOURS[i][r] == patternLines[i][0]->getType()){
                     column = r;
+                } else if (patternLines[i][0] == nullptr){
+                    std::cout << "is null" << std::endl;
                 }
             }
             // Places first tile from patternLine into wall
             wall[row][column] = patternLines[i][0];
+            std::cout << "Row: " << row  << " Column: " << column << std::endl;
             // Removes tile pointer from patternLines
             patternLines[i][0] = nullptr;
             // Puts all other tiles in row (if any exist) into lid
