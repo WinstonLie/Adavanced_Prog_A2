@@ -102,27 +102,42 @@ bool saveGame(Game* game, int currentPlayer, std::string filePath){
    return successfullySaved;
 }
 
-bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& isInProgress){
+bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
+  bool& isInProgress){
+    
+    // If valid load is set to false, then loading was unsuccessful
     bool validLoad = true;
+
     // Read all valid lines from file into vector
     std::vector<std::string> inputLines;
+    
+    // Open file
     std::ifstream inputFileStream;
     inputFileStream.open(filePath);
-    std::string currentLine;
-
+    
+    // While the input stream is good
     while (inputFileStream.good()){
 
+        // Holds the current line        
+        std::string currentLine = "";
+
+        // Get the next line from the stream
         std::getline(inputFileStream, currentLine);
-        if (!currentLine.empty() && currentLine[0] != '#' && currentLine[0] != '\r'){
+
+        // If line has a windows end key, then get rid of it
+        if (currentLine.size() > 0 && currentLine[currentLine.size() - 1] == '\r'){
+            currentLine.pop_back();
+        }
+
+        // If the line isn't empty or a comment then add it to the inputLines vector
+        if (!currentLine.empty() && currentLine[0] != '#'){
+            
             inputLines.push_back(currentLine);
         }
     }
+
+    // Close the input file stream
     inputFileStream.close();
-    
-    // // Code to print read in lines
-    // for (int i = 0; i < inputLines.size(); i++){
-    //     std::cout << inputLines[i] << std::endl;
-    // }
     
     // Create game from input
     // Create empty values for game
@@ -144,11 +159,13 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& 
     if (checkLoad(validLoad, inputLines, currentLineCounter) &&
       inputLines[currentLineCounter].compare("Fri 1630 - Dale") == 0){
         currentLineCounter++;
+
     } else {
         validLoad = false;
     }
 
     // Check that no errors found so far and that there is a next line
+
     // Check date
     if (checkLoad(validLoad, inputLines, currentLineCounter)){
         // Nothing is to be done with the date, ignore this line
@@ -157,8 +174,9 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& 
 
     // Get game status
     if (checkLoad(validLoad, inputLines, currentLineCounter)){
+        // Checks to see if the word True is anywhere in this line
         std::size_t found = inputLines[currentLineCounter].find("True");
-        isInProgress = (found != std::string::npos);
+        isInProgress = (found != inputLines[currentLineCounter].npos);
         currentLineCounter++;
     }
 
@@ -183,18 +201,25 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& 
 
     // Reads in factories
     if (checkLoad(validLoad, inputLines, currentLineCounter)){
+
         // Create array for factories
         factories = new Tile**[factoryCount];
         int factoryCounter = 0;
+        
         // While loading is valid and there are still factories to load
         while (validLoad && factoryCounter < factoryCount){
+        
             // Input the tiles for factory into the input vector
             std::vector<Tile*> input;
             readTiles(validLoad, inputLines, currentLineCounter, input);
+        
+            // If tiles were read in correctly
             if (validLoad){
+
                 // Create factory and input tiles into it
                 Tile** factory = new Tile*[FACTORY_SIZE];
                 for (int i = 0; i < FACTORY_SIZE; i++){
+                
                     // If a tile is found, put it in else put in a nullptr
                     if (i < input.size()){
                         factory[i] = input[i];
@@ -202,8 +227,10 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& 
                         factory[i] = nullptr;
                     }
                 }
+                
                 // Add factory into factories array
                 factories[factoryCounter] = factory;
+                
                 // Increment the factory counter, move on to next factory
                 factoryCounter++;
             }
@@ -222,9 +249,11 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& 
 
     // Number of players
     if (checkLoad(validLoad, inputLines, currentLineCounter)){
+
         // Parse line into an integer
         numberOfPlayers = std::stoi(inputLines[currentLineCounter]);
         currentLineCounter++;
+
         // Check to see that current player is within boundaries
         if (currentPlayerIndex < 0 || currentPlayerIndex >= numberOfPlayers){
             validLoad = false;
@@ -235,11 +264,12 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& 
     if (checkLoad(validLoad, inputLines, currentLineCounter)){
         // For every expected player, go through a loop
         int playerCounter = 0;
-
         while (validLoad && playerCounter < numberOfPlayers){
+
             // Initialise player variables
             std::string name = "";
             int points = -1;
+
             // Initialise empty wall
             Tile*** wall = new Tile**[WALL_DIMENSION];
             for (int i = 0; i < WALL_DIMENSION; i++){
@@ -304,6 +334,7 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& 
                     // Read in each character one by one
                     for (int i = 0; validLoad && i < WALL_DIMENSION; i++){
                         char input = inputLines[currentLineCounter][i];
+
                         // Parse character into a type of tile
                         Types type = readTypeFromChar(input);
 
@@ -316,15 +347,18 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& 
                         } else if (type == Empty) {
 
                             wall[wallRowCounter][i] = nullptr;
+
                         // If type is invalid or First_Player, then input is invalid
                         } else {
 
                             validLoad = false;
                         }
                     }
+
                     // Increment input line and counter for wall rows
                     wallRowCounter++;
                     currentLineCounter++;
+
                 // If length of input is less than the expected columns, then loading is
                 // incorrect
                 } else {
@@ -340,12 +374,15 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& 
 
                 // check that row has enough characters
                 if (inputLines[currentLineCounter].length() >= patternRowCounter + 1){
+
                     // Boolean to check that all tiles are inserted at front
                     bool emptyTileFound = false;
                     
                     // Read in each character one by one
                     for (int i = 0; validLoad && i < patternRowCounter + 1; i++){
+
                         char input = inputLines[currentLineCounter][i];
+
                         // Parse character into a type of tile
                         Types type = readTypeFromChar(input);
 
@@ -360,11 +397,13 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& 
                                 if (emptyTileFound){
                                     validLoad = false;
                                 } else {
+
                                     // Increase counter for that row and insert tile into row
                                     patternLineCounts[patternRowCounter]++;
                                     patternLines[patternRowCounter][i] = new Tile(type);
                                 }
                             }
+
                         // If type is invalid or starter player, loading is invalid
                         } else {
                             validLoad = false;
@@ -374,6 +413,7 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& 
                     // Increment row counter and input line counter
                     patternRowCounter++;
                     currentLineCounter++;
+
                 // If length of line is less than expected, loading is invalid
                 } else {
                     validLoad = false;
@@ -382,10 +422,13 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& 
 
             // load in floor line
             if (checkLoad(validLoad, inputLines, currentLineCounter)){
+
                 // Boolean to check that all tiles are inserted at front
                 bool emptyTileFound = false;
+
                 // check that floor line has enough characters
                 if (inputLines[currentLineCounter].length() >= FLOOR_LINE_LENGTH){
+
                     // Read in floor line
                     for (int i = 0; validLoad && i < FLOOR_LINE_LENGTH; i++){
                         char input = inputLines[currentLineCounter][i];
@@ -397,22 +440,27 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& 
 
                                 if (emptyTileFound || (type == First_Player && firstPlayerMarker == false)){
                                     validLoad = false;
+
                                 } else {
 
                                     if (type == First_Player){
                                         firstPlayerMarker = false;
                                     }
+
                                     floorLineCount++;
                                     floorLine[i] = new Tile(type);
                                 }
                             } else {
                                 emptyTileFound = true;
                             }
+
                         } else {
                             validLoad = false;
                         }
                     }
+
                     currentLineCounter++;
+
                 } else {
                     validLoad = false;
                 }
@@ -420,11 +468,14 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& 
 
             // If load is valid so far, then create player with details
             if (validLoad){
+
                 // Call loading contructor for player
                 Player* player = new Player(name, points, patternLines,
                   patternLineCounts,  wall,  floorLine,  floorLineCount);
+
                 // Push player into vector for players
                 players.push_back(player);
+
                 // Increase counter for how many players have been loaded
                 playerCounter++;
             } else {
@@ -500,7 +551,7 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& 
         std::cout << "valid load\n" << std::endl;
     } else {
         //delete created objects
-        // TODO
+
         // Deletes all tiles from respective tile vectors, if added
         std::vector<Tile*>* tileVectors[3] = {&bag, &boxLid, &centreOfTable};
         for (int i = 0; i < 3; i++){
@@ -515,6 +566,7 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& 
             delete players.back();
             players.pop_back();
         }
+        
         // Delete all factories
         if (factories != nullptr){
             for (int i = 0; i < NUM_OF_FACTORIES; i++){
@@ -532,15 +584,20 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& 
     }
 
 }
+
 // checks that validLoad is true and that array counter is within range
 bool checkLoad(bool& validLoad, std::vector<std::string>& inputLines, int currentLineCounter){
+
     bool checkedLoad;
+
     if (validLoad && inputLines.size() > currentLineCounter){
         checkedLoad = true;
+
     } else {
         validLoad = false;
         checkedLoad = false;
     }
+
     return checkedLoad;
 }
 
@@ -548,7 +605,8 @@ bool checkLoad(bool& validLoad, std::vector<std::string>& inputLines, int curren
 // Doesn't expect empty tiles (represented as .)
 void readTiles(bool& validLoad, std::vector<std::string>& inputLines, 
   int& currentLineCounter, std::vector<Tile*>& tiles){
-    int currentIndex = 0;
+
+        int currentIndex = 0;
         char currentTile = inputLines[currentLineCounter][currentIndex];
         while (validLoad && currentTile != '$'){
             if (currentTile == '\n'){
@@ -557,26 +615,33 @@ void readTiles(bool& validLoad, std::vector<std::string>& inputLines,
             } else if (currentTile == ' ') {
                 currentIndex++;
             } else {
+
                 // First_Player is treated as unassigned
                 Types colour = readTypeFromChar(currentTile);
 
                 if (colour != Invalid){
+                
                     // starter player will be added after for centre table
                     if (colour != First_Player){
                         tiles.push_back(new Tile(colour));
                     }
+                
                     currentIndex++;
+                
                 } else {
                     validLoad = false;
                 }
             }
             
             if (checkLoad(validLoad, inputLines, currentLineCounter)){
+                
                 currentTile = inputLines[currentLineCounter][currentIndex];
+            
             } else {
                 validLoad = false;
             }
         }// end of while
+        
         currentLineCounter++;
 
 }
