@@ -15,7 +15,12 @@ CentreTable::CentreTable(std::vector<Tile*> centreTable){
 }
 
 CentreTable::~CentreTable(){
-    //destructor
+
+    while (head != nullptr){
+        delete head->getTileFromNode();
+        removeNode(nullptr, head);
+    }
+    
 }
 
 int CentreTable::getSize(){
@@ -77,25 +82,6 @@ void CentreTable::removeTiles(Types colour, Tile**& tiles, int& tileCount){
 
     }
     
-}
-
-void CentreTable::clear(){
-    Node* iterator = head;
-    Node* iteratorNext = nullptr;
-    
-    //delete all the nodes
-    iterator = head;
-    while(iterator != nullptr){
-
-        //insert tiles into the box lid
-        game->addToBoxLid(iterator->getTileFromNode());
-        //deallocate memory
-        iteratorNext = iterator->getNext();
-        iterator->setTile(nullptr);
-        delete iterator;
-        iterator = iteratorNext;
-   }
-   
 }
 
 void CentreTable::removeNode(Node* prevNode, Node*& nodeToDel){

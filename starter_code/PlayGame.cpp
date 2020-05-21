@@ -54,7 +54,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
  
                 // Initial checks, to make sure that input is within range to be checked
                 // to prevent out of bounds error
-                if (colourType != Invalid && colourType != starter_player && factory >= 0 && factory < NUM_OF_FACTORIES + 1 &&
+                if (colourType != Invalid && colourType != First_Player && factory >= 0 && factory < NUM_OF_FACTORIES + 1 &&
                     patternRow > 0 && patternRow < PATTERN_LINE_ROWS + 2){
 
                     //Move tiles
@@ -241,7 +241,7 @@ bool moveTiles(Game* game,Player* player, int factory, Types colourType, int pat
                 // If they took the start player tile, then add it to the floor line
                 if (isStartPlayer){
                     //Add starting player marker into the broken
-                    player->addToFloorLine(new Tile(starter_player));
+                    player->addToFloorLine(new Tile(First_Player));
                 }
                 
                 // Add to the board of player

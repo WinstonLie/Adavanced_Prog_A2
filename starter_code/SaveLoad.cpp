@@ -308,7 +308,7 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& 
                         Types type = readTypeFromChar(input);
 
                         // If the type is valid for the wall, insert it into wall
-                        if (type != Invalid && type != starter_player && type != Empty){
+                        if (type != Invalid && type != First_Player && type != Empty){
 
                             wall[wallRowCounter][i] = new Tile(type);
 
@@ -316,7 +316,7 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& 
                         } else if (type == Empty) {
 
                             wall[wallRowCounter][i] = nullptr;
-                        // If type is invalid or starter_player, then input is invalid
+                        // If type is invalid or First_Player, then input is invalid
                         } else {
 
                             validLoad = false;
@@ -350,7 +350,7 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& 
                         Types type = readTypeFromChar(input);
 
                         // Checks that type is invalid
-                        if (type != Invalid && type != starter_player){
+                        if (type != Invalid && type != First_Player){
 
                             // If type is empty then leave index as nullptr
                             if (type != Empty){
@@ -395,11 +395,11 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& 
 
                             if (type != Empty){
 
-                                if (emptyTileFound || (type == starter_player && firstPlayerMarker == false)){
+                                if (emptyTileFound || (type == First_Player && firstPlayerMarker == false)){
                                     validLoad = false;
                                 } else {
 
-                                    if (type == starter_player){
+                                    if (type == First_Player){
                                         firstPlayerMarker = false;
                                     }
                                     floorLineCount++;
@@ -557,12 +557,12 @@ void readTiles(bool& validLoad, std::vector<std::string>& inputLines,
             } else if (currentTile == ' ') {
                 currentIndex++;
             } else {
-                // starter_player is treated as unassigned
+                // First_Player is treated as unassigned
                 Types colour = readTypeFromChar(currentTile);
 
                 if (colour != Invalid){
                     // starter player will be added after for centre table
-                    if (colour != starter_player){
+                    if (colour != First_Player){
                         tiles.push_back(new Tile(colour));
                     }
                     currentIndex++;

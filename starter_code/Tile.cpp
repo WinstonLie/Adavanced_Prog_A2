@@ -4,20 +4,20 @@ Tile::Tile(Types type){
     this->type = type;
 }
 
-Tile::~Tile(){
-    //destructor
-}
+Tile::~Tile(){}
 
 Types Tile::getType(){
-
     return this->type;
 }
 
-// May potentially be moved to a util file for use in main program
 Types readTypeFromChar(char input){
+    // Convert input to upper case
     input = std::toupper(input);
+    // Initialises return value as invalid
     Types colour = Invalid;
     
+    // Goes through the different types of tiles, sets colour to the
+    // type that matches input if possible.
     if (input == 'R'){
         colour = Red;
     } else if (input == 'Y'){
@@ -31,8 +31,9 @@ Types readTypeFromChar(char input){
     } else if (input == '.'){
         colour = Empty;  
     } else if (input == 'F'){
-        colour = starter_player;
+        colour = First_Player;
     }
 
+    // Returns colour
     return colour;
 }
