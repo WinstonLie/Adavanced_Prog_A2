@@ -12,25 +12,32 @@ bool manageInput(char input);
 void printCredits();
 
 int main(void){
+
     std::cout << "Welcome to Azul" << std::endl;
     std::cout << "------------------" << std::endl;
+    
     // Variable that loops main menu,
     // goes false when quitting or invalid input occurs
     bool menu_loop = true;
+    
     while (menu_loop){
         
         // Displays main menu options
         menuDisplay();
+        
         std::cout << "\n> ";
+        
         // Inputs character from user
         std::string input;
         char inputChar = '_';
         std::getline(std::cin, input);
 
         if (input.size() == 1){
+        
             //gets the first character of string
             inputChar = input[0];
         }
+        
         std::cout << std::endl;
 
         // If not eof then process input
@@ -48,6 +55,7 @@ int main(void){
 }
 
 void menuDisplay(){
+    
     std::cout << "\nMenu"<< std::endl;
     std::cout << "----"<< std::endl;
 
@@ -63,6 +71,7 @@ bool manageInput(char input){
     
     //New Game
     if(input == '1'){
+    
         std::cout << "Starting a New Game" << std::endl;
         // Can add prompt for player count if needed to extend
         int playerCount = 2;

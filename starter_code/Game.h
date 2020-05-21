@@ -16,12 +16,17 @@
 #define DEFAULT_SEED      100
 #define TILES_PER_COLOUR  20
 
+// Forward declarations for player
 class Player;
-class CentreTable;
 
+// Class game holds all data that relates to the game
+// Doesn't handle players taking turns, doesn't contain current player
+// Driver for this class is PlayGame
 class Game{
     public:
+
         // Constructor that initialises private values and sets players
+        // Also creates all tiles needed for game
         Game(std::vector<Player*> playersToAdd, int randomSeed = DEFAULT_SEED);
 
         // Load constructor
@@ -29,7 +34,7 @@ class Game{
           int factoryCount, Factory** factories, CentreTable* centreTable, BoxLid* boxLid,
           bool firstPlayerMarker, int randomSeed = DEFAULT_SEED);
         
-        // Decontructor
+        // Decontructor, deletes all tiles in all sub-containers
         ~Game();
         
         // Moves tiles from the lid into the bag
@@ -109,6 +114,7 @@ class Game{
         // Seed for the random number generator
         int randomSeed;
 
+        // Array of pointers to factories
         Factory** factories;
 };
 #endif // AZUL_GAME

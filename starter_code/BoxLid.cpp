@@ -25,9 +25,9 @@ void BoxLid::insertIntoBoxLid(Tile* tile){
     boxLid.push_back(tile);
 }
 
-void BoxLid::removeFromBoxLid(int value){
+void BoxLid::removeFromBoxLid(int index){
 
-    boxLid.erase(boxLid.begin() + value);
+    boxLid.erase(boxLid.begin() + index);
 }
 
 int BoxLid::getSize(){

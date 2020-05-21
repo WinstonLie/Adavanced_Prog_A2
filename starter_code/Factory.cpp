@@ -97,6 +97,7 @@ void Factory::getTiles(Types colour, Tile**& tiles, int& tileCount, Tile**& cent
         // The inefficiency won't matter too much, these arrays
         //   will be deleted very soon
         tiles = new Tile*[FACTORY_SIZE];
+
         // Since at least one tile must be of the colour, max size is -1
         centreTiles = new Tile*[FACTORY_SIZE];
 
@@ -109,6 +110,7 @@ void Factory::getTiles(Types colour, Tile**& tiles, int& tileCount, Tile**& cent
 
                 tiles[tileCount] = factory[i];
                 tileCount++;
+            
             // If it doesn't match, add it to the centre array
             } else {
                 

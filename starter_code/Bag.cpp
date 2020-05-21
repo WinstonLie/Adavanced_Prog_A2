@@ -1,9 +1,6 @@
 #include "Bag.h"
 
-Bag::Bag(){
-    //constructor
-    
-}
+Bag::Bag(){}
 
 Bag::Bag(std::vector<Tile*> otherBag){
 
@@ -14,7 +11,7 @@ Bag::Bag(std::vector<Tile*> otherBag){
 }
 
 Bag::~Bag(){
-    //destructor
+    //destructor, deletes all tiles in bag
     for (int i = 0 ; i < bag.size() ; i++){
 
         delete bag[i];
@@ -25,14 +22,15 @@ void Bag::insertIntoBag(Tile* tile){
     bag.push_back(tile);
 }
 
-void Bag::removeFromBag(int value){
-    //initializing temp
-    Tile* tile = bag[value];
+void Bag::removeFromBag(int index){
+    //initializing temp pointer
+    Tile* tile = bag[index];
 
-    //swap
-    bag[value] = bag[bag.size() - 1];
+    // Swap tile to delete with last element
+    bag[index] = bag[bag.size() - 1];
     bag[bag.size() - 1] = tile;
 
+    // Delete last element
     bag.pop_back();
 }
 
