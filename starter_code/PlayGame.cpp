@@ -396,7 +396,7 @@ bool updateEndRoundDetails(Game* game,int& currentPlayerIndex){
         // Displays the total points at the end of the round
         std::cout << "Overall points: " << player->getPoints() << std::endl;
         //Display all player mosaic at the end of a round
-        std::cout << player->displayMosaic();
+        printOutCharacterInColours(player->displayMosaic());
         std::cout << std::endl;
 
     }// end of for loop
@@ -522,8 +522,8 @@ void showOpponentDetails(Game* game , int currentPlayerIndex){
 
             std::cout << "Player Name: " << playerName << std::endl;
             std::cout << "Player Points: " << playerPoints << std::endl;
-            std::cout << mosaic << std::endl;
-            std::cout << penaltyLine << std::endl;
+            printOutCharacterInColours(mosaic);
+            printOutCharacterInColours(penaltyLine);
             std::cout << std::endl;
 
         }
