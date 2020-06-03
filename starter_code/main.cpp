@@ -13,8 +13,8 @@ void printCredits();
 
 int main(void){
 
-    std::cout << "Welcome to Azul" << std::endl;
-    std::cout << "------------------" << std::endl;
+    std::cout << "\033[1m\033[36m" << "\n\nWelcome to Azul!!" << std::endl;
+    std::cout << "-----------------" << "\033[0m" << std::endl;
     
     // Variable that loops main menu,
     // goes false when quitting or invalid input occurs
@@ -57,12 +57,12 @@ int main(void){
 void menuDisplay(){
     
     std::cout << "\nMenu"<< std::endl;
-    std::cout << "----"<< std::endl;
+    std::cout << "----" << std::endl;
 
     std::cout << "1. New Game"<< std::endl;
     std::cout << "2. Load Game"<< std::endl;
     std::cout << "3. Credits"<< std::endl;
-    std::cout << "4. Quit"<< std::endl;
+    std::cout << "\033[31m" << "4. Quit"<< "\033[0m" << std::endl;
 
 }
 //Checks the input

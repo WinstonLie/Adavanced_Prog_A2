@@ -33,16 +33,19 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
             Player* player = game->getPlayer(currentPlayerIndex);
             
             // Displays information for user
-            std::cout << "TURN FOR PLAYER: " << player->getPlayerName() << std::endl;
+            std::cout << "\n\n\033[36m" << "For help type " << "\033[1m\033[36m"  << "'Help'." << "\033[0m" << std::endl;
+            std::cout << "TURN FOR PLAYER: " << "\033[1m\033[37m" << player->getPlayerName() << "\033[0m" << std::endl;
 
             std::cout << "Factories:" << std::endl;
-            std::cout << game->displayFactories() + "\n" << std::endl;
-
-            std::cout << player->displayMosaic();
-            std::cout << player->displayPenalty();
+            
+            colorizeOutput(game->displayFactories());
+            std::cout << std::endl;
+            colorizeOutput(player->displayMosaic());
+            colorizeOutput(player->displayPenalty());
 
             std::cout << "> ";
 
+          
             //Recieve input from user
             // Gets whole line
             std::string commandLineInput = "";
@@ -80,7 +83,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
                 
                 // If the turn was successful then move to next player
                 if (validTurn){
-                    std::cout << "Turn successful\n" << std::endl;
+                    std::cout << "\033[32m" << "Turn successful\n" << "\033[0m" << std::endl;
 
                     // Add command to vector of commands
                     std::string command = "(" +player->getPlayerName()
@@ -94,7 +97,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
                 
                 // If turn was unsuccessful then stay on same player
                 } else {
-                    std::cout << "Turn unsuccessful\n" << std::endl;
+                    std::cout << "\033[31m"  << "Turn unsuccessful\n" << "\033[0m" << std::endl;
                 }
             
             // If the user insert "save" as their first word
@@ -123,8 +126,8 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
             // If the user inserted "exit" as their first word    
             } else if(commandInput == "EXIT"){
                 
-                std::cout << "Game will exit without saving. Enter 'y' to quit game.)" << std::endl;
-                std::cout << ">";
+                std::cout << "\033[31m" << "Game will exit without saving. Enter 'y' to quit game.)" << "\033[0m" << std::endl;
+                std::cout << "> ";
 
                 std::string input = "";
                 std::getline(std::cin, input);
@@ -136,17 +139,69 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
                 }else {
                     
                     std::cout << "Continuing game..." << std::endl;
-                    
-
+    
                 }
                 
             // If eof has been found
             }else if (std::cin.eof()){
                 
                 gameRunning = false; 
-        
-            // If word inserted doesn't match any valid input
-            } else{
+
+
+            // User Interface Enhancement - HELP FUNCTION
+            }else if (commandInput == "HELP") {
+
+                bool exit = false;
+
+                while(exit == false){
+                    
+                    std::cout << "\n \nAvailable Commands:" << std::endl;
+                    std::cout << "'Turn <factory number> <color> <pattern row number>' to make a turn." << std::endl;
+                    std::cout << "'Save <file name>' to save the game.'" << std::endl;
+                    std::cout << "'Enemy' to see the board of your enemy." << std::endl;
+                    std::cout << "'Exit' to leave the game.\n" << std::endl;
+                    std::cout << "\033[32m" << "Type 'Return' to return to game\n \n" << "\033[0m" << std::endl;
+                    std::cout << "\n> ";
+
+                    std::string userInput;
+                    std::cin >> userInput;
+                    transform(userInput.begin(), userInput.end(), userInput.begin(), ::toupper);
+                    if(userInput == "RETURN"){
+                        exit = true;
+                    }
+                }
+                
+            //User Interface Enhancement - SEE ENEMY BOARD FUNCTION
+            }else if (commandInput == "ENEMY"){
+                
+                bool exit = false;
+                int playerNumber = currentPlayerIndex;
+
+                if (playerNumber != game->getPlayerCount() - 1){
+                    playerNumber++;
+                } else {
+                    playerNumber = 0;
+                }
+
+                Player* enemyPlayer = game->getPlayer(playerNumber);
+
+                while(exit == false){
+                    std::cout << "\n\n" << std::endl;
+                    colorizeOutput(enemyPlayer->displayMosaic());
+                    std::cout << "\n\n" << std::endl;
+
+                    std::cout << "Type 'Return' to return to game\n \n" << std::endl;
+                    std::cout << "\n> ";
+
+                    std::string userInput;
+                    std::cin >> userInput;
+                    transform(userInput.begin(), userInput.end(), userInput.begin(), ::toupper);
+                    if(userInput == "RETURN"){
+                        exit = true;
+                    }
+                }
+                 
+            }else{
                 
                 std::cout << "Invalid Input!\n" << std::endl;
             }// end of command checking
@@ -473,4 +528,49 @@ std::string getNextWord(std::string line, std::size_t& currentIndex, bool toUppe
     }
     
     return nextWord;
+}
+
+// User Interface Enhancement - COLORIZATION OF OUTPUT
+void colorizeOutput(std::string output){
+
+    for(int i = 0; i < output.length(); i++){
+        char toPrint = output[i];
+
+        if(toPrint == '\n'){
+
+            std::cout << "\n";
+
+        }else{
+            if(toPrint == 'R'){
+
+                std::cout << "\033[1m\033[31m" << toPrint << "\033[0m";
+
+            }else if(toPrint == 'Y'){
+
+                std::cout << "\033[1m\033[33m" << toPrint << "\033[0m";
+
+            }else if(toPrint == 'B'){
+
+                std::cout << "\033[1m\033[34m" << toPrint << "\033[0m";
+
+            }else if(toPrint == 'L'){
+
+                std::cout << "\033[1m\033[36m" << toPrint << "\033[0m";
+
+            }else if(toPrint == 'U'){
+
+                std::cout << "\033[1m\033[30m" << toPrint << "\033[0m";
+
+            }else if(toPrint == 'F'){
+
+                std::cout << "\033[1m\033[32m" << toPrint << "\033[0m";
+
+            }else{
+
+                std::cout << toPrint;
+
+            }
+        }
+        
+    }
 }

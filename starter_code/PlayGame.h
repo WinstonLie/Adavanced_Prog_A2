@@ -43,4 +43,6 @@ bool processTurn(std::string line, std::size_t currentIndex, int& factory, Types
 // Returns the next word in the line, starting from the current index.
 std::string getNextWord(std::string line, std::size_t& currentIndex, bool toUpper = true);
 
+void colorizeOutput(std::string output);
+
 #endif //PLAYGAME_H
