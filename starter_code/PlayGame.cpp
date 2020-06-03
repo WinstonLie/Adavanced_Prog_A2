@@ -36,10 +36,14 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
             std::cout << "TURN FOR PLAYER: " << player->getPlayerName() << std::endl;
 
             std::cout << "Factories:" << std::endl;
-            std::cout << game->displayFactories() + "\n" << std::endl;
+            std::string factories = game->displayFactories();
+            printOutCharacterInColours(factories);
 
-            std::cout << player->displayMosaic();
-            std::cout << player->displayPenalty();
+            std::string mosaic =  player->displayMosaic();
+            std::string penalty = player->displayPenalty();
+
+            printOutCharacterInColours(mosaic);
+            printOutCharacterInColours(penalty);
 
             std::cout << "> ";
 
@@ -140,7 +144,32 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
 
                 }
                 
-            // If eof has been found
+            }else if(commandInput == "HELP"){
+                bool help = true;
+
+                while(help){
+
+                    showHelpMenu();
+                    
+                    std::cout << "> ";
+                    std::string helpInput = "";
+                    std::cin >> helpInput;
+                    
+                    if(helpInput == "1"){
+
+                        //show opponent details such as board and points
+                        std::cout << std::endl;
+                        showOpponentDetails(game, currentPlayerIndex);
+
+                    }else if (helpInput == "2"){
+
+                        help = false;
+                    }else{
+                        std::cout << "Please enter a valid number!" << std::endl;
+                    }
+
+                }
+                 // If eof has been found
             }else if (std::cin.eof()){
                 
                 gameRunning = false; 
@@ -473,4 +502,83 @@ std::string getNextWord(std::string line, std::size_t& currentIndex, bool toUppe
     }
     
     return nextWord;
+}
+
+void showOpponentDetails(Game* game , int currentPlayerIndex){
+    //get current player count in the game
+    int playerCount = game->getPlayerCount();
+
+    std::cout << "\nOpponent's Details" << std::endl;
+    std::cout << "--------------"<< std::endl;
+    //loop through players
+    for(int i = 0 ; i < playerCount ; i++){
+        if( i != currentPlayerIndex){
+
+            //display all opponents details in the middle of a game
+            std::string playerName =  game->getPlayer(i)->getPlayerName();
+            int playerPoints = game->getPlayer(i)->getPoints();
+            std::string mosaic = game->getPlayer(i)->displayMosaic();
+            std::string penaltyLine = game->getPlayer(i)->displayPenalty();
+
+            std::cout << "Player Name: " << playerName << std::endl;
+            std::cout << "Player Points: " << playerPoints << std::endl;
+            std::cout << mosaic << std::endl;
+            std::cout << penaltyLine << std::endl;
+            std::cout << std::endl;
+
+        }
+    }
+
+
+}
+
+void showHelpMenu(){
+    
+    std::cout << "\nHelp Menu"<< std::endl;
+    std::cout << "--------"<< std::endl;
+
+    std::cout << "1. Show Opponent Information"<< std::endl;
+    std::cout << "2. Exit Help"<< std::endl;
+}
+
+void printOutCharacterInColours(std::string consoleDisplay){
+    char newLine = '\n';
+
+    //loop through the whole string
+    for(int i = 0; i < consoleDisplay.length() ; i++){
+
+        //conver to colours if it matches the tile type
+        if(consoleDisplay[i] != newLine){
+            if(consoleDisplay[i] == 'R'){
+
+                std::string a(1,consoleDisplay[i]);
+                std::string s  = "\033[1;31m" + a + "\033[0m";
+                std::cout << s;
+
+            }else if (consoleDisplay[i] == 'Y'){
+
+                std::string a(1,consoleDisplay[i]);
+                std::string s  = "\033[1;33m" + a + "\033[0m";
+                std::cout << s;
+
+            }else if (consoleDisplay[i] == 'B'){
+
+                std::string a(1,consoleDisplay[i]);
+                std::string s  = "\033[1;34m" + a + "\033[0m";
+                std::cout << s;
+
+            }else if (consoleDisplay[i] == 'L'){
+
+                std::string a(1,consoleDisplay[i]);
+                std::string s  = "\033[1;36m" + a + "\033[0m";
+                std::cout << s;
+            }
+            else{
+                std::cout << consoleDisplay[i];
+            }
+        }else{
+            std::cout << std::endl;
+        }
+    }
+    std::cout << std::endl;
 }

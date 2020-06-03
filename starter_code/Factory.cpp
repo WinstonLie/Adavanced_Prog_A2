@@ -134,8 +134,8 @@ std::string Factory::getTileString(){
 
             char tileType = factory[i]->getType();
             tileType = toupper(tileType);
-            std::string s(1, tileType);
 
+            std::string s(1,tileType);
             //get the type of tiles
             tileString += tileType;
         }
