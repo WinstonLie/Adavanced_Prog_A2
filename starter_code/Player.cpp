@@ -531,7 +531,6 @@ bool Player::tileInRowOfWall(Types colour, int row){
 std::string Player::displayMosaic(){
 
     std::string displayOutput = "";
-    displayOutput += "Mosaic for " + playerName + ":\n";
 
     // For every for of wall (and pattern line)
     for (int i = 0; i < WALL_DIMENSION; i++){

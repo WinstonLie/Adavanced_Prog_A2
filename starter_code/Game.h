@@ -87,7 +87,16 @@ class Game{
 
         // Returns the random seed being used for game
         int getRandomSeed();
+
+        //get all the turn commands
+        std::string getCommands();
+
+        //add turn command into commands
+        void addCommand(std::string command);
+        
     private:
+
+        std::vector<std::string> commands;
 
         // Vector of all players
         std::vector<Player*> players;

@@ -3,8 +3,6 @@
 
 void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
 
-    // Vector that keeps track of all the commands that have been used
-    std::vector<std::string> commands;
     
     // Boolean that keeps track of if the game is running
     // If false, then game loop ends
@@ -39,8 +37,12 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
             std::string factories = game->displayFactories();
             printOutCharacterInColours(factories);
 
+            std::string displayName = "Mosaic for " + player->getPlayerName() + ":\n";
+
             std::string mosaic =  player->displayMosaic();
             std::string penalty = player->displayPenalty();
+
+            std::cout << displayName;
 
             printOutCharacterInColours(mosaic);
             printOutCharacterInColours(penalty);
@@ -91,7 +93,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
                       + ") > " + commandInput + " " + std::to_string(factory)
                       + " " + (char) colourType + " " + std::to_string(patternRow);
 
-                    commands.push_back(command);
+                    game->addCommand(command);
                     
                     //Switch to next player
                     nextPlayer(game, currentPlayerIndex);
@@ -188,7 +190,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
         if (gameRunning){
 
             //print out commands of the round
-            getCommands(commands);
+            std::cout << game->getCommands() << std::endl;
 
             //Add tiles into the wall
             //get round points for each player and details
@@ -396,6 +398,9 @@ bool updateEndRoundDetails(Game* game,int& currentPlayerIndex){
         // Displays the total points at the end of the round
         std::cout << "Overall points: " << player->getPoints() << std::endl;
         //Display all player mosaic at the end of a round
+        std::string displayName = "Mosaic for " + player->getPlayerName() + ":\n";
+
+        std::cout << displayName;
         printOutCharacterInColours(player->displayMosaic());
         std::cout << std::endl;
 
@@ -517,11 +522,15 @@ void showOpponentDetails(Game* game , int currentPlayerIndex){
             //display all opponents details in the middle of a game
             std::string playerName =  game->getPlayer(i)->getPlayerName();
             int playerPoints = game->getPlayer(i)->getPoints();
+
+            std::string displayName = "Mosaic for " + game->getPlayer(i)->getPlayerName() + ":\n";
             std::string mosaic = game->getPlayer(i)->displayMosaic();
             std::string penaltyLine = game->getPlayer(i)->displayPenalty();
 
             std::cout << "Player Name: " << playerName << std::endl;
             std::cout << "Player Points: " << playerPoints << std::endl;
+
+            std::cout << displayName;
             printOutCharacterInColours(mosaic);
             printOutCharacterInColours(penaltyLine);
             std::cout << std::endl;
@@ -551,6 +560,7 @@ void printOutCharacterInColours(std::string consoleDisplay){
         if(consoleDisplay[i] != newLine){
             if(consoleDisplay[i] == 'R'){
 
+                //a is tileType in string format
                 std::string a(1,consoleDisplay[i]);
                 std::string s  = "\033[1;31m" + a + "\033[0m";
                 std::cout << s;

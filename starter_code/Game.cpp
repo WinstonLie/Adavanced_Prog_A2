@@ -369,3 +369,19 @@ bool Game::checkIfFactoriesPopulated(){
 int Game::getRandomSeed(){
     return randomSeed;
 }
+
+std::string Game::getCommands(){
+
+    std::string acc = "";
+    for(int i = 0 ; i < commands.size() ; i++){
+
+        acc += commands[i] + "\n";
+    }
+
+    return acc;
+}
+
+void Game::addCommand(std::string command){
+
+    commands.push_back(command);
+}
