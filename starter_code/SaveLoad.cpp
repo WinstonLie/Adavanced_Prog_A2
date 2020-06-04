@@ -34,6 +34,12 @@ bool saveGame(Game* game, int currentPlayer, std::string filePath, bool gameInPr
        outputStream << gameInProgress << std::endl;
        outputStream << std::endl;
 
+       
+       //game seed
+       outputStream << "#Game Seed" << std::endl;
+       outputStream << game->getRandomSeed() << std::endl;
+       outputStream << std::endl;
+
 
        //bag data
        outputStream << "#Bag" << std::endl;
@@ -157,6 +163,7 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
     int numberOfPlayers;
     std::vector<Player*> players;
     std::vector<std::string> commands;
+    int gameSeed;
 
     // Is set to false if marker is found in a floor line
     bool firstPlayerMarker = true;
@@ -194,6 +201,14 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
         }
         currentLineCounter++;
 
+    }
+
+    // Get game seed
+    if(checkLoad(validLoad, inputLines, currentLineCounter)){
+        std::string lineFromFile = inputLines[currentLineCounter];
+
+        gameSeed = std::stoi(lineFromFile);
+        currentLineCounter++;
     }
 
     // Read in bag
@@ -252,9 +267,6 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
             }
         }
     }
-
-    // Read in seed
-    // Not currently implemented
 
     // Current player
     if (checkLoad(validLoad, inputLines, currentLineCounter)){
@@ -568,7 +580,7 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
         }
         // Calls loading constructor for Game
         *game = new Game(players, numberOfPlayers, new Bag(bag), factoryCount, 
-          factories_, centreTable,  new BoxLid(boxLid), firstPlayerMarker, commands);
+          factories_, centreTable,  new BoxLid(boxLid), firstPlayerMarker, commands, gameSeed);
 
         // Confirms load is valid in console
         std::cout << "valid load\n" << std::endl;
