@@ -6,7 +6,7 @@
 
 // Saves the game to the specified file path
 // Returns true if saving was successful, else false
-bool saveGame(Game* game, int currentPlayer, std::string filePath);
+bool saveGame(Game* game, int currentPlayer, std::string filePath, bool gameInProgress);
 
 // Loads the game from the specified file path
 // If no file is found or save file doesn't match format, then return false

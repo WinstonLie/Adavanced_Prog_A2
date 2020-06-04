@@ -7,7 +7,7 @@
 #include "PlayGame.h"
 
 
-bool saveGame(Game* game, int currentPlayer, std::string filePath){
+bool saveGame(Game* game, int currentPlayer, std::string filePath, bool gameInProgress){
    bool successfullySaved = false;
    std::ofstream outputStream;
    outputStream.open(filePath);
@@ -31,7 +31,7 @@ bool saveGame(Game* game, int currentPlayer, std::string filePath){
 
        //game status
        outputStream << "#Game Status" << std::endl;
-       outputStream << "GameInProgress: True" << std::endl;
+       outputStream << gameInProgress << std::endl;
        outputStream << std::endl;
 
 
@@ -157,6 +157,7 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
     int numberOfPlayers;
     std::vector<Player*> players;
     std::vector<std::string> commands;
+    bool gameInProgress;
 
     // Is set to false if marker is found in a floor line
     bool firstPlayerMarker = true;
@@ -185,9 +186,15 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
     // Get game status
     if (checkLoad(validLoad, inputLines, currentLineCounter)){
         // Checks to see if the word True is anywhere in this line
-        std::size_t found = inputLines[currentLineCounter].find("True");
-        isInProgress = (found != inputLines[currentLineCounter].npos);
+        std::string lineFromFile = inputLines[currentLineCounter];
+
+        if(lineFromFile == "1"){
+            gameInProgress = true;
+        }else{
+            gameInProgress = false;
+        }
         currentLineCounter++;
+
     }
 
     // Read in bag

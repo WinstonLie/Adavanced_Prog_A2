@@ -6,6 +6,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
     // Boolean that keeps track of if the game is running
     // If false, then game loop ends
     bool gameRunning = true;
+    bool gameExited = false;
 
     // Keeps track of the index of the current player
     int currentPlayerIndex = startPlayerIndex;
@@ -108,7 +109,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
 
                 //check if filename was entered
                 if(filename != ""){
-                    saved = saveGame(game, currentPlayerIndex + 1, filename);
+                    saved = saveGame(game, currentPlayerIndex + 1, filename, true);
 
                     if(saved == false){
                         std::cout << "Error: Saving failed...\n" << std::endl;
@@ -132,6 +133,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
                 if(input.size() == 1 && toupper(input[0]) == 'Y'){
                     
                     gameRunning = false;
+                    gameExited = true;
                     
                 }else {
                     
@@ -198,6 +200,11 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
                     }
                 }
                  
+            // Replay Enhancement 
+            }else if (commandInput == "REPLAY"){
+                
+                std::cout << "TO BE IMPLEMENTED" << std::endl;
+
             }else{
                 
                 std::cout << "Invalid Input!\n" << std::endl;
@@ -227,6 +234,67 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
 
             gameRunning = false;
 
+            // replay enhancement
+            while(gameExited == false){
+            std::cout << "\nGame Finished. Would you like to save the game, replay, or exit?\n" << std::endl;
+
+            std::string response;
+
+            std::cin >> response;
+
+            transform(response.begin(), response.end(), response.begin(), ::toupper);
+
+            if(response == "SAVE"){
+                std::cout << "Please input a file name: ";
+                std::string filename = "";
+                std::cin >> filename;
+                bool saved;
+
+                //check if filename was entered
+                if(filename != ""){
+                    saved = saveGame(game, currentPlayerIndex + 1, filename, false);
+
+                    if(saved == false){
+                        std::cout << "Error: Saving failed...\n" << std::endl;
+                    }else{
+
+                        std::cout << "Saved successfully to " << filename << std::endl;
+                        std::cout << "Now quitting game..." << std::endl;
+                        gameExited = true;
+                    }
+                }else{
+                    std::cout << "Please input a proper file name\n" << std::endl;
+                }
+            }else if(response == "REPLAY"){
+
+                std::cout << "TO BE IMPLEMENTED" << std::endl;
+
+            }else if(response == "EXIT"){
+
+                std::cout << "\033[31m" << "Game will exit without saving. Enter 'y' to quit game.)" << "\033[0m" << std::endl;
+                std::cout << "> ";
+
+                std::string input = "";
+                std::getline(std::cin, input);
+                
+                if(input.size() == 1 && toupper(input[0]) == 'Y'){
+                    
+                    gameExited = true;
+                    
+                }else {
+                    
+                    std::cout << "Error: Unrecognised input..." << std::endl;
+    
+                }
+
+            }else{
+                
+                std::cout << "Error: Invalid input..." << std::endl;
+
+            }
+
+            }
+            
             // calculate final points, decide winner and print results
         } else {
             //to next round
@@ -234,6 +302,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
 
     }
 }
+
 
 void updateEndGameDetails(Game* game){
     
