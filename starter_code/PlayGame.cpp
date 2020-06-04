@@ -74,7 +74,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool isInP
                         std::string name = commandFromVector.substr(1, splitIndex-1);
                         std::string turnCommand = commandFromVector.substr(splitIndex+4, commandFromVector.length());
 
-                        std::cout << "Turn " << commandIndex+1 << ": Player " << name << " executed command -> " << turnCommand << std::endl;
+                        std::cout << "\033[1m\033[36m\n\n" << "Turn " << commandIndex+1 << ": Player " << name << " executed command -> " << turnCommand << "\033[0m\n\n" << std::endl;
                         commandLineInput = turnCommand;
                         commandIndex++;
                         
@@ -274,6 +274,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool isInP
             }else if (commandInput == "REPLAY"){
                 
                 gameRunning = false;
+                gameExited = true;
                 std::vector<Player*> players;
 
                 for(int i = 0; i < game->getPlayerCount(); i++){
@@ -330,7 +331,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool isInP
 
             // replay enhancement
             while(gameExited == false){
-            std::cout << "\nGame Finished. Would you like to save and exit (type 'Save') or watch a replay (type 'Replay')?\n" << std::endl;
+            std::cout << "\nGame Finished. Would you like to save, (type 'Save'), watch a replay (type 'Replay') or exit (type 'Exit')?\n" << std::endl;
 
             std::string response;
 
@@ -353,8 +354,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool isInP
                     }else{
 
                         std::cout << "Saved successfully to " << filename << std::endl;
-                        std::cout << "Now quitting game..." << std::endl;
-                        gameExited = true;
+        
                     }
                 }else{
                     std::cout << "Please input a proper file name\n" << std::endl;
@@ -362,6 +362,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool isInP
             }else if(response == "REPLAY"){
 
                 gameRunning = false;
+                gameExited = true;
                 std::vector<Player*> players;
 
                 for(int i = 0; i < game->getPlayerCount(); i++){
@@ -379,6 +380,11 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool isInP
                 }
 
                 startGame(replayGame, 0, false, true, true);
+
+            }else if(response == "EXIT"){
+                std::cout << "\n\nThank you for playing Azul!!" << std::endl;
+                gameRunning = false;
+                gameExited = true;
 
             }else{
                 
