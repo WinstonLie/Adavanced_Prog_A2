@@ -208,8 +208,15 @@ Game* loadGameForReplay(std::string filePath){
     //Read in number of players
     int numOfPlayers = 0;
     if(checkLoad(validLoad, inputLines, currentLineCounter)){
-         numOfPlayers = std::stoi(inputLines[currentLineCounter]);
-         currentLineCounter++;
+
+        try{
+             numOfPlayers = std::stoi(inputLines[currentLineCounter]);
+            currentLineCounter++;
+
+        }catch (std::invalid_argument){
+            validLoad = false;
+        }
+        
     }
 
     //Create the players
@@ -226,8 +233,13 @@ Game* loadGameForReplay(std::string filePath){
     //Get the seed
     int seed = 0;
     if(checkLoad(validLoad, inputLines, currentLineCounter)){
-        seed = std::stoi(inputLines[currentLineCounter]);
-        currentLineCounter++;
+        try{
+            seed = std::stoi(inputLines[currentLineCounter]);
+            currentLineCounter++;
+
+        }catch(std::invalid_argument){
+            validLoad = false;
+        }
     }
 
     std::vector<std::string> commands;

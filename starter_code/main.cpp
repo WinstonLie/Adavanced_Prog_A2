@@ -191,6 +191,8 @@ bool manageInput(char input){
             startGame(game,0,false,true);
 
             delete game;
+
+            checked = true;
         }else{
 
             std::cout << "Invalid File Name input!" << std::endl;

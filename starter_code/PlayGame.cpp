@@ -10,25 +10,31 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool repla
     // Keeps track of the index of the current player
     int currentPlayerIndex = startPlayerIndex;
 
-    int breakPointInt = -1;
+    // int breakPointInt = -1;
 
-        if(replayGame == true){
-        bool validBreakpoint = false;
-        while(validBreakpoint == false){
+    //     if(replayGame == true){
+    //     bool validBreakpoint = false;
+    //     while(validBreakpoint == false){
 
-            std::cout << "Please enter a breakpoint for replay >";
-            std::string breakpoint = "";
-            std::cin >> breakpoint;
-            breakPointInt = std::stoi(breakpoint);
+    //         std::cout << "Please enter a breakpoint for replay >";
+    //         std::string breakpoint = "";
+    //         std::cin >> breakpoint;
+    //         try{
+    //             breakPointInt = std::stoi(breakpoint);
+    //         }catch(std::invalid_argument e){
+                
+    //         }
+    //         int charPerCommand = 11;
+    //         if(breakPointInt >= 0 && breakPointInt < game->getCommandsForEndSave().size()/charPerCommand){
 
-            if(breakPointInt >= 0 && breakPointInt < game->getCommandsForEndSave().size()){
+    //             validBreakpoint = true;
+    //         }else{
+    //             std::cout << "Invalid Input" << std::endl;
+    //         }
 
-                validBreakpoint = true;
-            }
+    //     }
 
-        }
-
-    }
+    // }
 
     int i = 0;
 
@@ -73,14 +79,33 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool repla
             //Recieve input from user
             // Gets whole line
             std::string commandLineInput = "";
+
             
             if(replayGame == true){
-                commandLineInput = game->getSingleCommand(i);
-                i++;
-                if(i == breakPointInt){
+                
+                bool valid = false;
 
-                    replayGame = false;
+                while(valid == false){
+
+                    std::cout << "Please enter your choice (n to move to next player or exit to quit) > ";
+                    std::string input = "";
+                    std::cin >>input;
+
+                    if(input == "n"){
+
+                        commandLineInput = game->getSingleCommand(i);
+                        i++;
+                        valid = true;
+
+                    }else if(input == "exit"){
+
+                        gameRunning = false;
+                        valid = true;
+                    }else{
+                        std::cout << "please enter a valid input" << std::endl;
+                    }
                 }
+                
 
             }else{
                 std::getline(std::cin, commandLineInput);
@@ -305,7 +330,7 @@ void updateEndGameDetails(Game* game){
     }
 
     std::cout << "Would You Like to Save the game (Replay Mode available For Games that have finished)" << std::endl;
-    std::cout << "(y/n) >  ";
+    std::cout << "(y to confirm) >  ";
     std::string input = "";
     std::cin >> input;
     
