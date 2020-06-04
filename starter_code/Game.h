@@ -32,7 +32,7 @@ class Game{
         // Load constructor
         Game (std::vector<Player*> playersToAdd, int playerCount, Bag* bag,
           int factoryCount, Factory** factories, CentreTable* centreTable, BoxLid* boxLid,
-          bool firstPlayerMarker, int randomSeed = DEFAULT_SEED);
+          bool firstPlayerMarker, std::vector<std::string> commands, int randomSeed = DEFAULT_SEED);
         
         // Decontructor, deletes all tiles in all sub-containers
         ~Game();
@@ -86,11 +86,19 @@ class Game{
         bool checkIfFactoriesPopulated();
 
         // Returns the random seed being used for game
-        int getRandomSeed();
+        int getRandomSeed(); 
+
+        // gets commands vector
+        std::vector<std::string> getCommands();
+
+        void addCommand(std::string commandToAdd);
     private:
 
         // Vector of all players
         std::vector<Player*> players;
+
+        // vector of commands
+        std::vector<std::string> commands;
 
         // Bag that holds tiles
         Bag* bag;

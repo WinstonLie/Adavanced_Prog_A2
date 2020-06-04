@@ -4,6 +4,7 @@
 #include <fstream>
 #include <iostream>
 #include <ctime>
+#include "PlayGame.h"
 
 
 bool saveGame(Game* game, int currentPlayer, std::string filePath){
@@ -92,6 +93,14 @@ bool saveGame(Game* game, int currentPlayer, std::string filePath){
             outputStream << player->getFloorLine() << std::endl;
             outputStream << std::endl;
         }
+
+        //player turn data
+        outputStream << "#Turns Taken" << std::endl;
+        std::vector<std::string> commands = game->getCommands();
+        
+        for(int i = 0; i < commands.size(); i++){
+            outputStream << commands[i] << std::endl;
+        }
        
        //successfully saved set to true
        successfullySaved = true;
@@ -147,6 +156,7 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
     Tile*** factories = nullptr;
     int numberOfPlayers;
     std::vector<Player*> players;
+    std::vector<std::string> commands;
 
     // Is set to false if marker is found in a floor line
     bool firstPlayerMarker = true;
@@ -536,6 +546,12 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
 
     }// end of reading in players
 
+
+    for(int i = currentLineCounter; i < inputLines.size(); i++){
+        commands.push_back(inputLines[i]);
+    }
+
+
     // Creates game and adds in data if loaded successfully
     if (validLoad){
 
@@ -546,7 +562,8 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
         }
         // Calls loading constructor for Game
         *game = new Game(players, numberOfPlayers, new Bag(bag), factoryCount, 
-          factories_, centreTable,  new BoxLid(boxLid), firstPlayerMarker);
+          factories_, centreTable,  new BoxLid(boxLid), firstPlayerMarker, commands);
+
         // Confirms load is valid in console
         std::cout << "valid load\n" << std::endl;
     } else {

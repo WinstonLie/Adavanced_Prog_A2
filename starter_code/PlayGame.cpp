@@ -2,9 +2,6 @@
 #include <iostream>
 
 void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
-
-    // Vector that keeps track of all the commands that have been used
-    std::vector<std::string> commands;
     
     // Boolean that keeps track of if the game is running
     // If false, then game loop ends
@@ -90,7 +87,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
                       + ") > " + commandInput + " " + std::to_string(factory)
                       + " " + (char) colourType + " " + std::to_string(patternRow);
 
-                    commands.push_back(command);
+                    game->addCommand(command);
                     
                     //Switch to next player
                     nextPlayer(game, currentPlayerIndex);
@@ -214,6 +211,8 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
         if (gameRunning){
 
             //print out commands of the round
+            std::cout << "Round ended" << std::endl;
+            std::vector<std::string> commands = game->getCommands();
             getCommands(commands);
 
             //Add tiles into the wall
@@ -431,8 +430,6 @@ bool updateEndRoundDetails(Game* game,int& currentPlayerIndex){
 }
 
 void getCommands(std::vector<std::string> commands){
-    std::cout << "Round ended" << std::endl;
-
     //print all commands issued that round
     std::cout << "\n Commands Issued" << std::endl;
 

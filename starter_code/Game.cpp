@@ -48,9 +48,9 @@ Game::Game(std::vector<Player*> playersToAdd, int randomSeed) : randomSeed{ rand
 
 Game::Game (std::vector<Player*> playersToAdd, int playerCount, Bag* bag,
           int factoryCount, Factory** factories, CentreTable* centreTable, BoxLid* boxLid,
-          bool firstPlayerMarker, int randomSeed) : players{ playersToAdd }, bag{ bag },
+          bool firstPlayerMarker, std::vector<std::string> commands, int randomSeed) : players{ playersToAdd }, bag{ bag },
           factoryCount{ factoryCount }, factories{ factories }, centreTable{ centreTable }, boxLid{ boxLid },
-          firstPlayerMarker{ firstPlayerMarker }, randomSeed{ randomSeed } {
+          firstPlayerMarker{ firstPlayerMarker }, commands{ commands }, randomSeed{ randomSeed }{
             
             //initializing players to the game
             for (int i = 0; i < players.size(); i++){
@@ -368,4 +368,12 @@ bool Game::checkIfFactoriesPopulated(){
 
 int Game::getRandomSeed(){
     return randomSeed;
+}
+
+std::vector<std::string> Game::getCommands(){
+    return this->commands;
+}
+
+void Game::addCommand(std::string commandToAdd){
+    commands.push_back(commandToAdd);
 }
