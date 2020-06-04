@@ -10,32 +10,8 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool repla
     // Keeps track of the index of the current player
     int currentPlayerIndex = startPlayerIndex;
 
-    // int breakPointInt = -1;
 
-    //     if(replayGame == true){
-    //     bool validBreakpoint = false;
-    //     while(validBreakpoint == false){
-
-    //         std::cout << "Please enter a breakpoint for replay >";
-    //         std::string breakpoint = "";
-    //         std::cin >> breakpoint;
-    //         try{
-    //             breakPointInt = std::stoi(breakpoint);
-    //         }catch(std::invalid_argument e){
-                
-    //         }
-    //         int charPerCommand = 11;
-    //         if(breakPointInt >= 0 && breakPointInt < game->getCommandsForEndSave().size()/charPerCommand){
-
-    //             validBreakpoint = true;
-    //         }else{
-    //             std::cout << "Invalid Input" << std::endl;
-    //         }
-
-    //     }
-
-    // }
-
+    //tracker for replay mode
     int i = 0;
 
     // While the game is running
@@ -87,7 +63,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool repla
 
                 while(valid == false){
 
-                    std::cout << "Please enter your choice (n to move to next player or exit to quit) > ";
+                    std::cout << "Please enter your choice (n to move to next player's turn or exit to quit) > ";
                     std::string input = "";
                     std::cin >>input;
 
