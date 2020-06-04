@@ -8,7 +8,7 @@
 
 // Starts the game
 // if fromLoadedGame == true, then factories will be re-generated
-void startGame(Game* game, int startPlayerIndex = 0, bool fromLoadedGame = false);
+void startGame(Game* game, int startPlayerIndex = 0, bool fromLoadedGame = false, bool isInProgress = true);
 
 // Sets currentPlayerIndex to the next player, going up in index before going back to start
 // eg 0, 1, 0 etc

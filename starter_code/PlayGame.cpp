@@ -1,7 +1,7 @@
 #include "PlayGame.h"
 #include <iostream>
 
-void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
+void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool isInProgress){
     
     // Boolean that keeps track of if the game is running
     // If false, then game loop ends
@@ -25,7 +25,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
 
         // Factory offer phase, this is where user does all input
         // Loop ends when all factories are empty
-        while (gameRunning && game->checkIfFactoriesPopulated()){
+        while (gameRunning && game->checkIfFactoriesPopulated() && isInProgress){
 
             // Current player
             Player* player = game->getPlayer(currentPlayerIndex);
@@ -213,9 +213,16 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
         } // end of factory offer phase while loop
     
         // Add tiles to wall, calculate points
-        bool hasEndedGame = false;
 
-        if (gameRunning){
+        bool hasEndedGame;
+        if(isInProgress){
+            hasEndedGame = false;
+        }else{
+            hasEndedGame = true;
+        }
+        
+
+        if (gameRunning && !hasEndedGame){
 
             //print out commands of the round
             std::cout << "Round ended" << std::endl;
@@ -236,7 +243,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
 
             // replay enhancement
             while(gameExited == false){
-            std::cout << "\nGame Finished. Would you like to save the game, replay, or exit?\n" << std::endl;
+            std::cout << "\nGame Finished. Would you like to save and exit (type 'Save') or replay (type 'Replay')?\n" << std::endl;
 
             std::string response;
 
@@ -268,24 +275,6 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
             }else if(response == "REPLAY"){
 
                 std::cout << "TO BE IMPLEMENTED" << std::endl;
-
-            }else if(response == "EXIT"){
-
-                std::cout << "\033[31m" << "Game will exit without saving. Enter 'y' to quit game.)" << "\033[0m" << std::endl;
-                std::cout << "> ";
-
-                std::string input = "";
-                std::getline(std::cin, input);
-                
-                if(input.size() == 1 && toupper(input[0]) == 'Y'){
-                    
-                    gameExited = true;
-                    
-                }else {
-                    
-                    std::cout << "Error: Unrecognised input..." << std::endl;
-    
-                }
 
             }else{
                 

@@ -157,7 +157,6 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
     int numberOfPlayers;
     std::vector<Player*> players;
     std::vector<std::string> commands;
-    bool gameInProgress;
 
     // Is set to false if marker is found in a floor line
     bool firstPlayerMarker = true;
@@ -189,9 +188,9 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
         std::string lineFromFile = inputLines[currentLineCounter];
 
         if(lineFromFile == "1"){
-            gameInProgress = true;
+            isInProgress = true;
         }else{
-            gameInProgress = false;
+            isInProgress = false;
         }
         currentLineCounter++;
 

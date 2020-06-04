@@ -135,12 +135,13 @@ bool manageInput(char input){
         Game** game = new Game*;
         *game = nullptr;
         int currentPlayerIndex = 0;
-        bool fromLoadedGame = false;
-        loadGame(game, fileName, currentPlayerIndex, fromLoadedGame);
+        bool isInProgress = false;
+        bool fromLoadedGame = true;
+        loadGame(game, fileName, currentPlayerIndex, isInProgress);
 
         //validation if it was successfully loaded
         if (*game != nullptr){
-            startGame(*game, currentPlayerIndex, fromLoadedGame);
+            startGame(*game, currentPlayerIndex, fromLoadedGame, isInProgress);
 
             //Deallocating memory for the game and game 
             delete *game;
