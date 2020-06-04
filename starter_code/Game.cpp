@@ -385,3 +385,32 @@ void Game::addCommand(std::string command){
 
     commands.push_back(command);
 }
+
+std::string Game::getCommandsForEndSave(){
+
+    std::string acc = "";
+    for(int i = 0 ; i < commandsForEndSave.size() ; i++){
+
+        acc += commandsForEndSave[i] + "\n";
+    }
+
+    return acc;
+}
+
+void Game::addCommandToEndSave(std::string command){
+
+    commandsForEndSave.push_back(command);
+}
+
+std::string Game::getSingleCommand(int input){
+    std::string command = "";
+
+    for(int i = 0; i < commandsForEndSave.size() ; i++){
+        if(i == input){
+
+            command = commandsForEndSave[i];
+        }
+    }
+
+    return command;
+}

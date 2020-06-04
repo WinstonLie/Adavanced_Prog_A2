@@ -92,7 +92,7 @@ bool saveGame(Game* game, int currentPlayer, std::string filePath){
             outputStream << player->getFloorLine() << std::endl;
             outputStream << std::endl;
         }
-       
+
        //successfully saved set to true
        successfullySaved = true;
    }
@@ -100,6 +100,161 @@ bool saveGame(Game* game, int currentPlayer, std::string filePath){
    outputStream.close();
    
    return successfullySaved;
+}
+
+//Save the game commands and 
+bool saveEndGame(Game* game, std::string filePath){
+
+    bool successfullySaved = false;
+    std::ofstream outputStream;
+    outputStream.open(filePath);
+
+    //save file tag
+    outputStream << "#Saving File Tag" << std::endl;
+    outputStream << "Fri 1630 - Dale" << std::endl;
+    outputStream << std::endl;
+
+    //game status
+    outputStream << "#Game Status" << std::endl;
+    outputStream << "GameInProgress: False" << std::endl;
+    outputStream << std::endl;
+
+    //read in number of players
+    outputStream << "#NumberOfPlayers" << std::endl;
+    outputStream << game->getPlayerCount() << std::endl;
+    outputStream << std::endl;
+
+    outputStream << "#Player Name" << std::endl;
+    for(int i = 0 ; i < game->getPlayerCount() ; i++ ){
+
+        outputStream << game->getPlayer(i)->getPlayerName() << std::endl;
+    }
+
+    outputStream << std::endl;
+
+    //get the seed
+    outputStream << "#Seed" << std::endl;
+    outputStream << game->getRandomSeed() << std::endl;
+
+    outputStream << std::endl;
+
+    //Get the turn commands
+    outputStream << "#Turn Commands" << std::endl;
+    outputStream << game->getCommandsForEndSave();
+
+    successfullySaved = true;
+
+    outputStream.close();
+
+    return successfullySaved;
+}
+
+Game* loadGameForReplay(std::string filePath){
+    Game* game = nullptr;
+    bool validLoad = true;
+    std::vector<Player*> players;
+
+    std::vector<std::string> inputLines;
+
+    // Open file
+    std::ifstream inputFileStream;
+    inputFileStream.open(filePath);
+
+        // While the input stream is good
+    while (inputFileStream.good()){
+
+        // Holds the current line        
+        std::string currentLine = "";
+
+        // Get the next line from the stream
+        std::getline(inputFileStream, currentLine);
+
+        // If line has a windows end key, then get rid of it
+        if (currentLine.size() > 0 && currentLine[currentLine.size() - 1] == '\r'){
+            currentLine.pop_back();
+        }
+
+        // If the line isn't empty or a comment then add it to the inputLines vector
+        if (!currentLine.empty() && currentLine[0] != '#'){
+            
+            inputLines.push_back(currentLine);
+        }
+    }
+
+    // Close the input file stream
+    inputFileStream.close();
+
+
+    int currentLineCounter = 0;
+
+        // Check save file tag
+    if (checkLoad(validLoad, inputLines, currentLineCounter) &&
+      inputLines[currentLineCounter].compare("Fri 1630 - Dale") == 0){
+        currentLineCounter++;
+
+    } else {
+        validLoad = false;
+    }
+
+    // Get game status
+    if (checkLoad(validLoad, inputLines, currentLineCounter)){
+        // Checks to see if the word False is anywhere in this line
+        std::size_t found = inputLines[currentLineCounter].find("False");
+        validLoad = found;
+        currentLineCounter++;
+    }
+
+
+    //Read in number of players
+    int numOfPlayers = 0;
+    if(checkLoad(validLoad, inputLines, currentLineCounter)){
+         numOfPlayers = std::stoi(inputLines[currentLineCounter]);
+         currentLineCounter++;
+    }
+
+    //Create the players
+    if(checkLoad(validLoad, inputLines, currentLineCounter)){
+         for(int i = 0 ; i < numOfPlayers ; i++){
+
+             std::string name =  inputLines[currentLineCounter];
+             players.insert(players.end(), new Player(name));
+             currentLineCounter++;
+         }
+    }
+
+
+    //Get the seed
+    int seed = 0;
+    if(checkLoad(validLoad, inputLines, currentLineCounter)){
+        seed = std::stoi(inputLines[currentLineCounter]);
+        currentLineCounter++;
+    }
+
+    std::vector<std::string> commands;
+    if(checkLoad(validLoad, inputLines, currentLineCounter)){
+         while(currentLineCounter < inputLines.size()){
+
+             std::string command = inputLines[currentLineCounter];
+             commands.push_back(command);
+             currentLineCounter++;
+         }
+    }
+
+    if(validLoad){
+
+        game = new Game(players,seed);
+        for(int i = 0 ; i < commands.size() ; i++){
+            //populating the commands vector with commands being used for this game
+            
+            game->addCommandToEndSave(commands[i]);
+        }
+    }else{
+        for(int i = 0 ; i < players.size() ; i++){
+            delete players[i];
+        }
+    }
+
+    return game;
 }
 
 bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,

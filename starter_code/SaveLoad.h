@@ -8,6 +8,12 @@
 // Returns true if saving was successful, else false
 bool saveGame(Game* game, int currentPlayer, std::string filePath);
 
+//Save game that has already ended for the purpose of replaying the game
+bool saveEndGame(Game* game, std::string filePath);
+
+//Load game based on turn commands
+Game* loadGameForReplay(std::string filePath);
+
 // Loads the game from the specified file path
 // If no file is found or save file doesn't match format, then return false
 // else true

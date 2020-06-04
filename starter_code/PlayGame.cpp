@@ -1,8 +1,7 @@
 #include "PlayGame.h"
 #include <iostream>
 
-void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
-
+void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool replayGame){
     
     // Boolean that keeps track of if the game is running
     // If false, then game loop ends
@@ -10,6 +9,28 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
 
     // Keeps track of the index of the current player
     int currentPlayerIndex = startPlayerIndex;
+
+    int breakPointInt = -1;
+
+        if(replayGame == true){
+        bool validBreakpoint = false;
+        while(validBreakpoint == false){
+
+            std::cout << "Please enter a breakpoint for replay >";
+            std::string breakpoint = "";
+            std::cin >> breakpoint;
+            breakPointInt = std::stoi(breakpoint);
+
+            if(breakPointInt >= 0 && breakPointInt < game->getCommandsForEndSave().size()){
+
+                validBreakpoint = true;
+            }
+
+        }
+
+    }
+
+    int i = 0;
 
     // While the game is running
     while (gameRunning){
@@ -52,8 +73,19 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
             //Recieve input from user
             // Gets whole line
             std::string commandLineInput = "";
-            std::getline(std::cin, commandLineInput);
+            
+            if(replayGame == true){
+                commandLineInput = game->getSingleCommand(i);
+                i++;
+                if(i == breakPointInt){
 
+                    replayGame = false;
+                }
+
+            }else{
+                std::getline(std::cin, commandLineInput);
+            }
+            
             // Gets the first word of the line
             std::string commandInput = "";
             std::size_t currentLineIndex = 0;
@@ -93,7 +125,22 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame){
                       + ") > " + commandInput + " " + std::to_string(factory)
                       + " " + (char) colourType + " " + std::to_string(patternRow);
 
-                    game->addCommand(command);
+                    std::string commandForEndSave = commandInput + " " + std::to_string(factory)
+                      + " " + (char) colourType + " " + std::to_string(patternRow);  
+
+
+                    //if its a replay add commands to normal comand to be displayed in console
+                    if(replayGame == true){
+                        game->addCommand(command);
+
+                    }else{
+                        //else, add it to both as its a new command
+                        game->addCommand(command);
+                        game->addCommandToEndSave(commandForEndSave);
+
+                    }
+                    
+                    
                     
                     //Switch to next player
                     nextPlayer(game, currentPlayerIndex);
@@ -255,6 +302,38 @@ void updateEndGameDetails(Game* game){
         currentRanking++;
         highestPoints = -1;
         highestPlayerIndex = 0;
+    }
+
+    std::cout << "Would You Like to Save the game (Replay Mode available For Games that have finished)" << std::endl;
+    std::cout << "(y/n) >  ";
+    std::string input = "";
+    std::cin >> input;
+    
+    if(input == "Y" || input == "y"){
+        
+        bool saved = false;
+
+        while(saved == false){
+
+            std::string fileName = "";
+            std::cout << "File Name >" ;
+            std::cin >> fileName;
+
+            if(fileName != ""){
+
+                bool saveSuccessful = false;
+                saveSuccessful = saveEndGame(game,fileName);
+
+                if(saveSuccessful){
+                    saved = true;
+                }
+
+            }else{
+                std::cout << "Please enter a valid file name" << std::endl;
+            }
+        }
+    }else {
+        std::cout << "Returning to Main Menu!" << std::endl;
     }
 
 }

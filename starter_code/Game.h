@@ -93,10 +93,20 @@ class Game{
 
         //add turn command into commands
         void addCommand(std::string command);
-        
+
+        //get all the turn commands
+        std::string getCommandsForEndSave();
+
+        //add turn command into commands
+        void addCommandToEndSave(std::string command);
+
+        std::string getSingleCommand(int i);
+
     private:
 
         std::vector<std::string> commands;
+
+        std::vector<std::string> commandsForEndSave;
 
         // Vector of all players
         std::vector<Player*> players;

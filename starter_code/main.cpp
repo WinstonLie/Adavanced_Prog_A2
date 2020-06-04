@@ -62,7 +62,8 @@ void menuDisplay(){
     std::cout << "1. New Game"<< std::endl;
     std::cout << "2. Load Game"<< std::endl;
     std::cout << "3. Credits"<< std::endl;
-    std::cout << "4. Quit"<< std::endl;
+    std::cout << "4. Replay Game" << std::endl;
+    std::cout << "5. Quit"<< std::endl;
 
 }
 //Checks the input
@@ -140,6 +141,7 @@ bool manageInput(char input){
 
         //validation if it was successfully loaded
         if (*game != nullptr){
+            
             startGame(*game, currentPlayerIndex, fromLoadedGame);
 
             //Deallocating memory for the game and game 
@@ -171,8 +173,33 @@ bool manageInput(char input){
         printCredits();
         checked = true;
     }
-    //Quit game
+
+    //replay game
     else if(input == '4'){
+
+        //get the file name, game must be completed
+        std::cout << "\nPlease input file name" << std::endl;
+        std::cout << ">" ; 
+        std::string fileName = "";
+        std::getline(std::cin, fileName);
+        Game* game = nullptr;
+
+        game = loadGameForReplay(fileName);
+
+        if(game != nullptr){
+            
+            startGame(game,0,false,true);
+
+            delete game;
+        }else{
+
+            std::cout << "Invalid File Name input!" << std::endl;
+            checked = true;
+        }
+
+    }
+    //Quit game
+    else if(input == '5'){
         std::cout << "Quitting The Game" << std::endl;
         checked = false;
 
