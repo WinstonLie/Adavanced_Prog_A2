@@ -1,12 +1,13 @@
 #include "PlayGame.h"
 #include <iostream>
 
-void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool isInProgress){
+void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool isInProgress, bool replayMode){
     
     // Boolean that keeps track of if the game is running
     // If false, then game loop ends
     bool gameRunning = true;
     bool gameExited = false;
+    int commandIndex = 0;
 
     // Keeps track of the index of the current player
     int currentPlayerIndex = startPlayerIndex;
@@ -47,7 +48,72 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool isInP
             //Recieve input from user
             // Gets whole line
             std::string commandLineInput = "";
-            std::getline(std::cin, commandLineInput);
+
+            if(replayMode){
+                bool ongoing = true;
+                std::cout << "== REPLAY MODE ==" << std::endl;
+
+                if(commandIndex < game->getCommands().size()){
+                    std::cout << "For next turn type 'Next', to exit type 'Exit'" << std::endl;
+
+                    std::string choice;
+
+                    std::cin >> choice;
+                    transform(choice.begin(), choice.end(), choice.begin(), ::toupper);
+
+                    if(choice == "NEXT"){
+                    
+                        std::string commandFromVector = game->getCommands()[commandIndex];
+                        int splitIndex;
+                        for(int i = 0; i < commandFromVector.length(); i++){
+                            if(commandFromVector[i] == ')'){
+                                splitIndex = i;
+                            }
+                        }
+
+                        std::string name = commandFromVector.substr(1, splitIndex-1);
+                        std::string turnCommand = commandFromVector.substr(splitIndex+4, commandFromVector.length());
+
+                        std::cout << "Turn " << commandIndex+1 << ": Player " << name << " executed command -> " << turnCommand << std::endl;
+                        commandLineInput = turnCommand;
+                        commandIndex++;
+                        
+                    }else if(choice == "EXIT"){
+
+                        std::cout << "Quitting game..." << std::endl;
+                        gameRunning = false;
+                        gameExited = true;
+
+                    }       
+                }else{
+                    std::cout << "latest command has been inputted. Would you like to resume game? (Yes/No)" << std::endl;
+
+                    std::string resume;
+                    std::cin >> resume;
+                    transform(resume.begin(), resume.end(), resume.begin(), ::toupper);
+
+                    if(resume == "YES"){
+
+                        replayMode = false;
+                        std::cout << "Resuming game..." << std::endl;
+                        std::getline(std::cin, commandLineInput);
+
+                    }else if(resume == "NO"){
+
+                        std::cout << "Quitting game..." << std::endl;
+                        gameRunning = false;
+                        gameExited = true;
+
+                    }else{
+
+                        std::cout << "Invalid input" << std::endl;
+
+                    }
+                }
+            }else{
+                std::getline(std::cin, commandLineInput);
+            }
+            
 
             // Gets the first word of the line
             std::string commandInput = "";
@@ -88,7 +154,10 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool isInP
                       + ") > " + commandInput + " " + std::to_string(factory)
                       + " " + (char) colourType + " " + std::to_string(patternRow);
 
-                    game->addCommand(command);
+                    if(!replayMode){
+                        game->addCommand(command);
+                    }
+                    
                     
                     //Switch to next player
                     nextPlayer(game, currentPlayerIndex);
@@ -158,6 +227,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool isInP
                     std::cout << "'Turn <factory number> <color> <pattern row number>' to make a turn." << std::endl;
                     std::cout << "'Save <file name>' to save the game.'" << std::endl;
                     std::cout << "'Enemy' to see the board of your enemy." << std::endl;
+                    std::cout << "'Replay' to watch a replay of the game until now." << std::endl;
                     std::cout << "'Exit' to leave the game.\n" << std::endl;
                     std::cout << "\033[32m" << "Type 'Return' to return to game\n \n" << "\033[0m" << std::endl;
                     std::cout << "\n> ";
@@ -203,7 +273,24 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool isInP
             // Replay Enhancement 
             }else if (commandInput == "REPLAY"){
                 
-                std::cout << "TO BE IMPLEMENTED" << std::endl;
+                gameRunning = false;
+                std::vector<Player*> players;
+
+                for(int i = 0; i < game->getPlayerCount(); i++){
+                    Player* player = game->getPlayer(i);
+                    std::string playerName = player->getPlayerName();
+                    players.push_back(new Player(playerName));
+                }
+
+                int gameSeed = game->getRandomSeed();
+
+                Game* replayGame = new Game(players, gameSeed);
+
+                for(int i = 0; i < game->getCommands().size(); i++){
+                    replayGame->addCommand(game->getCommands()[i]);
+                }
+
+                startGame(replayGame, 0, false, true, true);
 
             }else{
                 
@@ -243,7 +330,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool isInP
 
             // replay enhancement
             while(gameExited == false){
-            std::cout << "\nGame Finished. Would you like to save and exit (type 'Save') or replay (type 'Replay')?\n" << std::endl;
+            std::cout << "\nGame Finished. Would you like to save and exit (type 'Save') or watch a replay (type 'Replay')?\n" << std::endl;
 
             std::string response;
 
@@ -274,7 +361,24 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool isInP
                 }
             }else if(response == "REPLAY"){
 
-                std::cout << "TO BE IMPLEMENTED" << std::endl;
+                gameRunning = false;
+                std::vector<Player*> players;
+
+                for(int i = 0; i < game->getPlayerCount(); i++){
+                    Player* player = game->getPlayer(i);
+                    std::string playerName = player->getPlayerName();
+                    players.push_back(new Player(playerName));
+                }
+
+                int gameSeed = game->getRandomSeed();
+
+                Game* replayGame = new Game(players, gameSeed);
+
+                for(int i = 0; i < game->getCommands().size(); i++){
+                    replayGame->addCommand(game->getCommands()[i]);
+                }
+
+                startGame(replayGame, 0, false, true, true);
 
             }else{
                 
