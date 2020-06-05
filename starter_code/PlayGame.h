@@ -8,7 +8,7 @@
 
 // Starts the game
 // if fromLoadedGame == true, then factories will be re-generated
-void startGame(Game* game, int startPlayerIndex = 0, bool fromLoadedGame = false, bool replayGame = false);
+void startGame(Game* game, int startPlayerIndex = 0, bool fromLoadedGame = false, bool replayGame = false, bool twoCentreFactories = false);
 
 // Sets currentPlayerIndex to the next player, going up in index before going back to start
 // eg 0, 1, 0 etc
@@ -17,7 +17,7 @@ void nextPlayer(Game* game, int& currentPlayerIndex);
 // Moves the tiles from the inputted factory row into the inputted pattern
 // row of player. If input is invalid, then no moving will take place.
 // Returns true if tiles were moved, else false.
-bool moveTiles(Game* game,Player* player, int factory, Types colourType, int patternRow);
+bool moveTiles(Game* game,Player* player, int factory, Types colourType, int patternRow, int indexOfCentreFactory);
 
 // Adds the tiles into the players board, then deletes the tiles array
 // Assumes pattern row being inserted into is valid (1-6)

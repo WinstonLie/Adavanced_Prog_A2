@@ -1,7 +1,7 @@
 #include "PlayGame.h"
 #include <iostream>
 
-void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool replayGame){
+void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool replayGame, bool twoCentreFactories){
     
     // Boolean that keeps track of if the game is running
     // If false, then game loop ends
@@ -9,7 +9,6 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool repla
 
     // Keeps track of the index of the current player
     int currentPlayerIndex = startPlayerIndex;
-
 
     //tracker for replay mode
     int i = 0;
@@ -112,9 +111,40 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool repla
                 // to prevent out of bounds error
                 if (colourType != Invalid && colourType != First_Player && factory >= 0 && factory < game->getNumOfFactories() + 1 &&
                     patternRow > 0 && patternRow < PATTERN_LINE_ROWS + 2){
+                    
+                    int indexOfCentreFactory = 0;
+                    bool validInput = false;
 
-                    //Move tiles
-                    validTurn = moveTiles(game, player, factory, colourType, patternRow);
+                    //if the game uses two centre factories
+                    if(twoCentreFactories == true){
+                        //loop through for input until valid
+                        while(validInput == false){
+                            std::string indexInput = "";
+                            std::cout << "Enter which Centre Factory number(1 or 2): ";
+                            std::getline(std::cin,indexInput);
+
+                            try{
+                                indexOfCentreFactory = std::stoi(indexInput);
+                                if(indexOfCentreFactory == 1 || indexOfCentreFactory == 2){
+                                    validInput = true;
+                                }
+
+                            }catch (std::invalid_argument e){
+                                std::cout << "Please enter a valid number(1 or 2)!" << std::endl;
+                            }
+                        }
+
+                        //if valid, put it at that index of centretable
+                        //Move tiles
+                        validTurn = moveTiles(game, player, factory, colourType, patternRow, indexOfCentreFactory);
+
+                    }else{
+                        
+                        //Move tiles
+                        validTurn = moveTiles(game, player, factory, colourType, patternRow,1);
+
+                    }
+                    
                 }
                 
                 // If the turn was successful then move to next player
@@ -352,7 +382,7 @@ void nextPlayer(Game* game, int& currentPlayerIndex){
 }
 
 bool moveTiles(Game* game,Player* player, int factory, Types colourType,
-  int patternRow){
+  int patternRow, int indexOfCentreFactory){
     
     // Represents if tiles were moved successfully
     bool moved = false;
@@ -370,7 +400,7 @@ bool moveTiles(Game* game,Player* player, int factory, Types colourType,
 
         // if factory chosen (not centre tiles)
         if (factory > 0 && factory < game->getNumOfFactories() + 1){
-            game->getTilesFromFactory(factory - 1, colourType, tileAmount, tiles);
+            game->getTilesFromFactory(factory - 1, colourType, tileAmount, tiles, indexOfCentreFactory - 1);
 
             // If any tiles were taken, then add tiles to player
             if(tileAmount > 0){
@@ -384,7 +414,7 @@ bool moveTiles(Game* game,Player* player, int factory, Types colourType,
         } else if (factory == 0){
             
             //center of table
-            bool isStartPlayer = game->getTilesFromCentre(colourType, tileAmount, tiles);
+            bool isStartPlayer = game->getTilesFromCentre(colourType, tileAmount, tiles, indexOfCentreFactory - 1);
 
             // If at least one tile is taken from the centre
             if(tileAmount > 0){
@@ -673,5 +703,4 @@ void printOutCharacterInColours(std::string consoleDisplay){
             std::cout << std::endl;
         }
     }
-    std::cout << std::endl;
 }

@@ -60,7 +60,7 @@ bool saveGame(Game* game, int currentPlayer, std::string filePath){
        if (game->isFirstPlayerMarkerTaken() == false){
            outputStream << 'F';
        }
-       outputStream << game->getCentreTable() << std::endl;
+       outputStream << game->getCentreTable(0) << std::endl;
        outputStream << std::endl;
 
        //factory data

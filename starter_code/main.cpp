@@ -89,7 +89,7 @@ bool manageInput(char input){
 
             validPlayerNumber = false;
         }
-        //int playerCount = 2;
+        //Prompt for information to start a new game
         if(validPlayerNumber && playerCount >=2 && playerCount <= 4){
             std::vector<Player*> players;
 
@@ -114,18 +114,37 @@ bool manageInput(char input){
             } catch (std::invalid_argument e){
                 successfulConversion = false;
             }
-        
-            if(successfulConversion){
+
+            std::string centreInput = "";
+            std::cout << "Would you like to use 2 CentreTables? (y/n) : ";
+            std::getline(std::cin,centreInput);
+            bool centreBool = false;
+            bool validInput = false;
+
+            //validation checks
+            if(centreInput == "y" || centreInput == "Y"){
+                centreBool = true;
+                validInput = true;
+
+            }else if(centreInput == "n" || centreInput == "N"){
+
+                validInput = true;
+            }else{
+
+                validInput = false;
+            }
+
+            if(successfulConversion && validInput){
                 Game* game = nullptr;
             // If a random seed was inserted, then use it in the game
             if (randomSeed != -1){
-                game =  new Game(players, randomSeed);
+                game =  new Game(players, randomSeed,centreBool);
             // If no seed was inserted, use the default value set in Game.h
             } else {
-                game =  new Game(players);
+                game =  new Game(players,centreBool);
             }
             // Starts the game
-            startGame(game);
+            startGame(game,0,false,false,centreBool);
             
             delete game;
             
@@ -138,7 +157,7 @@ bool manageInput(char input){
                 checked = true;
             }
             }else{
-                std::cout << "Invalid seed. Please enter a number" << std::endl;
+                std::cout << "Invalid seed or Invalid Number of Centre Tables. Please enter a number" << std::endl;
                 checked = true;
             }  
         }else{

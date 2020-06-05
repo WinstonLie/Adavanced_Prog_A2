@@ -27,7 +27,7 @@ class Game{
 
         // Constructor that initialises private values and sets players
         // Also creates all tiles needed for game
-        Game(std::vector<Player*> playersToAdd, int randomSeed = DEFAULT_SEED);
+        Game(std::vector<Player*> playersToAdd, bool twoCentreTables, int randomSeed = DEFAULT_SEED);
 
         // Load constructor
         Game (std::vector<Player*> playersToAdd, int playerCount, Bag* bag,
@@ -52,13 +52,13 @@ class Game{
         // Removes the tiles of the inputted colour from the specified factory and places
         //   them into the inputted 'tiles' array
         // Returns true if factory was emptied, else false
-        bool getTilesFromFactory(int factoryIndex, Types colour, int& tileAmount, Tile**& tiles);
+        bool getTilesFromFactory(int factoryIndex, Types colour, int& tileAmount, Tile**& tiles, int centreTableIndex);
         
         // Removes the tiles of the inputted colour from the centre factory and places
         //   them into the inputted 'tiles' array
         // Returns true if first player marker has not been taken and remove
         //   the first player marker, otherwise false
-        bool getTilesFromCentre(Types colour, int& tileAmount, Tile**& tiles);
+        bool getTilesFromCentre(Types colour, int& tileAmount, Tile**& tiles, int indexOfCentreTable = 0);
         
         // Returns true if the first player marker has been taken, otherwise false
         bool isFirstPlayerMarkerTaken();
@@ -76,7 +76,7 @@ class Game{
         std::string getFactories();
 
         //get centreTable data for saving
-        std::string getCentreTable();
+        std::string getCentreTable(int indexOfCentreTable);
 
         //Returning string representation of tiles in factories
         std::string displayFactories();
@@ -104,6 +104,8 @@ class Game{
 
         int getNumOfFactories();
 
+        int getNumOfCentreTable();
+
     private:
 
         std::vector<std::string> commands;
@@ -125,6 +127,9 @@ class Game{
 
         // The factory for the centre of the table
         CentreTable* centreTable;
+
+        //Storage of Centre Table's
+        std::vector<CentreTable*> centreTables;
 
         // Vector for the lid
         BoxLid* boxLid;
