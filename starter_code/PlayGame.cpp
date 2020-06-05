@@ -311,7 +311,7 @@ void updateEndGameDetails(Game* game){
     std::cout << "Would You Like to Save the game (Replay Mode available For Games that have finished)" << std::endl;
     std::cout << "(y to confirm) >  ";
     std::string input = "";
-    std::cin >> input;
+    std::getline(std::cin, input);
     
     if(input == "Y" || input == "y"){
         

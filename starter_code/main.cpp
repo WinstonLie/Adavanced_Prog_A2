@@ -90,7 +90,7 @@ bool manageInput(char input){
             validPlayerNumber = false;
         }
         //int playerCount = 2;
-        if(validPlayerNumber){
+        if(validPlayerNumber && playerCount >=2 && playerCount <= 4){
             std::vector<Player*> players;
 
             for (int i = 0; i < playerCount; i++){

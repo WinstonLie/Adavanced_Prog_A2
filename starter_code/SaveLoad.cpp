@@ -33,6 +33,16 @@ bool saveGame(Game* game, int currentPlayer, std::string filePath){
        outputStream << "GameInProgress: True" << std::endl;
        outputStream << std::endl;
 
+       //player taking their turn
+       outputStream << "#Current Player" << std::endl;
+       outputStream << currentPlayer << std::endl;
+       outputStream << std::endl;
+
+       //number of players
+       outputStream << "#Number of Players" << std::endl;
+       outputStream << game->getPlayerCount() << std::endl;
+       outputStream << std::endl;
+
 
        //bag data
        outputStream << "#Bag" << std::endl;
@@ -57,18 +67,6 @@ bool saveGame(Game* game, int currentPlayer, std::string filePath){
        outputStream << "#Factories" << std::endl;
        outputStream << game->getFactories() << std::endl;
        outputStream << std::endl;
-
-       //player taking their turn
-       outputStream << "#Current Player" << std::endl;
-       outputStream << currentPlayer << std::endl;
-       outputStream << std::endl;
-
-
-       //number of players
-       outputStream << "#Number of Players" << std::endl;
-       outputStream << game->getPlayerCount() << std::endl;
-       outputStream << std::endl;
-       
 
        //player data
         for(int i = 0; i < game->getPlayerCount(); i++){
@@ -187,9 +185,9 @@ Game* loadGameForReplay(std::string filePath){
 
     int currentLineCounter = 0;
 
-        // Check save file tag
+    // Check save file tag
     if (checkLoad(validLoad, inputLines, currentLineCounter) &&
-      inputLines[currentLineCounter].compare("Fri 1630 - Dale") == 0){
+        inputLines[currentLineCounter].compare("Fri 1630 - Dale") == 0){
         currentLineCounter++;
 
     } else {
@@ -210,7 +208,7 @@ Game* loadGameForReplay(std::string filePath){
     if(checkLoad(validLoad, inputLines, currentLineCounter)){
 
         try{
-             numOfPlayers = std::stoi(inputLines[currentLineCounter]);
+            numOfPlayers = std::stoi(inputLines[currentLineCounter]);
             currentLineCounter++;
 
         }catch (std::invalid_argument){
@@ -347,6 +345,35 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
         currentLineCounter++;
     }
 
+    // Current player
+    if (checkLoad(validLoad, inputLines, currentLineCounter)){
+        // Parse line into an integer for the current player
+        try{
+            currentPlayerIndex = std::stoi(inputLines[currentLineCounter]) - 1;
+            currentLineCounter++;
+        }catch(std::invalid_argument e){
+            validLoad = false;
+        }
+    }
+
+    // Number of players
+    if (checkLoad(validLoad, inputLines, currentLineCounter)){
+
+        // Parse line into an integer
+        try{
+            numberOfPlayers = std::stoi(inputLines[currentLineCounter]);
+            currentLineCounter++;
+        }catch(std::invalid_argument e){
+            validLoad = false;
+        }
+
+        // Check to see that current player is within boundaries
+        if (currentPlayerIndex < 0 || currentPlayerIndex >= numberOfPlayers){
+            validLoad = false;
+        }
+    }
+
+
     // Read in bag
     if (checkLoad(validLoad, inputLines, currentLineCounter)){
         readTiles(validLoad, inputLines, currentLineCounter, bag);
@@ -362,9 +389,23 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
         readTiles(validLoad, inputLines, currentLineCounter, centreOfTable);
     }
     
+    
+    // end of reading in players
+    int factoryCount = 0;
+    int NUM_OF_FACTORIES = 0;
 
-    // Assumes 5 factories
-    int factoryCount = 5;
+    if(numberOfPlayers == 2){
+        NUM_OF_FACTORIES = 5;
+        factoryCount = 5;
+
+    }else if (numberOfPlayers == 3){
+        NUM_OF_FACTORIES = 7;
+        factoryCount = 7;
+
+    }else if (numberOfPlayers == 4){
+        NUM_OF_FACTORIES = 9;
+        factoryCount = 9;
+    }
 
     // Reads in factories
     if (checkLoad(validLoad, inputLines, currentLineCounter)){
@@ -407,26 +448,7 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
     // Read in seed
     // Not currently implemented
 
-    // Current player
-    if (checkLoad(validLoad, inputLines, currentLineCounter)){
-        // Parse line into an integer for the current player
-        currentPlayerIndex = std::stoi(inputLines[currentLineCounter]) - 1;
-        currentLineCounter++;
-    }
-
-    // Number of players
-    if (checkLoad(validLoad, inputLines, currentLineCounter)){
-
-        // Parse line into an integer
-        numberOfPlayers = std::stoi(inputLines[currentLineCounter]);
-        currentLineCounter++;
-
-        // Check to see that current player is within boundaries
-        if (currentPlayerIndex < 0 || currentPlayerIndex >= numberOfPlayers){
-            validLoad = false;
-        }
-    }
-
+    std::cout << "Num Of Players: " << numberOfPlayers << std::endl;
     // Read in players
     if (checkLoad(validLoad, inputLines, currentLineCounter)){
         // For every expected player, go through a loop
@@ -701,18 +723,7 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
             }
         }
 
-    }// end of reading in players
-        int NUM_OF_FACTORIES = 0;
-
-        if(numberOfPlayers == 2){
-            NUM_OF_FACTORIES = 5;
-
-        }else if (numberOfPlayers == 3){
-            NUM_OF_FACTORIES = 7;
-
-        }else if (numberOfPlayers == 4){
-            NUM_OF_FACTORIES = 9;
-        }
+    }
 
     // Creates game and adds in data if loaded successfully
     if (validLoad){

@@ -16,9 +16,10 @@ CentreTable::CentreTable(std::vector<Tile*> centreTable){
 
 CentreTable::~CentreTable(){
 
-    while (head != nullptr){
-        delete head->getTileFromNode();
-        removeNode(nullptr, head);
+    Node* current = head;
+    while (current != nullptr){
+        delete current->getTileFromNode();
+        removeNode(nullptr, current);
     }
     
 }

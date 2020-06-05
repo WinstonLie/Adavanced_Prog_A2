@@ -1,10 +1,8 @@
-#Test to see if it properly loads in and the game can resume from where it is saved.
-
 #Saving File Tag
 Fri 1630 - Dale
 
 #Save Date
-Tue May 19 18:34:27 2020
+Fri Jun  5 10:58:21 2020
 
 
 #Game Status
@@ -14,27 +12,30 @@ GameInProgress: True
 2
 
 #Number of Players
-2
+3
 
 #Bag
-YBLURYBLRBLURBLURYBLURYBURYBYBLURYBLYBLURYBLURBLURYBLURBLUYBLRYBLURYBLURBUYBRYLU$
+UYBYURYBBLRYBLLLYBLURYBLURRBBYRUBLURYBLYRYRLURRBLURUBLBRYBLURYBUURLBLUBY$
 
 #Boxlid
 $
 
 #Centre Table
-$
+FU$
 
 #Factories
+RRUL$
+YRYB$
+UBYY$
+LUUB$
+ULLR$
+ULRL$
 $
-$
-$
-UULB$
-YURY$
+
 
 #Player Status
 #Player1
-Winston
+W
 0
 
 #Player1 Wall
@@ -46,8 +47,8 @@ Winston
 
 
 #Player1 PatternLine
-L
-UU
+.
+..
 YYY
 ....
 .....
@@ -58,7 +59,7 @@ YYY
 
 #Player Status
 #Player2
-Vieri
+R
 0
 
 #Player2 Wall
@@ -71,12 +72,36 @@ Vieri
 
 #Player2 PatternLine
 .
-LL
+..
 ...
-RRRR
+....
 .....
 
 
 #Player2 PenaltyPanel
-F......
+.......
+
+#Player Status
+#Player3
+J
+0
+
+#Player3 Wall
+.....
+.....
+.....
+.....
+.....
+
+
+#Player3 PatternLine
+.
+..
+...
+....
+.....
+
+
+#Player3 PenaltyPanel
+.......
 

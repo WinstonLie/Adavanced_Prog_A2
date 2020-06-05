@@ -14,6 +14,12 @@ Tue May 19 19:43:15 2020
 #Game Status
 GameInProgress: True
 
+#Current Player
+1
+
+#Number of Players
+2
+
 #Bag
 YBLURYBLRBLURBLURYBLURYBURYBYBLURYBLYBLURYBLURBLURYBLURBLUYBLRYBLURYBLURBUYBRYLU$
 
@@ -29,13 +35,6 @@ $
 $
 $
 $
-
-
-#Current Player
-1
-
-#Number of Players
-2
 
 #Player Status
 #Player1
