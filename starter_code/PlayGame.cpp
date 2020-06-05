@@ -11,6 +11,14 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool isInP
 
     std::string gameMode = game->getGameMode();
 
+    int patternLineRows;
+    if(gameMode == "Normal"){
+        patternLineRows = NORMAL_PATTERN_LINE_ROWS;
+    }else if(gameMode == "Six"){
+        patternLineRows = SIX_PATTERN_LINE_ROWS;
+    }
+    
+
     // Keeps track of the index of the current player
     int currentPlayerIndex = startPlayerIndex;
 
@@ -141,7 +149,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool isInP
                 // Initial checks, to make sure that input is within range to be checked
                 // to prevent out of bounds error
                 if (colourType != Invalid && colourType != First_Player && factory >= 0 && factory < NUM_OF_FACTORIES + 1 &&
-                    patternRow > 0 && patternRow < NORMAL_PATTERN_LINE_ROWS + 2){
+                    patternRow > 0 && patternRow < patternLineRows + 2){
 
                     //Move tiles
                     validTurn = moveTiles(game, player, factory, colourType, patternRow);
@@ -258,7 +266,9 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool isInP
 
                 while(exit == false){
                     std::cout << "\n\n" << std::endl;
+                    std::cout << "== ENEMY BOARD == \n" << std::endl;
                     colorizeOutput(enemyPlayer->displayMosaic());
+                    colorizeOutput(enemyPlayer->displayPenalty());
                     std::cout << "\n\n" << std::endl;
 
                     std::cout << "Type 'Return' to return to game\n \n" << std::endl;
@@ -287,7 +297,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool isInP
 
                 int gameSeed = game->getRandomSeed();
 
-                Game* replayGame = new Game(players, gameSeed);
+                Game* replayGame = new Game(players, game->getGameMode(), gameSeed);
 
                 for(int i = 0; i < game->getCommands().size(); i++){
                     replayGame->addCommand(game->getCommands()[i]);
@@ -375,7 +385,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool isInP
 
                 int gameSeed = game->getRandomSeed();
 
-                Game* replayGame = new Game(players, gameSeed);
+                Game* replayGame = new Game(players, game->getGameMode(), gameSeed);
 
                 for(int i = 0; i < game->getCommands().size(); i++){
                     replayGame->addCommand(game->getCommands()[i]);
@@ -463,6 +473,14 @@ void nextPlayer(Game* game, int& currentPlayerIndex){
 
 bool moveTiles(Game* game,Player* player, int factory, Types colourType,
   int patternRow){
+
+    int patternRowLength;
+
+    if(game->getGameMode() == "Normal"){
+        patternRowLength = 6;
+    }else if(game->getGameMode() == "Six"){
+        patternRowLength = 7;
+    }
     
     // Represents if tiles were moved successfully
     bool moved = false;
@@ -475,8 +493,8 @@ bool moveTiles(Game* game,Player* player, int factory, Types colourType,
     // check if tile can be placed in pattern row
     // at least one 
     //or if patternRow is 6 -> place in broken
-    if ((patternRow < 6 && player->canPlaceInPatternRow(colourType, patternRow - 1))
-        || patternRow == 6){
+    if ((patternRow < patternRowLength && player->canPlaceInPatternRow(colourType, patternRow - 1))
+        || patternRow == patternRowLength){
 
         // if factory chosen (not centre tiles)
         if (factory > 0 && factory < NUM_OF_FACTORIES + 1){
@@ -486,7 +504,7 @@ bool moveTiles(Game* game,Player* player, int factory, Types colourType,
             if(tileAmount > 0){
                
                 // Add to the board of player
-                addToBoard(player,patternRow,tileAmount,tiles);
+                addToBoard(player,patternRow,tileAmount,tiles, game);
                 moved = true;
             }
 
@@ -507,7 +525,7 @@ bool moveTiles(Game* game,Player* player, int factory, Types colourType,
                 }
                 
                 // Add to the board of player
-                addToBoard(player, patternRow, tileAmount, tiles);
+                addToBoard(player, patternRow, tileAmount, tiles, game);
                 moved = true;
             }
         }
@@ -516,10 +534,16 @@ bool moveTiles(Game* game,Player* player, int factory, Types colourType,
     return moved;   
 }
 
-void addToBoard(Player* player, int patternRow, int tileAmount, Tile**& tiles){
+void addToBoard(Player* player, int patternRow, int tileAmount, Tile**& tiles, Game* game){
     
+    int patternRowLength;
+    if(game->getGameMode() == "Normal"){
+        patternRowLength = 6;
+    }else if(game->getGameMode() == "Six"){
+        patternRowLength = 7;
+    }
     // If the pattern row inserted is actually a pattern row (and not the floor line)
-    if (patternRow < 6){
+    if (patternRow < patternRowLength){
         // add tiles to pattern line of player
         player->addTilesToPatternLine(tiles, tileAmount, patternRow - 1);
 
@@ -732,7 +756,11 @@ void colorizeOutput(std::string output){
 
                 std::cout << "\033[1m\033[32m" << toPrint << "\033[0m";
 
-            }else{
+            }else if(toPrint == 'O'){
+
+                std::cout << "\033[1m\033[35m" << toPrint << "\033[0m";
+            }
+            else{
 
                 std::cout << toPrint;
 

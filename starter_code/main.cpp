@@ -96,12 +96,11 @@ bool manageInput(char input){
                 std::cout << "Not yet implemented" << std::endl;
                 std::getline(std::cin, gameModeChosen);
             }else if (gameModeChosen == "3"){
-                // gameMode = "Six";
-                // chosen = true;
-                std::cout << "Not yet implemented" << std::endl;
-                std::getline(std::cin, gameModeChosen);
+                gameMode = "Six";
+                chosen = true;
             }else{
                 std::cout << "Please choose from the list provided" << std::endl;
+                std::cout << "> ";
                 std::getline(std::cin, gameModeChosen);
             }
         }
@@ -134,14 +133,12 @@ bool manageInput(char input){
             Game* game = nullptr;
         // If a random seed was inserted, then use it in the game
         if (randomSeed != -1){
-            game =  new Game(players, randomSeed);
+            game =  new Game(players, gameMode, randomSeed);
         // If no seed was inserted, use the default value set in Game.h
         } else {
-            game =  new Game(players);
+            game =  new Game(players, gameMode);
         }
 
-        //sets game mode
-        game->setGameMode(gameMode);
         // Starts the game
         startGame(game);
         

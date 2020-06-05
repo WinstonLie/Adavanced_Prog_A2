@@ -21,7 +21,7 @@ bool moveTiles(Game* game,Player* player, int factory, Types colourType, int pat
 
 // Adds the tiles into the players board, then deletes the tiles array
 // Assumes pattern row being inserted into is valid (1-6)
-void addToBoard(Player* player, int patternRow, int tileAmount, Tile**& tiles);
+void addToBoard(Player* player, int patternRow, int tileAmount, Tile**& tiles, Game* game);
 
 // Adds the tiles to wall for all players, and displays points earned from
 // those placements. Also sets current player index to whoever had the first

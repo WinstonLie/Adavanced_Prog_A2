@@ -2,7 +2,7 @@
 #include <random>
 #include <iostream>
 
-Game::Game(std::vector<Player*> playersToAdd, int randomSeed) : randomSeed{ randomSeed }{
+Game::Game(std::vector<Player*> playersToAdd, std::string gameMode, int randomSeed) : gameMode { gameMode }, randomSeed{ randomSeed }{
     bag = new Bag();
     boxLid = new BoxLid();
 
@@ -22,12 +22,17 @@ Game::Game(std::vector<Player*> playersToAdd, int randomSeed) : randomSeed{ rand
         Tile* darkBlueTile = new Tile(Dark_Blue);
         Tile* lightBlueTile = new Tile(Light_Blue);
         Tile* blackTile = new Tile(Black);
-        
+
         bag->insertIntoBag(redTile);
         bag->insertIntoBag(yellowTile);
         bag->insertIntoBag(darkBlueTile);
         bag->insertIntoBag(lightBlueTile);
         bag->insertIntoBag(blackTile);
+
+        if(this->gameMode == "Six"){
+            Tile* orangeTile = new Tile(Orange);
+            bag->insertIntoBag(orangeTile);
+        }
     }
 
     //set factoryCount
@@ -46,9 +51,9 @@ Game::Game(std::vector<Player*> playersToAdd, int randomSeed) : randomSeed{ rand
 }
 
 
-Game::Game (std::vector<Player*> playersToAdd, int playerCount, Bag* bag,
+Game::Game (std::vector<Player*> playersToAdd, std::string gameMode, int playerCount, Bag* bag,
           int factoryCount, Factory** factories, CentreTable* centreTable, BoxLid* boxLid,
-          bool firstPlayerMarker, std::vector<std::string> commands, int randomSeed) : players{ playersToAdd }, bag{ bag },
+          bool firstPlayerMarker, std::vector<std::string> commands, int randomSeed) : players{ playersToAdd }, gameMode { gameMode }, bag{ bag },
           factoryCount{ factoryCount }, factories{ factories }, centreTable{ centreTable }, boxLid{ boxLid },
           firstPlayerMarker{ firstPlayerMarker }, commands{ commands }, randomSeed{ randomSeed }{
             
@@ -380,8 +385,4 @@ void Game::addCommand(std::string commandToAdd){
 
 std::string Game::getGameMode(){
     return this->gameMode;
-}
-
-void Game::setGameMode(std::string gameMode){
-    this->gameMode = gameMode;
 }

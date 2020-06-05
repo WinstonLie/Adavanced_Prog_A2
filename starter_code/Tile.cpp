@@ -32,6 +32,8 @@ Types readTypeFromChar(char input){
         colour = Empty;  
     } else if (input == 'F'){
         colour = First_Player;
+    } else if (input == 'O'){
+        colour = Orange;
     }
 
     // Returns colour

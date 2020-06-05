@@ -27,10 +27,10 @@ class Game{
 
         // Constructor that initialises private values and sets players
         // Also creates all tiles needed for game
-        Game(std::vector<Player*> playersToAdd, int randomSeed = DEFAULT_SEED);
+        Game(std::vector<Player*> playersToAdd, std::string gameMode, int randomSeed = DEFAULT_SEED);
 
         // Load constructor
-        Game (std::vector<Player*> playersToAdd, int playerCount, Bag* bag,
+        Game (std::vector<Player*> playersToAdd, std::string gameMode, int playerCount, Bag* bag,
           int factoryCount, Factory** factories, CentreTable* centreTable, BoxLid* boxLid,
           bool firstPlayerMarker, std::vector<std::string> commands, int randomSeed = DEFAULT_SEED);
         
@@ -94,8 +94,6 @@ class Game{
         void addCommand(std::string commandToAdd);
 
         std::string getGameMode();
-
-        void setGameMode(std::string gameMode);
     private:
 
         // game mode of game

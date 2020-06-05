@@ -201,6 +201,20 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
         currentLineCounter++;
     }
 
+    int wallDimension;
+    int patternLineRows;
+    int floorLineLength;
+
+    if(gameMode == "Normal"){
+        wallDimension = NORMAL_WALL_DIMENSION;
+        patternLineRows = NORMAL_PATTERN_LINE_ROWS;
+        floorLineLength = NORMAL_FLOOR_LINE_LENGTH;
+    }else if(gameMode == "Six"){
+        wallDimension = SIX_WALL_DIMENSION;
+        patternLineRows = SIX_PATTERN_LINE_ROWS;
+        floorLineLength = SIX_FLOOR_LINE_LENGTH;
+    }
+
     // Get game status
     if (checkLoad(validLoad, inputLines, currentLineCounter)){
         // Checks to see if the word True is anywhere in this line
@@ -311,22 +325,22 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
             int points = -1;
 
             // Initialise empty wall
-            Tile*** wall = new Tile**[NORMAL_WALL_DIMENSION];
-            for (int i = 0; i < NORMAL_WALL_DIMENSION; i++){
+            Tile*** wall = new Tile**[wallDimension];
+            for (int i = 0; i < wallDimension; i++){
 
-                wall[i] = new Tile*[NORMAL_WALL_DIMENSION];
+                wall[i] = new Tile*[wallDimension];
 
-                for (int r = 0; r < NORMAL_WALL_DIMENSION; r++){
+                for (int r = 0; r < wallDimension; r++){
 
                     wall[i][r] = nullptr;
                 }
             }
 
             // Initialise empty pattern lines
-            Tile*** patternLines = new Tile**[NORMAL_PATTERN_LINE_ROWS];
-            int* patternLineCounts = new int[NORMAL_PATTERN_LINE_ROWS];
+            Tile*** patternLines = new Tile**[patternLineRows];
+            int* patternLineCounts = new int[patternLineRows];
 
-            for (int i = 0; i < NORMAL_PATTERN_LINE_ROWS; i++){
+            for (int i = 0; i < patternLineRows; i++){
 
                 patternLines[i] = new Tile*[i + 1];
                 patternLineCounts[i] = 0;
@@ -338,8 +352,8 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
             }
 
             // Initialise floor line
-            Tile** floorLine = new Tile*[NORMAL_FLOOR_LINE_LENGTH];
-            for (int i = 0; i < NORMAL_FLOOR_LINE_LENGTH; i++){
+            Tile** floorLine = new Tile*[floorLineLength];
+            for (int i = 0; i < floorLineLength; i++){
                 floorLine[i] = nullptr;
             }
             int floorLineCount = 0;
@@ -366,13 +380,13 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
             int wallRowCounter = 0;
             // While the loading is successful and still have rows left to load
             while (checkLoad(validLoad, inputLines, currentLineCounter)
-              && wallRowCounter < NORMAL_WALL_DIMENSION){
+              && wallRowCounter < wallDimension){
 
                 // check that row has at least five characters
-                if (inputLines[currentLineCounter].length() >= NORMAL_WALL_DIMENSION){
+                if (inputLines[currentLineCounter].length() >= wallDimension){
 
                     // Read in each character one by one
-                    for (int i = 0; validLoad && i < NORMAL_WALL_DIMENSION; i++){
+                    for (int i = 0; validLoad && i < wallDimension; i++){
                         char input = inputLines[currentLineCounter][i];
 
                         // Parse character into a type of tile
@@ -409,7 +423,7 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
 
             // Read in patternLines
             int patternRowCounter = 0;
-            while (patternRowCounter < NORMAL_PATTERN_LINE_ROWS
+            while (patternRowCounter < patternLineRows
               && checkLoad(validLoad, inputLines, currentLineCounter)){
 
                 // check that row has enough characters
@@ -467,10 +481,10 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
                 bool emptyTileFound = false;
 
                 // check that floor line has enough characters
-                if (inputLines[currentLineCounter].length() >= NORMAL_FLOOR_LINE_LENGTH){
+                if (inputLines[currentLineCounter].length() >= floorLineLength){
 
                     // Read in floor line
-                    for (int i = 0; validLoad && i < NORMAL_FLOOR_LINE_LENGTH; i++){
+                    for (int i = 0; validLoad && i < floorLineLength; i++){
                         char input = inputLines[currentLineCounter][i];
                         Types type = readTypeFromChar(input);
 
@@ -526,7 +540,7 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
                 
                 // Delete pattern line
                 if (patternLines != nullptr){
-                    for (int i = 0; i < NORMAL_PATTERN_LINE_ROWS; i++){
+                    for (int i = 0; i < patternLineRows; i++){
 
                         if (patternLines[i] != nullptr){
 
@@ -544,11 +558,11 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
 
                 // Delete wall
                 if (wall != nullptr){
-                    for (int i = 0; i < NORMAL_WALL_DIMENSION; i++){
+                    for (int i = 0; i < wallDimension; i++){
 
                         if (wall[i] != nullptr){
 
-                            for (int r = 0; r < NORMAL_WALL_DIMENSION; r++){
+                            for (int r = 0; r < wallDimension; r++){
                                 if (wall[i][r] != nullptr){
                                     delete wall[i][r];
                                 }
@@ -591,7 +605,7 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
             factories_[i] = new Factory(factories[i]);
         }
         // Calls loading constructor for Game
-        *game = new Game(players, numberOfPlayers, new Bag(bag), factoryCount, 
+        *game = new Game(players, gameMode, numberOfPlayers, new Bag(bag), factoryCount, 
           factories_, centreTable,  new BoxLid(boxLid), firstPlayerMarker, commands, gameSeed);
 
         // Confirms load is valid in console
