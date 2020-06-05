@@ -73,6 +73,38 @@ bool manageInput(char input){
     if(input == '1'){
     
         std::cout << "Starting a New Game" << std::endl;
+
+        std::cout << "Please choose your game mode:" << std::endl;
+        std::cout << "1. Normal" << std::endl;
+        std::cout << "2. Grey Board" << std::endl;
+        std::cout << "3. 6 Tile Board" << std::endl;
+
+        std::cout << "> ";
+
+        // choosing game mode they want to play
+        std::string gameModeChosen;
+        std::string gameMode;
+        std::getline(std::cin, gameModeChosen);
+        bool chosen = false;
+        while(!chosen){
+            if(gameModeChosen == "1"){
+                gameMode = "Normal";
+                chosen = true;
+            }else if (gameModeChosen == "2"){
+                // gameMode = "Grey";
+                // chosen = true;
+                std::cout << "Not yet implemented" << std::endl;
+                std::getline(std::cin, gameModeChosen);
+            }else if (gameModeChosen == "3"){
+                // gameMode = "Six";
+                // chosen = true;
+                std::cout << "Not yet implemented" << std::endl;
+                std::getline(std::cin, gameModeChosen);
+            }else{
+                std::cout << "Please choose from the list provided" << std::endl;
+                std::getline(std::cin, gameModeChosen);
+            }
+        }
         // Can add prompt for player count if needed to extend
         int playerCount = 2;
         std::vector<Player*> players;

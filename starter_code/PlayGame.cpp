@@ -58,7 +58,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool isInP
 
                     std::string choice;
 
-                    std::cin >> choice;
+                    std::getline(std::cin, choice);
                     transform(choice.begin(), choice.end(), choice.begin(), ::toupper);
 
                     if(choice == "NEXT"){
@@ -89,7 +89,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool isInP
                     std::cout << "latest command has been inputted. Would you like to resume game? (Yes/No)" << std::endl;
 
                     std::string resume;
-                    std::cin >> resume;
+                    std::getline(std::cin, resume);
                     transform(resume.begin(), resume.end(), resume.begin(), ::toupper);
 
                     if(resume == "YES"){
@@ -233,7 +233,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool isInP
                     std::cout << "\n> ";
 
                     std::string userInput;
-                    std::cin >> userInput;
+                    std::getline(std::cin, userInput);
                     transform(userInput.begin(), userInput.end(), userInput.begin(), ::toupper);
                     if(userInput == "RETURN"){
                         exit = true;
@@ -263,7 +263,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool isInP
                     std::cout << "\n> ";
 
                     std::string userInput;
-                    std::cin >> userInput;
+                    std::getline(std::cin, userInput);
                     transform(userInput.begin(), userInput.end(), userInput.begin(), ::toupper);
                     if(userInput == "RETURN"){
                         exit = true;
@@ -335,14 +335,14 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool isInP
 
             std::string response;
 
-            std::cin >> response;
+            std::getline(std::cin, response);
 
             transform(response.begin(), response.end(), response.begin(), ::toupper);
 
             if(response == "SAVE"){
                 std::cout << "Please input a file name: ";
                 std::string filename = "";
-                std::cin >> filename;
+                std::getline(std::cin, filename);
                 bool saved;
 
                 //check if filename was entered
