@@ -9,6 +9,8 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool isInP
     bool gameExited = false;
     int commandIndex = 0;
 
+    std::string gameMode = game->getGameMode();
+
     // Keeps track of the index of the current player
     int currentPlayerIndex = startPlayerIndex;
 
@@ -139,7 +141,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool isInP
                 // Initial checks, to make sure that input is within range to be checked
                 // to prevent out of bounds error
                 if (colourType != Invalid && colourType != First_Player && factory >= 0 && factory < NUM_OF_FACTORIES + 1 &&
-                    patternRow > 0 && patternRow < PATTERN_LINE_ROWS + 2){
+                    patternRow > 0 && patternRow < NORMAL_PATTERN_LINE_ROWS + 2){
 
                     //Move tiles
                     validTurn = moveTiles(game, player, factory, colourType, patternRow);
@@ -280,7 +282,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool isInP
                 for(int i = 0; i < game->getPlayerCount(); i++){
                     Player* player = game->getPlayer(i);
                     std::string playerName = player->getPlayerName();
-                    players.push_back(new Player(playerName));
+                    players.push_back(new Player(playerName, game->getGameMode()));
                 }
 
                 int gameSeed = game->getRandomSeed();
@@ -368,7 +370,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool isInP
                 for(int i = 0; i < game->getPlayerCount(); i++){
                     Player* player = game->getPlayer(i);
                     std::string playerName = player->getPlayerName();
-                    players.push_back(new Player(playerName));
+                    players.push_back(new Player(playerName, game->getGameMode()));
                 }
 
                 int gameSeed = game->getRandomSeed();

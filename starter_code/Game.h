@@ -92,7 +92,14 @@ class Game{
         std::vector<std::string> getCommands();
 
         void addCommand(std::string commandToAdd);
+
+        std::string getGameMode();
+
+        void setGameMode(std::string gameMode);
     private:
+
+        // game mode of game
+        std::string gameMode;
 
         // Vector of all players
         std::vector<Player*> players;

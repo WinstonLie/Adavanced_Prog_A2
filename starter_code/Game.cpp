@@ -377,3 +377,11 @@ std::vector<std::string> Game::getCommands(){
 void Game::addCommand(std::string commandToAdd){
     commands.push_back(commandToAdd);
 }
+
+std::string Game::getGameMode(){
+    return this->gameMode;
+}
+
+void Game::setGameMode(std::string gameMode){
+    this->gameMode = gameMode;
+}

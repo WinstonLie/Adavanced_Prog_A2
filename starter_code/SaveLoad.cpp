@@ -28,6 +28,11 @@ bool saveGame(Game* game, int currentPlayer, std::string filePath, bool gameInPr
        outputStream << saveTime << std::endl;
        outputStream << std::endl;
 
+       // game Mode
+       outputStream << "#Game Mode" << std::endl;
+       outputStream << game->getGameMode() << std::endl;
+       outputStream << std::endl;
+
 
        //game status
        outputStream << "#Game Status" << std::endl;
@@ -164,6 +169,7 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
     std::vector<Player*> players;
     std::vector<std::string> commands;
     int gameSeed;
+    std::string gameMode;
 
     // Is set to false if marker is found in a floor line
     bool firstPlayerMarker = true;
@@ -186,6 +192,12 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
     // Check date
     if (checkLoad(validLoad, inputLines, currentLineCounter)){
         // Nothing is to be done with the date, ignore this line
+        currentLineCounter++;
+    }
+
+    // get game mode
+    if (checkLoad(validLoad, inputLines, currentLineCounter)){
+        gameMode = inputLines[currentLineCounter];
         currentLineCounter++;
     }
 
@@ -299,22 +311,22 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
             int points = -1;
 
             // Initialise empty wall
-            Tile*** wall = new Tile**[WALL_DIMENSION];
-            for (int i = 0; i < WALL_DIMENSION; i++){
+            Tile*** wall = new Tile**[NORMAL_WALL_DIMENSION];
+            for (int i = 0; i < NORMAL_WALL_DIMENSION; i++){
 
-                wall[i] = new Tile*[WALL_DIMENSION];
+                wall[i] = new Tile*[NORMAL_WALL_DIMENSION];
 
-                for (int r = 0; r < WALL_DIMENSION; r++){
+                for (int r = 0; r < NORMAL_WALL_DIMENSION; r++){
 
                     wall[i][r] = nullptr;
                 }
             }
 
             // Initialise empty pattern lines
-            Tile*** patternLines = new Tile**[PATTERN_LINE_ROWS];
-            int* patternLineCounts = new int[PATTERN_LINE_ROWS];
+            Tile*** patternLines = new Tile**[NORMAL_PATTERN_LINE_ROWS];
+            int* patternLineCounts = new int[NORMAL_PATTERN_LINE_ROWS];
 
-            for (int i = 0; i < PATTERN_LINE_ROWS; i++){
+            for (int i = 0; i < NORMAL_PATTERN_LINE_ROWS; i++){
 
                 patternLines[i] = new Tile*[i + 1];
                 patternLineCounts[i] = 0;
@@ -326,8 +338,8 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
             }
 
             // Initialise floor line
-            Tile** floorLine = new Tile*[FLOOR_LINE_LENGTH];
-            for (int i = 0; i < FLOOR_LINE_LENGTH; i++){
+            Tile** floorLine = new Tile*[NORMAL_FLOOR_LINE_LENGTH];
+            for (int i = 0; i < NORMAL_FLOOR_LINE_LENGTH; i++){
                 floorLine[i] = nullptr;
             }
             int floorLineCount = 0;
@@ -354,13 +366,13 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
             int wallRowCounter = 0;
             // While the loading is successful and still have rows left to load
             while (checkLoad(validLoad, inputLines, currentLineCounter)
-              && wallRowCounter < WALL_DIMENSION){
+              && wallRowCounter < NORMAL_WALL_DIMENSION){
 
                 // check that row has at least five characters
-                if (inputLines[currentLineCounter].length() >= WALL_DIMENSION){
+                if (inputLines[currentLineCounter].length() >= NORMAL_WALL_DIMENSION){
 
                     // Read in each character one by one
-                    for (int i = 0; validLoad && i < WALL_DIMENSION; i++){
+                    for (int i = 0; validLoad && i < NORMAL_WALL_DIMENSION; i++){
                         char input = inputLines[currentLineCounter][i];
 
                         // Parse character into a type of tile
@@ -397,7 +409,7 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
 
             // Read in patternLines
             int patternRowCounter = 0;
-            while (patternRowCounter < PATTERN_LINE_ROWS
+            while (patternRowCounter < NORMAL_PATTERN_LINE_ROWS
               && checkLoad(validLoad, inputLines, currentLineCounter)){
 
                 // check that row has enough characters
@@ -455,10 +467,10 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
                 bool emptyTileFound = false;
 
                 // check that floor line has enough characters
-                if (inputLines[currentLineCounter].length() >= FLOOR_LINE_LENGTH){
+                if (inputLines[currentLineCounter].length() >= NORMAL_FLOOR_LINE_LENGTH){
 
                     // Read in floor line
-                    for (int i = 0; validLoad && i < FLOOR_LINE_LENGTH; i++){
+                    for (int i = 0; validLoad && i < NORMAL_FLOOR_LINE_LENGTH; i++){
                         char input = inputLines[currentLineCounter][i];
                         Types type = readTypeFromChar(input);
 
@@ -498,7 +510,7 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
             if (validLoad){
 
                 // Call loading contructor for player
-                Player* player = new Player(name, points, patternLines,
+                Player* player = new Player(name, gameMode, points, patternLines,
                   patternLineCounts,  wall,  floorLine,  floorLineCount);
 
                 // Push player into vector for players
@@ -514,7 +526,7 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
                 
                 // Delete pattern line
                 if (patternLines != nullptr){
-                    for (int i = 0; i < PATTERN_LINE_ROWS; i++){
+                    for (int i = 0; i < NORMAL_PATTERN_LINE_ROWS; i++){
 
                         if (patternLines[i] != nullptr){
 
@@ -532,11 +544,11 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
 
                 // Delete wall
                 if (wall != nullptr){
-                    for (int i = 0; i < WALL_DIMENSION; i++){
+                    for (int i = 0; i < NORMAL_WALL_DIMENSION; i++){
 
                         if (wall[i] != nullptr){
 
-                            for (int r = 0; r < WALL_DIMENSION; r++){
+                            for (int r = 0; r < NORMAL_WALL_DIMENSION; r++){
                                 if (wall[i][r] != nullptr){
                                     delete wall[i][r];
                                 }

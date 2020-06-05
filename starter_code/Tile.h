@@ -12,7 +12,8 @@ enum Types {
             Black = 'U',
             First_Player = 'F',
             Empty = '.',
-            Invalid = '_'
+            Invalid = '_',
+            Orange = 'O'
         };
 
 // Class Tile holds the type of a tile that exists on the board. Most the tiles

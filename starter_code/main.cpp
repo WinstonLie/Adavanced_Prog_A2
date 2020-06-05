@@ -115,7 +115,7 @@ bool manageInput(char input){
             std::string playerName;
             std::getline(std::cin, playerName);
 
-            players.insert(players.end(),new Player(playerName));
+            players.insert(players.end(),new Player(playerName, gameMode));
         }
 
         std::cout << "Insert seed or -1 for default:" << std::endl;
@@ -139,6 +139,9 @@ bool manageInput(char input){
         } else {
             game =  new Game(players);
         }
+
+        //sets game mode
+        game->setGameMode(gameMode);
         // Starts the game
         startGame(game);
         

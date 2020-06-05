@@ -8,28 +8,43 @@
 #include <string>
 
 // The width and length of the wall
-#define WALL_DIMENSION 5
+#define NORMAL_WALL_DIMENSION 5
+#define SIX_WALL_DIMENSION 6
 
 // A two dimensional array that shows the coloured background of the wall
 // Used to determine where a colour goes in a wall
-const Types WALL_COLOURS[WALL_DIMENSION][WALL_DIMENSION] =
+const Types NORMAL_WALL[NORMAL_WALL_DIMENSION][NORMAL_WALL_DIMENSION] =
                 {{Dark_Blue, Yellow, Red, Black, Light_Blue},
                 {Light_Blue, Dark_Blue, Yellow, Red, Black},
                 {Black, Light_Blue, Dark_Blue, Yellow, Red},
                 {Red, Black, Light_Blue, Dark_Blue, Yellow},
                 {Yellow, Red, Black, Light_Blue, Dark_Blue}};
 
+// Types GREY_WALL[NORMAL_WALL_DIMENSION][NORMAL_WALL_DIMENSION];
+
+const Types SIX_WALL[SIX_WALL_DIMENSION][SIX_WALL_DIMENSION] =
+                {{Dark_Blue, Yellow, Red, Black, Light_Blue, Orange},
+                {Orange, Dark_Blue, Yellow, Red, Black, Light_Blue},
+                {Light_Blue, Orange, Dark_Blue, Yellow, Red, Black},
+                {Black, Light_Blue, Orange, Dark_Blue, Yellow, Red},
+                {Red, Black, Light_Blue, Orange, Dark_Blue, Yellow},
+                {Yellow, Red, Black, Light_Blue, Orange, Dark_Blue}};
+
 // The amount of rows for the pattern lines (rows on left)
-#define PATTERN_LINE_ROWS 5
+#define NORMAL_PATTERN_LINE_ROWS 5
+#define SIX_PATTERN_LINE_ROWS 6
 
 // The length of the floor line (line below pattern lines and wall)
-#define FLOOR_LINE_LENGTH 7
+#define NORMAL_FLOOR_LINE_LENGTH 7
+#define SIX_FLOOR_LINE_LENGTH 8
 
 // The amount of points to subtract for every element in the floor line
-const int FLOOR_LINE_PENALTIES[] = {-1, -1, -2, -2, -2, -3, -3};
+const int NORMAL_FLOOR_LINE_PENALTIES[] = {-1, -1, -2, -2, -2, -3, -3};
+const int SIX_FLOOR_LINE_PENALTIES[] = {-1, -1, -2, -2 ,-2, -3, -3, -4};
 
 //Has the same dimension as walls
-#define COLOUR_COUNT      5
+#define NORMAL_COLOUR_COUNT 5
+#define SIX_COLOUR_COUNT 6
 
 // Directions to use when figuring out how many tiles a placed tile
 // is connected to
@@ -48,10 +63,10 @@ class Player{
     public:
         
         // Constructs the player and initialises the structures
-        Player(std::string playerName);
+        Player(std::string playerName, std::string gameMode);
 
         // Loading constructor
-        Player(std::string playerName, int points, Tile*** patternLine,
+        Player(std::string playerName, std::string gameMode, int points, Tile*** patternLine,
           int* patternLineRowCounts, Tile*** wall, Tile** floorLine,
           int floorLineCount);
         
@@ -150,6 +165,8 @@ class Player{
         // Checks to see if the type of tile exists in the row
         // Returns true if present, else false
         bool tileInRowOfWall(Types colour, int row);
+
+        std::string gameMode;
 };
 
 #endif // AZUL_PLAYER
