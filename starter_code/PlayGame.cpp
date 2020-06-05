@@ -2,8 +2,6 @@
 #include <iostream>
 
 void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool replayGame, bool twoCentreFactories){
-
-    std::cout << twoCentreFactories << std::endl;
     
     // Boolean that keeps track of if the game is running
     // If false, then game loop ends

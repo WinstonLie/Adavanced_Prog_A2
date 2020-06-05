@@ -323,10 +323,6 @@ Game* loadGameForReplay(std::string filePath, bool& twoCentreTables){
         }
     }
 
-    for(int i = 0 ; i < commands.size(); i ++){
-        std::cout << commands[i] << std::endl;
-    }
-
     if(validLoad){
 
         if(twoCentreTables){
