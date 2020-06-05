@@ -65,7 +65,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool repla
 
                     std::cout << "Please enter your choice (n to move to next player's turn or exit to quit) > ";
                     std::string input = "";
-                    std::cin >>input;
+                    std::getline(std::cin, input);
 
                     if(input == "n"){
 
@@ -75,7 +75,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool repla
 
                     }else if(input == "exit"){
 
-                        gameRunning = false;
+                        commandLineInput = "exit";
                         valid = true;
                     }else{
                         std::cout << "please enter a valid input" << std::endl;
@@ -110,7 +110,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool repla
  
                 // Initial checks, to make sure that input is within range to be checked
                 // to prevent out of bounds error
-                if (colourType != Invalid && colourType != First_Player && factory >= 0 && factory < NUM_OF_FACTORIES + 1 &&
+                if (colourType != Invalid && colourType != First_Player && factory >= 0 && factory < game->getNumOfFactories() + 1 &&
                     patternRow > 0 && patternRow < PATTERN_LINE_ROWS + 2){
 
                     //Move tiles
@@ -203,7 +203,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool repla
                     
                     std::cout << "> ";
                     std::string helpInput = "";
-                    std::cin >> helpInput;
+                    std::getline(std::cin, helpInput);
                     
                     if(helpInput == "1"){
 
@@ -213,7 +213,10 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool repla
 
                     }else if (helpInput == "2"){
 
+                        std::cout << "Exiting Help!" << std::endl;
+                        std::cout << std::endl;
                         help = false;
+
                     }else{
                         std::cout << "Please enter a valid number!" << std::endl;
                     }
@@ -366,7 +369,7 @@ bool moveTiles(Game* game,Player* player, int factory, Types colourType,
         || patternRow == 6){
 
         // if factory chosen (not centre tiles)
-        if (factory > 0 && factory < NUM_OF_FACTORIES + 1){
+        if (factory > 0 && factory < game->getNumOfFactories() + 1){
             game->getTilesFromFactory(factory - 1, colourType, tileAmount, tiles);
 
             // If any tiles were taken, then add tiles to player

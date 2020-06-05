@@ -12,7 +12,7 @@
 
 
 
-#define NUM_OF_FACTORIES  5
+//#define NUM_OF_FACTORIES  5
 #define DEFAULT_SEED      100
 #define TILES_PER_COLOUR  20
 
@@ -102,6 +102,8 @@ class Game{
 
         std::string getSingleCommand(int i);
 
+        int getNumOfFactories();
+
     private:
 
         std::vector<std::string> commands;
@@ -135,5 +137,7 @@ class Game{
 
         // Array of pointers to factories
         Factory** factories;
+
+        int NUM_OF_FACTORIES;
 };
 #endif // AZUL_GAME

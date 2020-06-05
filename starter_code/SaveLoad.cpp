@@ -702,6 +702,17 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
         }
 
     }// end of reading in players
+        int NUM_OF_FACTORIES = 0;
+
+        if(numberOfPlayers == 2){
+            NUM_OF_FACTORIES = 5;
+
+        }else if (numberOfPlayers == 3){
+            NUM_OF_FACTORIES = 7;
+
+        }else if (numberOfPlayers == 4){
+            NUM_OF_FACTORIES = 9;
+        }
 
     // Creates game and adds in data if loaded successfully
     if (validLoad){

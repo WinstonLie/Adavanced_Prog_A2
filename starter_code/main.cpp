@@ -74,57 +74,77 @@ bool manageInput(char input){
     if(input == '1'){
     
         std::cout << "Starting a New Game" << std::endl;
-        // Can add prompt for player count if needed to extend
-        int playerCount = 2;
-        std::vector<Player*> players;
+        std::cout << "-------------------" << std::endl;
+        //Prompt user for input of player number
+        std::string playerCoun = "";
+        std::cout << "Number of Players: ";
+        std::getline(std::cin, playerCoun);
+        int playerCount = -1;
+        bool validPlayerNumber = true;
 
-        for (int i = 0; i < playerCount; i++){
+        try{
+            playerCount = std::stoi(playerCoun);
 
-            std::cout << "Player " << i+1 << " name:" << std::endl;
-            std::string playerName;
-            std::getline(std::cin, playerName);
+        }catch(std::invalid_argument e){
 
-            players.insert(players.end(),new Player(playerName));
+            validPlayerNumber = false;
         }
+        //int playerCount = 2;
+        if(validPlayerNumber){
+            std::vector<Player*> players;
 
-        std::cout << "Insert seed or -1 for default:" << std::endl;
-        std::string seedInput = "";
-        std::getline(std::cin, seedInput);
-        int randomSeed = -1;
-        bool successfulConversion = true;
+            for (int i = 0; i < playerCount; i++){
 
-        try {
-            randomSeed = std::stoi(seedInput);
-        } catch (std::invalid_argument e){
-            successfulConversion = false;
-        }
-    
-        if(successfulConversion){
-            Game* game = nullptr;
-        // If a random seed was inserted, then use it in the game
-        if (randomSeed != -1){
-            game =  new Game(players, randomSeed);
-        // If no seed was inserted, use the default value set in Game.h
-        } else {
-            game =  new Game(players);
-        }
-        // Starts the game
-        startGame(game);
+                std::cout << "Player " << i+1 << " name:" << std::endl;
+                std::string playerName;
+                std::getline(std::cin, playerName);
+
+                players.insert(players.end(),new Player(playerName));
+            }
         
-        delete game;
-        
-        if (std::cin.eof()){
 
-            std::cout << "Game closing due to end of file input..." << std::endl;
-            checked = false;
+            std::cout << "Insert seed or -1 for default:" << std::endl;
+            std::string seedInput = "";
+            std::getline(std::cin, seedInput);
+            int randomSeed = -1;
+            bool successfulConversion = true;
+
+            try {
+                randomSeed = std::stoi(seedInput);
+            } catch (std::invalid_argument e){
+                successfulConversion = false;
+            }
+        
+            if(successfulConversion){
+                Game* game = nullptr;
+            // If a random seed was inserted, then use it in the game
+            if (randomSeed != -1){
+                game =  new Game(players, randomSeed);
+            // If no seed was inserted, use the default value set in Game.h
+            } else {
+                game =  new Game(players);
+            }
+            // Starts the game
+            startGame(game);
             
-        } else {
+            delete game;
+            
+            if (std::cin.eof()){
+
+                std::cout << "Game closing due to end of file input..." << std::endl;
+                checked = false;
+                
+            } else {
+                checked = true;
+            }
+            }else{
+                std::cout << "Invalid seed. Please enter a number" << std::endl;
+                checked = true;
+            }  
+        }else{
+            std::cout << "Invalid Number Of Players" <<  std::endl;
             checked = true;
         }
-        }else{
-            std::cout << "Invalid seed. Please enter a number" << std::endl;
-            checked = true;
-        }  
     }
     //Load saved game
     else if(input == '2'){

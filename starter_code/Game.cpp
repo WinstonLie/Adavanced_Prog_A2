@@ -14,6 +14,16 @@ Game::Game(std::vector<Player*> playersToAdd, int randomSeed) : randomSeed{ rand
         players[i]->setGame(this);
     }
 
+    if(players.size() == 2){
+        NUM_OF_FACTORIES = 5;
+
+    }else if (players.size() == 3){
+        NUM_OF_FACTORIES = 7;
+
+    }else if (players.size() == 4){
+        NUM_OF_FACTORIES = 9;
+    }
+
     //populate bag with 20 of each color
     for(int i = 0; i < TILES_PER_COLOUR; i++){
 
@@ -56,6 +66,16 @@ Game::Game (std::vector<Player*> playersToAdd, int playerCount, Bag* bag,
             for (int i = 0; i < players.size(); i++){
 
                 players[i]->setGame(this);
+            }
+
+            if(players.size() == 2){
+                NUM_OF_FACTORIES = 5;
+
+            }else if (players.size() == 3){
+                NUM_OF_FACTORIES = 7;
+
+            }else if (players.size() == 4){
+                NUM_OF_FACTORIES = 9;
             }
           }
 
@@ -413,4 +433,9 @@ std::string Game::getSingleCommand(int input){
     }
 
     return command;
+}
+
+int Game::getNumOfFactories(){
+    
+    return NUM_OF_FACTORIES;
 }
