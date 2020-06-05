@@ -1,3 +1,5 @@
+#Test for Replay Mode with 1 centre factory
+
 #Saving File Tag
 Fri 1630 - Dale
 
@@ -7,6 +9,9 @@ GameInProgress: False
 #NumberOfPlayers
 2
 
+#Number of CentreTable
+1
+
 #Player Name
 Winston
 Rodrigo
@@ -14,6 +19,8 @@ Rodrigo
 #Seed
 100
 
+#Number of Turn Commands
+52
 #Turn Commands
 TURN 1 R 2
 TURN 2 Y 2

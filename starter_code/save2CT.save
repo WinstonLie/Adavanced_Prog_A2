@@ -2,26 +2,30 @@
 Fri 1630 - Dale
 
 #Save Date
-Fri Jun  5 10:58:21 2020
+Fri Jun  5 14:31:24 2020
 
 
 #Game Status
 GameInProgress: True
 
 #Current Player
-2
+1
 
 #Number of Players
-3
+2
+
+#Number of CentreTable
+2
 
 #Bag
-UYBYURYBBLRYBLLLYBLURYBLURRBBYRUBLURYBLYRYRLURRBLURUBLBRYBLURYBUURLBLUBY$
+UYBLURYBBLRYBLULYBLURYBLURRBYYRUBLURYBLYRYRLURYBLURYBLBRYBLURYBUURLBLURYBLURYBLU$
 
 #Boxlid
 $
 
 #Centre Table
-FU$
+F$
+$
 
 #Factories
 RRUL$
@@ -29,8 +33,6 @@ YRYB$
 UBYY$
 LUUB$
 ULLR$
-ULRL$
-$
 
 
 #Player Status
@@ -49,7 +51,7 @@ W
 #Player1 PatternLine
 .
 ..
-YYY
+...
 ....
 .....
 
@@ -79,29 +81,5 @@ R
 
 
 #Player2 PenaltyPanel
-.......
-
-#Player Status
-#Player3
-J
-0
-
-#Player3 Wall
-.....
-.....
-.....
-.....
-.....
-
-
-#Player3 PatternLine
-.
-..
-...
-....
-.....
-
-
-#Player3 PenaltyPanel
 .......
 

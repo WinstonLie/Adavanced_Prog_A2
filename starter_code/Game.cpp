@@ -14,6 +14,7 @@ Game::Game(std::vector<Player*> playersToAdd, bool twoCentreTables, int randomSe
         players[i]->setGame(this);
     }
 
+    //set number of factories
     if(players.size() == 2){
         NUM_OF_FACTORIES = 5;
 
@@ -51,10 +52,12 @@ Game::Game(std::vector<Player*> playersToAdd, bool twoCentreTables, int randomSe
 
     //if bool of twoCentrefactory is true
     if(twoCentreTables == true){
-        for(int i = 0 ; i < 2 ; i++){
-            this->centreTable = new CentreTable();
-            centreTables.push_back(centreTable);
-        }
+
+        this->centreTable = new CentreTable();
+        centreTables.push_back(centreTable);
+        this->centreTable2 = new CentreTable();
+        centreTables.push_back(centreTable2);
+
     }else{
         this->centreTable = new CentreTable();
         centreTables.push_back(centreTable);
@@ -65,10 +68,10 @@ Game::Game(std::vector<Player*> playersToAdd, bool twoCentreTables, int randomSe
 }
 
 
-Game::Game (std::vector<Player*> playersToAdd, int playerCount, Bag* bag,
-          int factoryCount, Factory** factories, CentreTable* centreTable, BoxLid* boxLid,
+Game::Game (bool twoCentreTables,std::vector<Player*> playersToAdd, int playerCount, Bag* bag,
+          int factoryCount, Factory** factories, CentreTable* centreTable, CentreTable* centreTable2, BoxLid* boxLid,
           bool firstPlayerMarker, int randomSeed) : players{ playersToAdd }, bag{ bag },
-          factoryCount{ factoryCount }, factories{ factories }, centreTable{ centreTable }, boxLid{ boxLid },
+          factoryCount{ factoryCount }, factories{ factories }, centreTable{ centreTable }, centreTable2{ centreTable2 }, boxLid{ boxLid },
           firstPlayerMarker{ firstPlayerMarker }, randomSeed{ randomSeed } {
             
             //initializing players to the game
@@ -87,10 +90,17 @@ Game::Game (std::vector<Player*> playersToAdd, int playerCount, Bag* bag,
                 NUM_OF_FACTORIES = 9;
             }
 
-            //add centreTables to vector of centreTables
-            centreTables.push_back(centreTable);
-          }
+            if(twoCentreTables == true){
+                //add two centre table
+                centreTables.push_back(centreTable);
+                centreTables.push_back(centreTable2);
 
+            }else{
+                //add centreTables to vector of centreTables
+                centreTables.push_back(centreTable);
+            }
+            
+          }
 
 Game::~Game(){
 
@@ -107,7 +117,9 @@ Game::~Game(){
     //deleting game components
     delete bag;
     delete factories;
-    delete centreTable;
+    for(int i = 0 ; i < centreTables.size(); i++){
+        delete centreTables[i];
+    }
     delete boxLid;
 }
 
@@ -396,7 +408,7 @@ bool Game::checkIfFactoriesPopulated(){
         //Check for centreTable to see if there is any tiles
         if(centreTables[i]->getSize() > 0){
         
-        populated = true;
+            populated = true;
         }
 
     }
@@ -457,6 +469,33 @@ std::string Game::getSingleCommand(int input){
         if(i == input){
 
             command = commandsForEndSave[i];
+        }
+    }
+
+    return command;
+}
+
+void Game::addcommandToCentreEndSave(std::string command){
+    commandsOfCentreEndSave.push_back(command);
+}
+
+std::string Game::getCommandsFromCentreForEndSave(){
+    std::string commands = "";
+
+    for(int i = 0 ; i < commandsOfCentreEndSave.size() ; i++){
+        commands += commandsOfCentreEndSave[i] + "\n";
+    }
+
+    return commands;
+}
+
+std::string Game::getSingleCentreCommand(int input){
+
+    std::string command = "";
+
+    for(int i = 0 ; i < commandsOfCentreEndSave.size() ; i++){
+        if(i == input ){
+            command = commandsOfCentreEndSave[i];        
         }
     }
 

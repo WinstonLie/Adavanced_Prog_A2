@@ -30,10 +30,10 @@ class Game{
         Game(std::vector<Player*> playersToAdd, bool twoCentreTables, int randomSeed = DEFAULT_SEED);
 
         // Load constructor
-        Game (std::vector<Player*> playersToAdd, int playerCount, Bag* bag,
-          int factoryCount, Factory** factories, CentreTable* centreTable, BoxLid* boxLid,
+        Game (bool twoCentreTables,std::vector<Player*> playersToAdd, int playerCount, Bag* bag,
+          int factoryCount, Factory** factories, CentreTable* centreTable, CentreTable* centreTable2, BoxLid* boxLid,
           bool firstPlayerMarker, int randomSeed = DEFAULT_SEED);
-        
+  
         // Decontructor, deletes all tiles in all sub-containers
         ~Game();
         
@@ -100,17 +100,29 @@ class Game{
         //add turn command into commands
         void addCommandToEndSave(std::string command);
 
-        std::string getSingleCommand(int i);
+        std::string getSingleCommand(int input);
 
+        void addcommandToCentreEndSave(std::string command);
+
+        std::string getCommandsFromCentreForEndSave();
+
+        std::string getSingleCentreCommand(int input);
+
+        //getters for factory number wtih different number of players
         int getNumOfFactories();
 
+        //getters for number of centretable
         int getNumOfCentreTable();
+
 
     private:
 
+        //Vector of commands 
         std::vector<std::string> commands;
 
         std::vector<std::string> commandsForEndSave;
+
+        std::vector<std::string> commandsOfCentreEndSave;
 
         // Vector of all players
         std::vector<Player*> players;
@@ -127,6 +139,8 @@ class Game{
 
         // The factory for the centre of the table
         CentreTable* centreTable;
+
+        CentreTable* centreTable2;
 
         //Storage of Centre Table's
         std::vector<CentreTable*> centreTables;

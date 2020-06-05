@@ -176,12 +176,13 @@ bool manageInput(char input){
         *game = nullptr;
         int currentPlayerIndex = 0;
         bool fromLoadedGame = false;
-        loadGame(game, fileName, currentPlayerIndex, fromLoadedGame);
+        bool twoCentreFactories = false;
+        loadGame(game, fileName, currentPlayerIndex, fromLoadedGame , twoCentreFactories);
 
         //validation if it was successfully loaded
         if (*game != nullptr){
             
-            startGame(*game, currentPlayerIndex, fromLoadedGame);
+            startGame(*game, currentPlayerIndex, fromLoadedGame,false,twoCentreFactories);
 
             //Deallocating memory for the game and game 
             delete *game;
@@ -222,12 +223,13 @@ bool manageInput(char input){
         std::string fileName = "";
         std::getline(std::cin, fileName);
         Game* game = nullptr;
+        bool twoCentreFactories = false;
 
-        game = loadGameForReplay(fileName);
+        game = loadGameForReplay(fileName, twoCentreFactories);
 
         if(game != nullptr){
             
-            startGame(game,0,false,true);
+            startGame(game,0,false,true,twoCentreFactories);
 
             delete game;
 

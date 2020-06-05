@@ -2,6 +2,8 @@
 #include <iostream>
 
 void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool replayGame, bool twoCentreFactories){
+
+    std::cout << twoCentreFactories << std::endl;
     
     // Boolean that keeps track of if the game is running
     // If false, then game loop ends
@@ -119,14 +121,19 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool repla
                     if(twoCentreFactories == true){
                         //loop through for input until valid
                         while(validInput == false){
+                            
                             std::string indexInput = "";
-                            std::cout << "Enter which Centre Factory number(1 or 2): ";
-                            std::getline(std::cin,indexInput);
-
+                            if(replayGame == true){
+                                indexInput = game->getSingleCentreCommand(i);
+                            }else{
+                                std::cout << "Enter which Centre Factory number(1 or 2): ";
+                                std::getline(std::cin,indexInput);
+                            }
                             try{
                                 indexOfCentreFactory = std::stoi(indexInput);
                                 if(indexOfCentreFactory == 1 || indexOfCentreFactory == 2){
                                     validInput = true;
+                                    game->addcommandToCentreEndSave(indexInput);
                                 }
 
                             }catch (std::invalid_argument e){
@@ -371,7 +378,6 @@ void updateEndGameDetails(Game* game){
     }
 
 }
-
 
 void nextPlayer(Game* game, int& currentPlayerIndex){
     if (currentPlayerIndex != game->getPlayerCount() - 1){

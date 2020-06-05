@@ -12,12 +12,12 @@ bool saveGame(Game* game, int currentPlayer, std::string filePath);
 bool saveEndGame(Game* game, std::string filePath);
 
 //Load game based on turn commands
-Game* loadGameForReplay(std::string filePath);
+Game* loadGameForReplay(std::string filePath, bool& twoCentreFactories);
 
 // Loads the game from the specified file path
 // If no file is found or save file doesn't match format, then return false
 // else true
-bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& isInProgress);
+bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex, bool& isInProgress, bool& twoCentreFactories);
 
 // For use in loadGame
 // Reads in tiles from the inputted line until a $ character is reached

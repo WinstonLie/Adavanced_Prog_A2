@@ -43,6 +43,10 @@ bool saveGame(Game* game, int currentPlayer, std::string filePath){
        outputStream << game->getPlayerCount() << std::endl;
        outputStream << std::endl;
 
+       //Number of centreTables
+       outputStream << "#Number of CentreTable" << std::endl;
+       outputStream << game->getNumOfCentreTable() << std::endl;
+       outputStream << std::endl;
 
        //bag data
        outputStream << "#Bag" << std::endl;
@@ -58,10 +62,11 @@ bool saveGame(Game* game, int currentPlayer, std::string filePath){
        //centre table data
        outputStream << "#Centre Table" << std::endl;
        if (game->isFirstPlayerMarkerTaken() == false){
-           outputStream << 'F';
+            outputStream << 'F';
        }
-       outputStream << game->getCentreTable(0) << std::endl;
-       outputStream << std::endl;
+       for(int i = 0 ; i < game->getNumOfCentreTable() ; i++){
+            outputStream << game->getCentreTable(i) << std::endl;
+       }
 
        //factory data
        outputStream << "#Factories" << std::endl;
@@ -117,9 +122,14 @@ bool saveEndGame(Game* game, std::string filePath){
     outputStream << "GameInProgress: False" << std::endl;
     outputStream << std::endl;
 
-    //read in number of players
+    //number of players
     outputStream << "#NumberOfPlayers" << std::endl;
     outputStream << game->getPlayerCount() << std::endl;
+    outputStream << std::endl;
+
+    //Number of centreTables
+    outputStream << "#Number of CentreTable" << std::endl;
+    outputStream << game->getNumOfCentreTable() << std::endl;
     outputStream << std::endl;
 
     outputStream << "#Player Name" << std::endl;
@@ -133,12 +143,24 @@ bool saveEndGame(Game* game, std::string filePath){
     //get the seed
     outputStream << "#Seed" << std::endl;
     outputStream << game->getRandomSeed() << std::endl;
-
     outputStream << std::endl;
+
+    //get the number of commands
+    outputStream << "#Number of Turn Commands" << std::endl;
+    outputStream << game->getCommandsForEndSave().size()/11 << std::endl;
 
     //Get the turn commands
     outputStream << "#Turn Commands" << std::endl;
     outputStream << game->getCommandsForEndSave();
+
+    //if using 2 centretables
+    if(game->getNumOfCentreTable() == 2){
+        //Get the turn commands for centre factories 
+        outputStream << "#Turn Commands For Centre Factories" << std::endl;
+        outputStream << game->getCommandsForEndSave().size()/11 << std::endl;
+
+        outputStream << game->getCommandsFromCentreForEndSave();
+    }
 
     successfullySaved = true;
 
@@ -147,7 +169,7 @@ bool saveEndGame(Game* game, std::string filePath){
     return successfullySaved;
 }
 
-Game* loadGameForReplay(std::string filePath){
+Game* loadGameForReplay(std::string filePath, bool& twoCentreTables){
     Game* game = nullptr;
     bool validLoad = true;
     std::vector<Player*> players;
@@ -158,7 +180,7 @@ Game* loadGameForReplay(std::string filePath){
     std::ifstream inputFileStream;
     inputFileStream.open(filePath);
 
-        // While the input stream is good
+    // While the input stream is good
     while (inputFileStream.good()){
 
         // Holds the current line        
@@ -217,6 +239,22 @@ Game* loadGameForReplay(std::string filePath){
         
     }
 
+    //check how many centreTables are there
+    if(checkLoad(validLoad, inputLines, currentLineCounter)){
+
+        try{
+            int numOfCentreTables = std::stoi(inputLines[currentLineCounter]);
+            if(numOfCentreTables == 2){
+                twoCentreTables = true;
+            }
+            currentLineCounter++;
+
+        }catch (std::invalid_argument){
+            validLoad = false;
+        }
+        
+    }
+
     //Create the players
     if(checkLoad(validLoad, inputLines, currentLineCounter)){
          for(int i = 0 ; i < numOfPlayers ; i++){
@@ -240,22 +278,72 @@ Game* loadGameForReplay(std::string filePath){
         }
     }
 
+    int numberOfCommands = 0;
+    if(checkLoad(validLoad, inputLines, currentLineCounter)){
+        try{
+            numberOfCommands = std::stoi(inputLines[currentLineCounter]);
+            currentLineCounter++;
+
+        }catch(std::invalid_argument){
+            validLoad = false;
+        }
+    }
+
     std::vector<std::string> commands;
     if(checkLoad(validLoad, inputLines, currentLineCounter)){
-         while(currentLineCounter < inputLines.size()){
+        for(int i = 0 ; i < numberOfCommands ; i++){
+            std::string command = inputLines[currentLineCounter];
+            commands.push_back(command);
+            currentLineCounter++;
+        }
+    }
 
-             std::string command = inputLines[currentLineCounter];
-             commands.push_back(command);
-             currentLineCounter++;
-         }
+    std::vector<std::string> commandsForCentre;
+    if(twoCentreTables == true){
+
+        int numberOfCommandsForCentre = 0;
+        if(checkLoad(validLoad, inputLines, currentLineCounter)){
+            try{
+                numberOfCommandsForCentre = std::stoi(inputLines[currentLineCounter]);
+                currentLineCounter++;
+
+            }catch(std::invalid_argument){
+                validLoad = false;
+            }
+        }
+        
+        if(checkLoad(validLoad, inputLines, currentLineCounter)){
+            for(int i = 0 ; i < numberOfCommandsForCentre ; i++){
+
+                std::string command = inputLines[currentLineCounter];
+                commandsForCentre.push_back(command);
+                currentLineCounter++;
+            }
+        }
+    }
+
+    for(int i = 0 ; i < commands.size(); i ++){
+        std::cout << commands[i] << std::endl;
     }
 
     if(validLoad){
 
-        game = new Game(players,seed);
-        for(int i = 0 ; i < commands.size() ; i++){
-            //populating the commands vector with commands being used for this game
+        if(twoCentreTables){
+
+            game = new Game(players,true,seed);
+
+            for(int i = 0 ; i < commandsForCentre.size() ; i++){
+                //populating the commands vector with commands being used for this game
+                game->addcommandToCentreEndSave(commandsForCentre[i]);
+            }
+
+        }else{
+            game = new Game(players,false,seed);
             
+        }
+        for(int i = 0 ; i < commands.size() ; i++){
+            
+            //populating the commands vector with commands being used for this game
             game->addCommandToEndSave(commands[i]);
         }
     }else{
@@ -268,7 +356,7 @@ Game* loadGameForReplay(std::string filePath){
 }
 
 bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
-  bool& isInProgress){
+  bool& isInProgress, bool& twoCentreFactories){
     
     // If valid load is set to false, then loading was unsuccessful
     bool validLoad = true;
@@ -309,6 +397,7 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
     std::vector<Tile*> bag;
     std::vector<Tile*> boxLid;
     std::vector<Tile*> centreOfTable;
+    std::vector<Tile*> centreOfTable2;
     Tile*** factories = nullptr;
     int numberOfPlayers;
     std::vector<Player*> players;
@@ -373,6 +462,17 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
         }
     }
 
+    int numberOfCentreTable = 0;
+    if (checkLoad(validLoad, inputLines, currentLineCounter)){
+        // Parse line into an integer for the current player
+        try{
+            numberOfCentreTable = std::stoi(inputLines[currentLineCounter]);
+            currentLineCounter++;
+        }catch(std::invalid_argument e){
+            validLoad = false;
+        }
+    }
+
 
     // Read in bag
     if (checkLoad(validLoad, inputLines, currentLineCounter)){
@@ -383,10 +483,18 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
     if (checkLoad(validLoad, inputLines, currentLineCounter)){
         readTiles(validLoad, inputLines, currentLineCounter, boxLid);
     }
-    
+
     // Read in the centre of table
     if (checkLoad(validLoad, inputLines, currentLineCounter)){
         readTiles(validLoad, inputLines, currentLineCounter, centreOfTable);
+    }
+    
+    if(numberOfCentreTable == 2){
+        twoCentreFactories = true;
+        // Read in the centre of table
+        if (checkLoad(validLoad, inputLines, currentLineCounter)){
+            readTiles(validLoad, inputLines, currentLineCounter, centreOfTable2);
+        }
     }
     
     
@@ -446,9 +554,7 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
     }
 
     // Read in seed
-    // Not currently implemented
 
-    std::cout << "Num Of Players: " << numberOfPlayers << std::endl;
     // Read in players
     if (checkLoad(validLoad, inputLines, currentLineCounter)){
         // For every expected player, go through a loop
@@ -729,21 +835,28 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
     if (validLoad){
 
         CentreTable* centreTable = new CentreTable(centreOfTable);
+        CentreTable* centreTable2 = new CentreTable(centreOfTable2);
         Factory** factories_ = new Factory*[NUM_OF_FACTORIES];
         for (int i = 0; i < NUM_OF_FACTORIES; i++){
             factories_[i] = new Factory(factories[i]);
         }
         // Calls loading constructor for Game
-        *game = new Game(players, numberOfPlayers, new Bag(bag), factoryCount, 
-          factories_, centreTable,  new BoxLid(boxLid), firstPlayerMarker);
+        if(numberOfCentreTable == 2){
+            *game = new Game(true,players, numberOfPlayers, new Bag(bag), factoryCount, 
+          factories_, centreTable, centreTable2, new BoxLid(boxLid), firstPlayerMarker);
+        }else{
+
+            *game = new Game(false,players, numberOfPlayers, new Bag(bag), factoryCount, 
+            factories_, centreTable, centreTable2, new BoxLid(boxLid), firstPlayerMarker);
+        }
         // Confirms load is valid in console
         std::cout << "valid load\n" << std::endl;
     } else {
         //delete created objects
 
         // Deletes all tiles from respective tile vectors, if added
-        std::vector<Tile*>* tileVectors[3] = {&bag, &boxLid, &centreOfTable};
-        for (int i = 0; i < 3; i++){
+        std::vector<Tile*>* tileVectors[4] = {&bag, &boxLid, &centreOfTable, &centreOfTable2};
+        for (int i = 0; i < 4; i++){
             while ((*tileVectors[i]).size() > 0){
                 delete (*tileVectors[i]).back();
                 (*tileVectors[i]).pop_back();
