@@ -12,7 +12,6 @@
 
 
 
-#define NUM_OF_FACTORIES  5
 #define DEFAULT_SEED      100
 #define TILES_PER_COLOUR  20
 
@@ -94,7 +93,13 @@ class Game{
         void addCommand(std::string commandToAdd);
 
         std::string getGameMode();
+
+        std::vector<Player*> getPlayers();
+
+        int getNumberOfFactories();
     private:
+
+        int numberOfFactories;
 
         // game mode of game
         std::string gameMode;

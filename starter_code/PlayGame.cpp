@@ -148,7 +148,7 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool isInP
  
                 // Initial checks, to make sure that input is within range to be checked
                 // to prevent out of bounds error
-                if (colourType != Invalid && colourType != First_Player && factory >= 0 && factory < NUM_OF_FACTORIES + 1 &&
+                if (colourType != Invalid && colourType != First_Player && factory >= 0 && factory < game->getNumberOfFactories() + 1 &&
                     patternRow > 0 && patternRow < patternLineRows + 2){
 
                     //Move tiles
@@ -252,24 +252,21 @@ void startGame(Game* game, int startPlayerIndex, bool fromLoadedGame, bool isInP
                 
             //User Interface Enhancement - SEE ENEMY BOARD FUNCTION
             }else if (commandInput == "ENEMY"){
-                
                 bool exit = false;
-                int playerNumber = currentPlayerIndex;
-
-                if (playerNumber != game->getPlayerCount() - 1){
-                    playerNumber++;
-                } else {
-                    playerNumber = 0;
-                }
-
-                Player* enemyPlayer = game->getPlayer(playerNumber);
+                std::vector<Player*> playersList = game->getPlayers();
 
                 while(exit == false){
                     std::cout << "\n\n" << std::endl;
                     std::cout << "== ENEMY BOARD == \n" << std::endl;
-                    colorizeOutput(enemyPlayer->displayMosaic());
-                    colorizeOutput(enemyPlayer->displayPenalty());
-                    std::cout << "\n\n" << std::endl;
+
+                    for(int i = 0; i < playersList.size(); i++){
+                        if(i != currentPlayerIndex){
+                            colorizeOutput(playersList[i]->displayMosaic());
+                            colorizeOutput(playersList[i]->displayPenalty());
+                            std::cout << "\n" << std::endl;
+                        }
+                    }
+                    std::cout << "\n" << std::endl;
 
                     std::cout << "Type 'Return' to return to game\n \n" << std::endl;
                     std::cout << "\n> ";
@@ -497,7 +494,7 @@ bool moveTiles(Game* game,Player* player, int factory, Types colourType,
         || patternRow == patternRowLength){
 
         // if factory chosen (not centre tiles)
-        if (factory > 0 && factory < NUM_OF_FACTORIES + 1){
+        if (factory > 0 && factory < game->getNumberOfFactories() + 1){
             game->getTilesFromFactory(factory - 1, colourType, tileAmount, tiles);
 
             // If any tiles were taken, then add tiles to player

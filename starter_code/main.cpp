@@ -79,33 +79,50 @@ bool manageInput(char input){
         std::cout << "2. Grey Board" << std::endl;
         std::cout << "3. 6 Tile Board" << std::endl;
 
-        std::cout << "> ";
-
         // choosing game mode they want to play
         std::string gameModeChosen;
         std::string gameMode;
-        std::getline(std::cin, gameModeChosen);
+        
         bool chosen = false;
         while(!chosen){
+            std::cout << "\n> ";
+            std::getline(std::cin, gameModeChosen);
+
             if(gameModeChosen == "1"){
                 gameMode = "Normal";
                 chosen = true;
             }else if (gameModeChosen == "2"){
                 // gameMode = "Grey";
                 // chosen = true;
-                std::cout << "Not yet implemented" << std::endl;
+                std::cout << "Not yet implemented\n" << std::endl;
+                std::cout << "\n> ";
                 std::getline(std::cin, gameModeChosen);
             }else if (gameModeChosen == "3"){
                 gameMode = "Six";
                 chosen = true;
             }else{
-                std::cout << "Please choose from the list provided" << std::endl;
-                std::cout << "> ";
-                std::getline(std::cin, gameModeChosen);
+                std::cout << "Please choose from the list provided\n" << std::endl;
             }
         }
-        // Can add prompt for player count if needed to extend
-        int playerCount = 2;
+        
+        std::cout << "Will there be 2, 3, or 4 players?:" << std::endl;
+
+        std::string playerInput;
+        
+        int playerCount;
+        bool entered = false;
+        while(!entered){
+            std::cout << "\n> ";
+            std::getline(std::cin, playerInput);
+
+            if(playerInput == "2" || playerInput == "3" || playerInput == "4"){
+                playerCount = std::stoi(playerInput);
+                entered = true;
+    
+            }else{
+                std::cout << "Please enter a valid number" << std::endl;
+            }
+        }
         std::vector<Player*> players;
 
         for (int i = 0; i < playerCount; i++){

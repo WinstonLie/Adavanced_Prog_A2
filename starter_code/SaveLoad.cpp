@@ -28,6 +28,11 @@ bool saveGame(Game* game, int currentPlayer, std::string filePath, bool gameInPr
        outputStream << saveTime << std::endl;
        outputStream << std::endl;
 
+       //number of players
+       outputStream << "#Number of Players" << std::endl;
+       outputStream << game->getPlayerCount() << std::endl;
+       outputStream << std::endl;
+
        // game Mode
        outputStream << "#Game Mode" << std::endl;
        outputStream << game->getGameMode() << std::endl;
@@ -73,12 +78,6 @@ bool saveGame(Game* game, int currentPlayer, std::string filePath, bool gameInPr
        //player taking their turn
        outputStream << "#Current Player" << std::endl;
        outputStream << currentPlayer << std::endl;
-       outputStream << std::endl;
-
-
-       //number of players
-       outputStream << "#Number of Players" << std::endl;
-       outputStream << game->getPlayerCount() << std::endl;
        outputStream << std::endl;
        
 
@@ -195,6 +194,13 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
         currentLineCounter++;
     }
 
+    // Number of players
+    if (checkLoad(validLoad, inputLines, currentLineCounter)){
+        // Parse line into an integer
+        numberOfPlayers = std::stoi(inputLines[currentLineCounter]);
+        currentLineCounter++;
+    }
+
     // get game mode
     if (checkLoad(validLoad, inputLines, currentLineCounter)){
         gameMode = inputLines[currentLineCounter];
@@ -217,7 +223,6 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
 
     // Get game status
     if (checkLoad(validLoad, inputLines, currentLineCounter)){
-        // Checks to see if the word True is anywhere in this line
         std::string lineFromFile = inputLines[currentLineCounter];
 
         if(lineFromFile == "1"){
@@ -252,9 +257,16 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
         readTiles(validLoad, inputLines, currentLineCounter, centreOfTable);
     }
     
-
+    int factoryCount;
     // Assumes 5 factories
-    int factoryCount = 5;
+    if(numberOfPlayers == 2){
+        factoryCount = 5;
+    }else if(numberOfPlayers == 3){
+        factoryCount = 7;
+    }else if(numberOfPlayers == 4){
+        factoryCount = 9;
+    }
+
 
     // Reads in factories
     if (checkLoad(validLoad, inputLines, currentLineCounter)){
@@ -299,19 +311,6 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
         // Parse line into an integer for the current player
         currentPlayerIndex = std::stoi(inputLines[currentLineCounter]) - 1;
         currentLineCounter++;
-    }
-
-    // Number of players
-    if (checkLoad(validLoad, inputLines, currentLineCounter)){
-
-        // Parse line into an integer
-        numberOfPlayers = std::stoi(inputLines[currentLineCounter]);
-        currentLineCounter++;
-
-        // Check to see that current player is within boundaries
-        if (currentPlayerIndex < 0 || currentPlayerIndex >= numberOfPlayers){
-            validLoad = false;
-        }
     }
 
     // Read in players
@@ -595,13 +594,23 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
         commands.push_back(inputLines[i]);
     }
 
+    int numberOfFactories;
 
     // Creates game and adds in data if loaded successfully
     if (validLoad){
 
+        
+        if(players.size() == 2){
+            numberOfFactories = 5;
+        }else if(players.size() == 3){
+            numberOfFactories = 7;
+        }else if(players.size() == 4){
+            numberOfFactories = 9;
+        }
+
         CentreTable* centreTable = new CentreTable(centreOfTable);
-        Factory** factories_ = new Factory*[NUM_OF_FACTORIES];
-        for (int i = 0; i < NUM_OF_FACTORIES; i++){
+        Factory** factories_ = new Factory*[numberOfFactories];
+        for (int i = 0; i < numberOfFactories; i++){
             factories_[i] = new Factory(factories[i]);
         }
         // Calls loading constructor for Game
@@ -630,7 +639,7 @@ bool loadGame(Game** game, std::string filePath, int& currentPlayerIndex,
         
         // Delete all factories
         if (factories != nullptr){
-            for (int i = 0; i < NUM_OF_FACTORIES; i++){
+            for (int i = 0; i < numberOfFactories; i++){
                 if (factories[i] != nullptr){
                     for (int r = 0; r < FACTORY_SIZE; r++){
                         if (factories[i][r] != nullptr){

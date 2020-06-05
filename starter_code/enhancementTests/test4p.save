@@ -1,0 +1,144 @@
+#Saving File Tag
+Fri 1630 - Dale
+
+#Save Date
+Fri Jun  5 19:21:14 2020
+
+
+#Number of Players
+4
+
+#Game Mode
+Normal
+
+#Game Status
+1
+
+#Game Seed
+100
+
+#Bag
+RBBRUUYBRURBBUURYBLRRYBLURYBLBRYBLUBLBLUBYBLRRYYLULUULURYBRLLLLL$
+
+#Boxlid
+$
+
+#Centre Table
+FULULRYBU$
+
+#Factories
+YUUU$
+$
+$
+RUYL$
+$
+YBRY$
+YLUY$
+$
+YYLB$
+
+
+#Current Player
+1
+
+#Player Status
+#Player1
+hello
+0
+
+#Player1 Wall
+.....
+.....
+.....
+.....
+.....
+
+
+#Player1 PatternLine
+.
+RR
+...
+....
+.....
+
+
+#Player1 PenaltyPanel
+.......
+
+#Player Status
+#Player2
+hi
+0
+
+#Player2 Wall
+.....
+.....
+.....
+.....
+.....
+
+
+#Player2 PatternLine
+.
+BB
+...
+....
+.....
+
+
+#Player2 PenaltyPanel
+.......
+
+#Player Status
+#Player3
+bye
+0
+
+#Player3 Wall
+.....
+.....
+.....
+.....
+.....
+
+
+#Player3 PatternLine
+.
+YY
+...
+....
+.....
+
+
+#Player3 PenaltyPanel
+.......
+
+#Player Status
+#Player4
+goodbye
+0
+
+#Player4 Wall
+.....
+.....
+.....
+.....
+.....
+
+
+#Player4 PatternLine
+.
+RR
+...
+....
+.....
+
+
+#Player4 PenaltyPanel
+.......
+
+#Turns Taken
+(hello) > TURN 5 R 2
+(hi) > TURN 3 B 2
+(bye) > TURN 2 Y 2
+(goodbye) > TURN 8 R 2

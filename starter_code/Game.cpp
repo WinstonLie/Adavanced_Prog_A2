@@ -14,6 +14,17 @@ Game::Game(std::vector<Player*> playersToAdd, std::string gameMode, int randomSe
         players[i]->setGame(this);
     }
 
+    if(playersToAdd.size() == 2){
+        this->numberOfFactories = 5;
+
+    }else if(playersToAdd.size() == 3){
+        this->numberOfFactories = 7;
+
+    }else if(playersToAdd.size() == 4){
+        this->numberOfFactories = 9;
+
+    }
+
     //populate bag with 20 of each color
     for(int i = 0; i < TILES_PER_COLOUR; i++){
 
@@ -36,10 +47,10 @@ Game::Game(std::vector<Player*> playersToAdd, std::string gameMode, int randomSe
     }
 
     //set factoryCount
-    this->factoryCount = NUM_OF_FACTORIES;
+    this->factoryCount = this->numberOfFactories;
     
-    factories = new Factory*[NUM_OF_FACTORIES];
-    for (int i = 0; i < NUM_OF_FACTORIES; i++){
+    factories = new Factory*[this->numberOfFactories];
+    for (int i = 0; i < this->numberOfFactories; i++){
         factories[i] = new Factory();
     }
 
@@ -62,6 +73,14 @@ Game::Game (std::vector<Player*> playersToAdd, std::string gameMode, int playerC
 
                 players[i]->setGame(this);
             }
+
+            if(playerCount == 2){
+                this->numberOfFactories = 5;
+            }else if(playerCount == 3){
+                this->numberOfFactories = 7;
+            }else if(playerCount == 4){
+                this->numberOfFactories = 9;
+            }
           }
 
 
@@ -73,7 +92,7 @@ Game::~Game(){
     }
     
     //deleting factories
-    for (int i = 0; i < NUM_OF_FACTORIES; i++){
+    for (int i = 0; i < this->numberOfFactories; i++){
         delete factories[i];
     }
 
@@ -111,7 +130,7 @@ void Game::populateFactories(){
     std::default_random_engine engine(randomSeed);
 
     
-    for(int row = 0; row < NUM_OF_FACTORIES; row++){
+    for(int row = 0; row < this->numberOfFactories; row++){
 
         Tile** tiles = new Tile*[FACTORY_SIZE];
 
@@ -276,7 +295,7 @@ std::string Game::getBoxLid(){
 std::string Game::getFactories(){
     std::string data = "";
 
-    for(int i = 0; i < NUM_OF_FACTORIES; i++){
+    for(int i = 0; i < this->numberOfFactories; i++){
 
         std::string tileString = factories[i]->getTileString();
 
@@ -323,7 +342,7 @@ std::string Game::displayFactories(){
 
         tilesInFactories += "\n";
     }
-    for(int i=0 ;i < NUM_OF_FACTORIES ; i++){
+    for(int i=0 ;i < this->numberOfFactories ; i++){
 
         tilesInFactories += std::to_string(i+1) + ": ";
         std::string tileString = factories[i]->getTileString();
@@ -359,7 +378,7 @@ bool Game::checkIfFactoriesPopulated(){
     }
     
     //Check for factories 1 to 5 until a tile has been found
-    for(int row = 0; populated == false && row < NUM_OF_FACTORIES ; row++){
+    for(int row = 0; populated == false && row < this->numberOfFactories ; row++){
         
         // Checks if factory has any tiles
         if (factories[row]->hasTiles()){
@@ -385,4 +404,12 @@ void Game::addCommand(std::string commandToAdd){
 
 std::string Game::getGameMode(){
     return this->gameMode;
+}
+
+std::vector<Player*> Game::getPlayers(){
+    return this->players;
+}
+
+int Game::getNumberOfFactories(){
+    return this->numberOfFactories;
 }
