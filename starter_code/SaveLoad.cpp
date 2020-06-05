@@ -105,7 +105,7 @@ bool saveGame(Game* game, int currentPlayer, std::string filePath){
    return successfullySaved;
 }
 
-//Save the game commands and 
+//Save the game commands for replay
 bool saveEndGame(Game* game, std::string filePath){
 
     bool successfullySaved = false;
@@ -169,6 +169,7 @@ bool saveEndGame(Game* game, std::string filePath){
     return successfullySaved;
 }
 
+//Load for Replay
 Game* loadGameForReplay(std::string filePath, bool& twoCentreTables){
     Game* game = nullptr;
     bool validLoad = true;
@@ -311,7 +312,7 @@ Game* loadGameForReplay(std::string filePath, bool& twoCentreTables){
                 validLoad = false;
             }
         }
-        
+
         if(checkLoad(validLoad, inputLines, currentLineCounter)){
             for(int i = 0 ; i < numberOfCommandsForCentre ; i++){
 

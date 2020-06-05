@@ -1,0 +1,136 @@
+#Saving File Tag
+Fri 1630 - Dale
+
+#Save Date
+Fri Jun  5 16:33:04 2020
+
+
+#Game Status
+GameInProgress: True
+
+#Current Player
+2
+
+#Number of Players
+4
+
+#Number of CentreTable
+2
+
+#Bag
+BYBYRRBBLURYBLURYBLUURBLURYBLYRYBUURYBLBRYBLYBLBRRRRLLLRLBLURYYU$
+
+#Boxlid
+$
+
+#Centre Table
+FUUL$
+$
+#Factories
+$
+YRUL$
+BRUY$
+LLLR$
+YUYR$
+LUUY$
+UUYB$
+UUBB$
+BYLY$
+
+
+#Player Status
+#Player1
+W
+0
+
+#Player1 Wall
+.....
+.....
+.....
+.....
+.....
+
+
+#Player1 PatternLine
+R
+..
+...
+....
+.....
+
+
+#Player1 PenaltyPanel
+.......
+
+#Player Status
+#Player2
+R
+0
+
+#Player2 Wall
+.....
+.....
+.....
+.....
+.....
+
+
+#Player2 PatternLine
+.
+..
+...
+....
+.....
+
+
+#Player2 PenaltyPanel
+.......
+
+#Player Status
+#Player3
+J
+0
+
+#Player3 Wall
+.....
+.....
+.....
+.....
+.....
+
+
+#Player3 PatternLine
+.
+..
+...
+....
+.....
+
+
+#Player3 PenaltyPanel
+.......
+
+#Player Status
+#Player4
+K
+0
+
+#Player4 Wall
+.....
+.....
+.....
+.....
+.....
+
+
+#Player4 PatternLine
+.
+..
+...
+....
+.....
+
+
+#Player4 PenaltyPanel
+.......
+
